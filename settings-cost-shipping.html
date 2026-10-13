@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Shipping costs</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Settings › Costs › Shipping costs (/app/settings/costs/shipping)
+  Nativo → s-page, card "How Cifra calculates…" con pasos (s-badge, s-link, s-switch), card Google Sheets, s-menu.
+  Custom → pasos numerados (.c-step), IndexTable.
+-->
+<s-page heading="Shipping costs" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="settings.html#costs">Costs</s-link>
+  <s-button slot="primary-action" variant="primary">Create shipping profile</s-button>
+  <s-button slot="secondary-actions" href="integration-meta.html">Manage Google Sheets</s-button>
+
+  <s-stack gap="base">
+    <s-text color="subdued">What you actually pay to ship orders.</s-text>
+
+    <s-section>
+      <s-stack gap="base">
+        <s-stack gap="none">
+          <s-text fontWeight="semibold">How Cifra calculates your shipping cost</s-text>
+          <s-text color="subdued">Set up as many of these as you like. Cifra applies them in this order and uses the first one that has data for an order.</s-text>
+        </s-stack>
+        <div class="c-inset" data-custom="OrderedSteps">
+          <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+            <span class="c-step">1</span>
+            <span><span class="c-listrow__title">Shopify Shipping labels</span><br><span class="c-listrow__desc">The most accurate. Real label costs, read straight from Shopify.</span></span>
+            <s-badge>Not available yet</s-badge>
+          </div>
+          <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+            <span class="c-step">2</span>
+            <span><span class="c-listrow__title">Shipping profiles</span><br><span class="c-listrow__desc">Your own rates by zone, and by weight if you need it. Type them here or keep them in a spreadsheet.</span></span>
+            <s-stack direction="inline" gap="small" alignItems="center"><s-badge tone="success">2 profiles</s-badge><s-link href="integration-meta.html">Use a spreadsheet</s-link></s-stack>
+          </div>
+          <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+            <span class="c-step">3</span>
+            <span><span class="c-listrow__title">What customers paid</span><br><span class="c-listrow__desc">The fallback. Any margin built into your shipping rates shows up as cost, not profit.</span></span>
+            <s-switch label="Use what customers paid" labelAccessibilityVisibility="exclusive" checked></s-switch>
+          </div>
+        </div>
+      </s-stack>
+    </s-section>
+
+    <s-section>
+      <s-grid gridTemplateColumns="1fr auto" gap="base" alignItems="start">
+        <s-stack gap="base">
+          <s-stack gap="none">
+            <s-text fontWeight="semibold">Google Sheets</s-text>
+            <s-text color="subdued">Collaborative tool for creating and editing spreadsheets in real-time.</s-text>
+          </s-stack>
+          <s-stack direction="inline" gap="small">
+            <s-button icon="settings" href="integration-meta.html">Manage</s-button>
+            <s-button icon="external">View template</s-button>
+          </s-stack>
+        </s-stack>
+        <s-box padding="small" border="base" borderRadius="large">
+          <img src="assets/logos/google_sheets.svg" alt="Google Sheets" width="40" height="40">
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <div class="c-indextable" data-custom="IndexTable">
+      <div class="c-indextable__bar">
+        <div class="c-tabs" role="tablist">
+          <button class="c-tabs__tab" role="tab" aria-selected="true">All</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Flat rated</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Weight-based</button>
+        </div>
+        <div class="c-indextable__tools">
+          <s-button icon="search" accessibilityLabel="Search and filter"></s-button>
+          <s-button icon="layout-columns-3" accessibilityLabel="Edit columns"></s-button>
+          <s-button icon="sort" accessibilityLabel="Sort"></s-button>
+        </div>
+      </div>
+      <div class="c-indextable__scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="c-col-check"><s-checkbox accessibilityLabel="Select all"></s-checkbox></th>
+              <th><button type="button">Name <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Zones <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Rate type <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Rates <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Source <s-icon type="sort" size="small"></s-icon></button></th>
+              <th class="c-col-actions"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select test"></s-checkbox></td>
+              <td class="c-strong">test</td><td>60 countries</td><td>Weight-based</td><td>2 rates</td><td>Manual</td>
+              <td class="c-col-actions"><s-clickable commandFor="m1" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable><s-menu id="m1" accessibilityLabel="Row actions"><s-button icon="edit">Edit</s-button><s-button icon="delete" tone="critical">Delete</s-button></s-menu></td>
+            </tr>
+            <tr>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select test 1"></s-checkbox></td>
+              <td class="c-strong">test 1</td><td>Everywhere else</td><td>Flat rate</td><td>£12.00</td><td>Manual</td>
+              <td class="c-col-actions"><s-clickable commandFor="m2" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable><s-menu id="m2" accessibilityLabel="Row actions"><s-button icon="edit">Edit</s-button><s-button icon="delete" tone="critical">Delete</s-button></s-menu></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="c-indextable__foot">
+        <span>Showing 2 of 2 results</span>
+        <s-button-group>
+          <s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button>
+          <s-button icon="chevron-right" accessibilityLabel="Next page" disabled></s-button>
+        </s-button-group>
+      </div>
+    </div>
+  </s-stack>
+</s-page>
+
+</body>
+</html>

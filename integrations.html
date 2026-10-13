@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrations</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+<style>
+  /* Nombre de la integración: un peso mayor, como los títulos de card en el admin de Shopify */
+  s-stack > s-heading { font-weight: 650; }
+  .int-logo { width: 64px; height: 64px; border-radius: 12px; border: 1px solid var(--c-border); display: grid; place-items: center; flex: none; background: #fff; }
+</style>
+</head>
+<body>
+
+<!--
+  Pantalla: Integrations (/app/integrations)
+  Nativo → s-search-field, s-section por categoría, cards con s-box/s-clickable, s-badge (Connected / Coming Soon), s-button.
+  Custom → filtro por categoría (tabs). Logos: se mantienen los assets actuales.
+  Detalles: integration-meta.html (OAuth) e integration-klaviyo.html (API key).
+-->
+<s-page heading="Integrations" inlineSize="base">
+  <s-link slot="breadcrumb-actions" href="home.html">Home</s-link>
+
+  <s-stack gap="base">
+    <s-search-field label="Search integrations" labelAccessibilityVisibility="exclusive" placeholder="Search integrations"></s-search-field>
+
+    <div class="c-tabs" role="tablist" data-custom="Tabs (filtro categoría)">
+      <button class="c-tabs__tab" role="tab" aria-selected="true">All</button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false">Sales</button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false">Advertising</button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false">Analytics</button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false">Marketing</button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false">Other</button>
+    </div>
+
+    <s-section heading="Sales">
+      <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Shopify</s-heading><s-text color="subdued">Ecommerce solutions for building and managing online stores with ease.</s-text><s-stack direction="inline"><s-badge tone="success">Connected</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/shopify.svg" alt="Shopify"></span>
+          </s-grid>
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <s-section heading="Advertising">
+      <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Google Ads</s-heading><s-text color="subdued">Online advertising solutions to drive targeted traffic to your business.</s-text><s-stack direction="inline"><s-button icon="plus">Connect</s-button></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/google_ads.svg" alt="Google Ads"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Meta Ads</s-heading><s-text color="subdued">Suite of social platforms for connecting and engaging with diverse audiences.</s-text><s-stack direction="inline"><s-button icon="plus" href="integration-meta.html">Connect</s-button></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/meta_ads.svg" alt="Meta Ads"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Pinterest Ads</s-heading><s-text color="subdued">Visual discovery engine for finding and sharing creative ideas and inspiration.</s-text><s-stack direction="inline"><s-badge tone="info">Coming Soon</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/pinterest_ads.svg" alt="Pinterest Ads"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>TikTok Ads</s-heading><s-text color="subdued">Social platform for sharing short, engaging videos that entertain users.</s-text><s-stack direction="inline"><s-badge tone="info">Coming Soon</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/tiktok_ads.svg" alt="TikTok Ads"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>X Ads</s-heading><s-text color="subdued">Global social network for connecting with followers in real-time.</s-text><s-stack direction="inline"><s-badge tone="info">Coming Soon</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/x_ads.svg" alt="X Ads"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Snapchat Ads</s-heading><s-text color="subdued">Ephemeral messages and stories to connect with close friends online.</s-text><s-stack direction="inline"><s-badge tone="info">Coming Soon</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/snapchat_ads.svg" alt="Snapchat Ads"></span>
+          </s-grid>
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <s-section heading="Analytics">
+      <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Google Analytics</s-heading><s-text color="subdued">Website traffic and user behavior insights for optimizing your online presence.</s-text><s-stack direction="inline"><s-button icon="plus">Connect</s-button></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/google_analytics.svg" alt="Google Analytics"></span>
+          </s-grid>
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <s-section heading="Marketing">
+      <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Klaviyo</s-heading><s-text color="subdued">Email marketing platform for automating personalized campaigns that drive engagement.</s-text><s-stack direction="inline"><s-button icon="plus" href="integration-klaviyo.html">Connect</s-button></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/klaviyo.svg" alt="Klaviyo"></span>
+          </s-grid>
+        </s-box>
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Attentive</s-heading><s-text color="subdued">Targeted SMS marketing campaigns designed to reach customers and boost sales.</s-text><s-stack direction="inline"><s-badge tone="info">Coming Soon</s-badge></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/attentive.svg" alt="Attentive"></span>
+          </s-grid>
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <s-section heading="Other">
+      <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+        <s-box padding="base" border="base" borderRadius="large">
+          <s-grid gridTemplateColumns="1fr auto" gap="base">
+            <s-stack gap="small-200"><s-heading>Google Sheets</s-heading><s-text color="subdued">Collaborative tool for creating and editing spreadsheets in real-time.</s-text><s-stack direction="inline"><s-button icon="plus">Connect</s-button></s-stack></s-stack>
+            <span class="int-logo"><img src="assets/logos/google_sheets.svg" alt="Google Sheets"></span>
+          </s-grid>
+        </s-box>
+      </s-grid>
+    </s-section>
+  </s-stack>
+</s-page>
+
+</body>
+</html>

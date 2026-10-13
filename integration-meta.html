@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integration · Meta Ads</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Integrations › Sign in with Meta (/app/integrations/meta-ads/new)
+  Patrón OAuth (Meta Ads, Google Ads, Google Analytics, Google Sheets). 100% nativo.
+-->
+<s-page heading="Sign in with Meta" inlineSize="base">
+  <s-link slot="breadcrumb-actions" href="integrations.html">Integrations</s-link>
+
+  <s-section>
+    <s-stack gap="base" alignItems="center" paddingBlock="large">
+      <img src="assets/logos/meta_ads.svg" alt="" width="48" height="48">
+      <s-stack gap="none" alignItems="center">
+        <s-heading>Connect Meta Ads</s-heading>
+        <s-text color="subdued">Start importing your data</s-text>
+      </s-stack>
+      <s-box inlineSize="300px">
+        <s-button icon="external" style="display:block">Sign in with Facebook</s-button>
+      </s-box>
+    </s-stack>
+  </s-section>
+</s-page>
+
+</body>
+</html>

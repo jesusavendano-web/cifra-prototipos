@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insights</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Insights (/app/insights)
+  Nativo → filtros Type/Source (s-popover + s-choice-list multiple), menú de orden (s-popover + s-choice-list + s-button),
+           cards (s-section + s-badge), empty state de Dismissed.
+  Custom → tabs Active / Dismissed.
+  Ojo ENG-2176: los eventos change de s-choice-list deben escucharse con addEventListener.
+-->
+<s-page heading="Insights" inlineSize="large">
+
+  <div class="c-stack">
+    <div class="c-row c-row--between" style="flex-wrap:wrap">
+      <div class="c-row" style="flex-wrap:wrap">
+        <div class="c-tabs" role="tablist" data-custom="Tabs">
+          <button class="c-tabs__tab" role="tab" aria-selected="true" aria-controls="ins-active">Active</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false" aria-controls="ins-dismissed">Dismissed</button>
+        </div>
+
+        <s-button commandFor="type-pop" icon="chevron-down">Type</s-button>
+        <s-popover id="type-pop">
+          <s-box padding="base">
+            <s-choice-list label="Type" name="type" multiple>
+              <s-choice value="all">All</s-choice>
+              <s-choice value="top">Top performer</s-choice>
+              <s-choice value="leak">Cost leak</s-choice>
+              <s-choice value="drag">Margin drag</s-choice>
+              <s-choice value="change">Sudden change</s-choice>
+              <s-choice value="trend">Trend</s-choice>
+              <s-choice value="comparison">Comparison</s-choice>
+            </s-choice-list>
+            <s-button variant="tertiary">Clear</s-button>
+          </s-box>
+        </s-popover>
+
+        <s-button commandFor="source-pop" icon="chevron-down">Source</s-button>
+        <s-popover id="source-pop">
+          <s-box padding="base">
+            <s-choice-list label="Source" name="source" multiple>
+              <s-choice value="all">All</s-choice>
+              <s-choice value="shopify">Shopify</s-choice>
+              <s-choice value="google-ads">Google Ads</s-choice>
+              <s-choice value="ga">Google Analytics</s-choice>
+              <s-choice value="sheets">Google Sheets</s-choice>
+              <s-choice value="klaviyo">Klaviyo</s-choice>
+              <s-choice value="meta">Meta</s-choice>
+            </s-choice-list>
+            <s-button variant="tertiary">Clear</s-button>
+          </s-box>
+        </s-popover>
+      </div>
+
+      <div class="c-row">
+        <s-text color="subdued">Updated yesterday at 8:00 PM</s-text>
+        <s-button commandFor="sort-pop" icon="sort" accessibilityLabel="Sort insights"></s-button>
+        <s-popover id="sort-pop">
+          <s-box padding="base">
+            <s-stack gap="small">
+              <s-choice-list label="Sort by" name="sort">
+                <s-choice value="date" selected>Date</s-choice>
+                <s-choice value="impact">Impact</s-choice>
+                <s-choice value="type">Type</s-choice>
+              </s-choice-list>
+              <s-divider></s-divider>
+              <s-button variant="tertiary" icon="arrow-up">Oldest to newest</s-button>
+              <s-button variant="tertiary" icon="arrow-down">Newest to oldest</s-button>
+            </s-stack>
+          </s-box>
+        </s-popover>
+      </div>
+    </div>
+
+    <!-- Active -->
+    <div id="ins-active" data-tabpanel>
+      <div style="max-width:560px;margin:0 auto">
+        <s-stack gap="base">
+          <s-section>
+            <s-stack gap="small">
+              <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                <s-stack direction="inline" gap="small-200" alignItems="center">
+                <s-badge tone="info" icon="info">Top performer</s-badge>
+                <s-text color="subdued">3 days ago</s-text>
+              </s-stack>
+                <s-button variant="tertiary" icon="minus-circle" accessibilityLabel="Dismiss insight"></s-button>
+              </s-stack>
+              <s-heading>Top Profit Product</s-heading>
+              <s-paragraph>Default Title generated $1,365.00 in profit over Sep 13 – Oct 12, 2026 across 13 orders (70% margin). Return rate is 0%.</s-paragraph>
+              <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                <s-button href="report.html">See product report</s-button>
+                <span class="c-source" aria-label="Source: Shopify">S</span>
+              </s-stack>
+            </s-stack>
+          </s-section>
+
+          <s-section>
+            <s-stack gap="small">
+              <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                <s-stack direction="inline" gap="small-200" alignItems="center">
+                <s-badge tone="critical" icon="alert-triangle">Margin drag</s-badge>
+                <s-text color="subdued">5 days ago</s-text>
+              </s-stack>
+                <s-button variant="tertiary" icon="minus-circle" accessibilityLabel="Dismiss insight"></s-button>
+              </s-stack>
+              <s-heading>Cifra Margin Bleeder is dragging your margin</s-heading>
+              <s-paragraph>7.5% gross margin on $1,343 of net sales over the last 30 days, versus 52.1% for the rest of your catalog.</s-paragraph>
+              <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                <s-button href="report.html">See product report</s-button>
+                <span class="c-source" aria-label="Source: Shopify">S</span>
+              </s-stack>
+            </s-stack>
+          </s-section>
+        </s-stack>
+      </div>
+    </div>
+
+    <!-- Dismissed -->
+    <div id="ins-dismissed" data-tabpanel hidden>
+      <s-section>
+        <s-empty-state heading="No dismissed insights">
+          <s-text slot="subheading">Insights you dismiss will appear here for reference.</s-text>
+        </s-empty-state>
+      </s-section>
+    </div>
+  </div>
+</s-page>
+
+</body>
+</html>

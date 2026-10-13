@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Gateway costs</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Settings › Costs › Gateway costs (/app/settings/costs/gateways)
+  Nativo → s-page, s-badge "Fallback", s-icon lock, s-button historial (icon clock), s-menu.
+  Custom → IndexTable (sin tabs, solo toolbar). Gateways calculados por Shopify son de solo lectura (candado).
+-->
+<s-page heading="Gateway costs" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="settings.html#costs">Costs</s-link>
+  <s-button slot="primary-action" variant="primary">Add gateway</s-button>
+
+  <s-stack gap="base">
+    <s-text color="subdued">What you pay to accept payments.</s-text>
+
+    <div class="c-indextable" data-custom="IndexTable">
+      <div class="c-indextable__bar">
+        <div class="c-indextable__tools">
+          <s-button icon="search" accessibilityLabel="Search and filter"></s-button>
+          <s-button icon="layout-columns-3" accessibilityLabel="Edit columns"></s-button>
+          <s-button icon="sort" accessibilityLabel="Sort"></s-button>
+        </div>
+      </div>
+      <div class="c-indextable__scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="c-col-check"><s-checkbox accessibilityLabel="Select all"></s-checkbox></th>
+              <th><button type="button">Gateway <s-icon type="sort" size="small"></s-icon></button></th>
+              <th></th>
+              <th><button type="button">Percentage fee <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Fixed fee <s-icon type="sort" size="small"></s-icon></button></th>
+              <th></th>
+              <th><button type="button">Source <s-icon type="sort" size="small"></s-icon></button></th>
+              <th class="c-col-actions"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-readonly>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select Shopify Payments" disabled></s-checkbox></td>
+              <td class="c-strong">Shopify Payments</td><td></td>
+              <td>Calculated by Shopify</td><td>Calculated by Shopify</td><td></td><td>Calculated by Shopify</td>
+              <td class="c-col-actions"><s-icon type="lock" color="subdued" interestFor="lock-tip"></s-icon></td>
+            </tr>
+            <tr data-readonly>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select PayPal" disabled></s-checkbox></td>
+              <td class="c-strong">PayPal</td><td></td>
+              <td>Calculated by Shopify</td><td>Calculated by Shopify</td><td></td><td>Calculated by Shopify</td>
+              <td class="c-col-actions"><s-icon type="lock" color="subdued"></s-icon></td>
+            </tr>
+            <tr>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select Gift Card"></s-checkbox></td>
+              <td class="c-strong">Gift Card</td><td></td>
+              <td>12%</td><td>£12.00</td>
+              <td><s-button icon="clock" accessibilityLabel="Rate history"></s-button></td>
+              <td>Manual</td>
+              <td class="c-col-actions"><s-clickable commandFor="g1" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable><s-menu id="g1" accessibilityLabel="Row actions"><s-button icon="edit">Edit</s-button><s-button icon="delete" tone="critical">Delete</s-button></s-menu></td>
+            </tr>
+            <tr>
+              <td class="c-col-check"><s-checkbox accessibilityLabel="Select Other"></s-checkbox></td>
+              <td class="c-strong">Other</td><td><s-badge>Fallback</s-badge></td>
+              <td>2%</td><td>£0.00</td>
+              <td><s-button icon="clock" accessibilityLabel="Rate history"></s-button></td>
+              <td>Manual</td>
+              <td class="c-col-actions"><s-clickable commandFor="g2" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable><s-menu id="g2" accessibilityLabel="Row actions"><s-button icon="edit">Edit</s-button></s-menu></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="c-indextable__foot">
+        <span>Showing 4 of 4 results</span>
+        <s-button-group>
+          <s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button>
+          <s-button icon="chevron-right" accessibilityLabel="Next page" disabled></s-button>
+        </s-button-group>
+      </div>
+    </div>
+    <s-tooltip id="lock-tip">Fees for this gateway are calculated by Shopify.</s-tooltip>
+  </s-stack>
+</s-page>
+
+</body>
+</html>

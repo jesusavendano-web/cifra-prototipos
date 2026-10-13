@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte · Create custom report</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Reports › Untitled  (/app/reports/new)  — estado vacío del explorador
+  Patrón de Shopify Analytics › Reports › New exploration (admin.shopify.com/.../analytics/reports/explore):
+  mismo panel de 280px con tabs Standard/Cohorts; solo "Metrics +" / "Metric +" está activo hasta
+  que se agrega una métrica. Ilustraciones extraídas del CDN de Shopify (assets/img/explore-*-empty.svg).
+  Custom → píldoras de filtro, panel con tabs, ilustración + texto centrados.
+-->
+<s-page heading="Untitled" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="reports.html">Reports</s-link>
+  <s-button slot="secondary-actions" commandFor="new-actions" disabled>Actions</s-button>
+  <s-menu id="new-actions" accessibilityLabel="Report actions">
+    <s-button icon="edit">Rename</s-button>
+    <s-button icon="delete" tone="critical">Delete</s-button>
+  </s-menu>
+
+  <div class="c-stack">
+    <div class="c-row c-row--between">
+      <div class="c-filterbar">
+        <button class="c-pill" type="button" data-custom="DateRangePicker">
+          <s-icon type="calendar"></s-icon>
+          <span data-date>Today</span>
+        </button>
+        <button class="c-pill" type="button" data-custom="ComparisonPicker" data-only="standard">
+          <s-icon type="calendar-compare"></s-icon>
+          No comparison
+        </button>
+        <button class="c-pill" type="button" data-only="standard" commandFor="new-granularity">Day <s-icon type="chevron-down" size="small"></s-icon></button>
+        <s-menu id="new-granularity" accessibilityLabel="Granularity">
+          <s-button>Entire range</s-button>
+          <s-button>Day</s-button>
+          <s-button>Week</s-button>
+          <s-button>Month</s-button>
+        </s-menu>
+        <button class="c-pill" type="button"><s-icon type="currency-convert"></s-icon>USD $</button>
+      </div>
+      <div class="c-xbar" data-custom="ReportActionBar">
+        <button class="c-pill" type="button" id="btn-controls" aria-pressed="true"><s-icon type="adjust"></s-icon>Controls</button>
+      </div>
+    </div>
+
+    <div class="c-xlayout" id="xlayout">
+      <!-- Estado vacío del contenido -->
+      <div>
+        <div class="c-xempty" id="empty-standard" data-custom="ReportEmptyState">
+          <img src="assets/img/explore-freeform-empty.svg" alt="">
+          <span>To explore patterns in your data, start by adding a metric</span>
+        </div>
+        <div class="c-xempty" id="empty-cohort" data-custom="ReportEmptyState" hidden>
+          <img src="assets/img/explore-cohorts-empty.svg" alt="">
+          <span>To explore patterns in your data, start by adding a metric</span>
+        </div>
+      </div>
+
+      <!-- Panel: solo el primer bloque está activo hasta agregar una métrica -->
+      <aside class="c-xpanel" aria-label="Report settings" data-custom="ReportConfigPanel">
+        <div class="c-xtabs" role="tablist" data-custom="ExplorationTabs">
+          <button class="c-xtab" role="tab" aria-selected="true" data-xtab="standard"><i class="c-icon-mask c-icon-mask--chart-vertical-filled" aria-hidden="true"></i>Standard</button>
+          <button class="c-xtab" role="tab" aria-selected="false" data-xtab="cohort"><s-icon type="chart-cohort"></s-icon>Cohorts</button>
+        </div>
+        <div class="c-xbody" data-xbody="standard">
+          <div class="c-xblock">Metrics <s-button icon="plus" variant="tertiary" accessibilityLabel="Add metric"></s-button></div>
+          <div class="c-xblock c-xblock--disabled">Dimensions <s-icon type="plus"></s-icon></div>
+          <div class="c-xblock c-xblock--disabled">Visualization</div>
+          <div class="c-xblock c-xblock--disabled">Filters <s-icon type="plus"></s-icon></div>
+        </div>
+        <div class="c-xbody" data-xbody="cohort" hidden>
+          <div class="c-xblock">Metric <s-button icon="plus" variant="tertiary" accessibilityLabel="Add metric"></s-button></div>
+          <div class="c-xblock c-xblock--disabled">Cohort definition</div>
+          <div class="c-xblock c-xblock--disabled">Visualization</div>
+          <div class="c-xblock c-xblock--disabled">Interval</div>
+          <div class="c-xblock c-xblock--disabled">Filters <s-icon type="plus"></s-icon></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</s-page>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const layout = document.getElementById("xlayout");
+  const tabs = [...document.querySelectorAll(".c-xtab")];
+  const setMode = (mode) => {
+    tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.xtab === mode)));
+    document.querySelectorAll("[data-xbody]").forEach((b) => { b.hidden = b.dataset.xbody !== mode; });
+    document.getElementById("empty-standard").hidden = mode !== "standard";
+    document.getElementById("empty-cohort").hidden = mode !== "cohort";
+    document.querySelectorAll("[data-only=standard]").forEach((e) => { e.hidden = mode !== "standard"; });
+    document.querySelector("[data-date]").textContent = mode === "cohort" ? "Last 12 months" : "Today";
+  };
+  tabs.forEach((t) => t.addEventListener("click", () => setMode(t.dataset.xtab)));
+  document.getElementById("btn-controls").addEventListener("click", (e) => {
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", String(on));
+    layout.classList.toggle("is-panel-hidden", !on);
+  });
+  if (location.hash === "#cohorts") setMode("cohort");
+});
+</script>
+
+</body>
+</html>

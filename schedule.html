@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule · Create</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Schedules › Create/Edit (/app/schedules/new)
+  Formulario 100% nativo excepto el segmented control (Email|Slack, Daily|Weekly|Monthly, Dashboard|Report).
+  Al final: empty state de la lista de Schedules.
+-->
+<s-page heading="Untitled" inlineSize="base">
+  <s-link slot="breadcrumb-actions" href="schedule.html">Schedules</s-link>
+  <s-button slot="primary-action" variant="primary">Save</s-button>
+
+  <s-stack gap="base">
+
+    <s-section heading="Schedule details">
+      <s-text-field label="Schedule name" value="Untitled" details="Enter a name and date range for schedule."></s-text-field>
+    </s-section>
+
+    <s-section heading="Recipients">
+      <s-button slot="secondary-actions" disabled>Send test</s-button>
+      <s-stack gap="base">
+        <div class="c-segmented" data-panels="recipients" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="true" data-value="email">Email</button>
+          <button type="button" aria-pressed="false" data-value="slack">Slack</button>
+        </div>
+        <div data-panel-group="recipients" data-panel="email">
+          <s-stack gap="small">
+            <s-email-field label="Email address" placeholder="eg. example@email.com" details="Press enter to add more emails"></s-email-field>
+            <s-stack direction="inline" gap="small-200">
+              <s-clickable-chip removable>jesus@getcifra.com</s-clickable-chip>
+              <s-clickable-chip removable>anas@getcifra.com</s-clickable-chip>
+            </s-stack>
+          </s-stack>
+        </div>
+        <div data-panel-group="recipients" data-panel="slack" hidden>
+          <s-banner tone="info" heading="Connect Slack to send schedules to a channel">
+            <s-button>Connect Slack</s-button>
+          </s-banner>
+        </div>
+      </s-stack>
+    </s-section>
+
+    <s-section heading="When to send">
+      <s-stack gap="base">
+        <s-text color="subdued">Choose when to send your schedule to all selected users.</s-text>
+        <div class="c-segmented" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="true">Daily</button>
+          <button type="button" aria-pressed="false">Weekly</button>
+          <button type="button" aria-pressed="false">Monthly</button>
+        </div>
+        <s-grid gridTemplateColumns="120px 120px" gap="small">
+          <s-select label="Hour" value="12">
+            <s-option value="8">8</s-option><s-option value="9">9</s-option><s-option value="10">10</s-option><s-option value="11">11</s-option><s-option value="12">12</s-option>
+          </s-select>
+          <s-select label="AM/PM" value="pm">
+            <s-option value="am">AM</s-option><s-option value="pm">PM</s-option>
+          </s-select>
+        </s-grid>
+        <s-box border="base" borderRadius="large" overflow="hidden">
+          <s-table>
+            <s-table-header-row>
+              <s-table-header listSlot="primary">Date</s-table-header>
+              <s-table-header listSlot="secondary">Time</s-table-header>
+            </s-table-header-row>
+            <s-table-body>
+              <s-table-row><s-table-cell>October 13, 2026</s-table-cell><s-table-cell>12:00 PM</s-table-cell></s-table-row>
+              <s-table-row><s-table-cell>October 14, 2026</s-table-cell><s-table-cell>12:00 PM</s-table-cell></s-table-row>
+              <s-table-row><s-table-cell>October 15, 2026</s-table-cell><s-table-cell>12:00 PM</s-table-cell></s-table-row>
+            </s-table-body>
+          </s-table>
+        </s-box>
+        <s-text color="subdued">This schedule will be sent at the local time set in your app (UTC-04:00)</s-text>
+      </s-stack>
+    </s-section>
+
+    <s-section heading="What to send">
+      <s-stack gap="base">
+        <div class="c-segmented" data-panels="what" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="true" data-value="dashboard">Dashboard</button>
+          <button type="button" aria-pressed="false" data-value="report">Report</button>
+        </div>
+        <div data-panel-group="what" data-panel="dashboard">
+          <s-select label="Dashboard" placeholder="Select Dashboard">
+            <s-option value="pl">Profit &amp; Loss</s-option>
+            <s-option value="ads">Ads &amp; Acquisition</s-option>
+            <s-option value="ltv">LTV &amp; Retention</s-option>
+          </s-select>
+        </div>
+        <div data-panel-group="what" data-panel="report" hidden>
+          <s-select label="Report" placeholder="Select Report">
+            <s-option value="gp">Gross Profit by Product</s-option>
+            <s-option value="exp">Expenses by Category</s-option>
+          </s-select>
+        </div>
+      </s-stack>
+    </s-section>
+
+    <s-section heading="How to send">
+      <s-select label="Format" value="pdf" details="Users will receive a preview embedded in the email body content.">
+        <s-option value="pdf">PDF (.pdf)</s-option>
+        <s-option value="xlsx">Excel (.xlsx)</s-option>
+        <s-option value="csv">CSV (.csv)</s-option>
+      </s-select>
+    </s-section>
+
+    <s-divider></s-divider>
+    <s-text color="subdued">Lista de Schedules (sin datos):</s-text>
+    <s-section>
+      <s-empty-state heading="No schedules available">
+        <s-icon slot="graphic" type="calendar"></s-icon>
+        <s-text slot="subheading">Click below to create your first schedule.</s-text>
+        <s-button slot="primary-action" variant="primary">Create Schedule</s-button>
+      </s-empty-state>
+    </s-section>
+
+  </s-stack>
+</s-page>
+
+</body>
+</html>

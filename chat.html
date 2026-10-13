@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat IA · Conversación</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body class="no-fade">
+
+<!--
+  Pantalla: Chat de IA  (/app?c=<id>)  — conversación completa
+  Estados (hash): (ninguno) conversación · #loading skeleton al abrir · #empty conversación nueva
+  Nativo → s-popover (historial), s-button (icon-only), s-paragraph, s-heading, s-unordered-list/s-list-item,
+           s-divider, s-text, s-clickable-chip (sugerencias), s-spinner
+  Custom → burbuja del usuario, tabla de markdown, barra de feedback, composer fijo, hilo con scroll
+-->
+<s-page inlineSize="large">
+  <div class="c-chat" data-custom="ChatThread">
+
+    <!-- Título de la conversación + historial -->
+    <header class="c-chat__head">
+      <s-clickable commandFor="chat-history" accessibilityLabel="Conversation history" padding="small-200" borderRadius="base">
+        <span class="c-row" style="gap:4px"><s-text type="strong" id="chat-title">Build a report on my top products</s-text><s-icon type="chevron-down" size="small"></s-icon></span>
+      </s-clickable>
+      <s-popover id="chat-history" maxInlineSize="320px">
+        <s-box padding="small-200">
+          <s-stack gap="small-100">
+            <s-text color="subdued">Recent conversations</s-text>
+            <s-clickable href="chat.html" padding="small-200" borderRadius="base"><s-text type="strong">Build a report on my top products</s-text></s-clickable>
+            <s-clickable href="chat.html" padding="small-200" borderRadius="base"><s-text>Why did my margin drop last week?</s-text></s-clickable>
+            <s-clickable href="chat.html" padding="small-200" borderRadius="base"><s-text>Which discount codes lose money?</s-text></s-clickable>
+            <s-divider></s-divider>
+            <s-button icon="clock" variant="tertiary" href="#">View all conversations</s-button>
+          </s-stack>
+        </s-box>
+      </s-popover>
+      <span class="c-row" style="gap:4px">
+        <s-button icon="compose" variant="tertiary" accessibilityLabel="New conversation" href="chat.html#empty"></s-button>
+        <s-button icon="x" variant="tertiary" accessibilityLabel="Close chat" href="home.html"></s-button>
+      </span>
+    </header>
+
+    <!-- Estado: cargando la conversación (skeleton) -->
+    <div class="c-chat__scroll" id="state-loading" hidden aria-busy="true" aria-label="Loading conversation" data-custom="Skeleton">
+      <div class="c-chat__col">
+        <span class="c-skeleton" style="width:240px;height:36px;margin-left:auto;border-radius:12px"></span>
+        <div class="c-chat__skel"><span class="c-skeleton"></span><span class="c-skeleton" style="width:92%"></span><span class="c-skeleton" style="width:80%"></span><span class="c-skeleton" style="width:50%"></span></div>
+        <span class="c-skeleton" style="width:240px;height:36px;margin-left:auto;border-radius:12px"></span>
+        <div class="c-chat__skel"><span class="c-skeleton"></span><span class="c-skeleton" style="width:92%"></span><span class="c-skeleton" style="width:80%"></span><span class="c-skeleton" style="width:50%"></span></div>
+      </div>
+    </div>
+
+    <!-- Estado: conversación nueva -->
+    <div class="c-chat__scroll c-chat__scroll--center" id="state-empty" hidden>
+      <s-stack gap="base" alignItems="center">
+        <img src="assets/img/cifra-icon-blue.svg" alt="" width="40" height="40">
+        <s-heading>Ask anything about your profit</s-heading>
+        <s-text color="subdued">Questions, reports, comparisons. I'll use your connected data.</s-text>
+        <s-stack direction="inline" gap="small-200" justifyContent="center">
+          <s-clickable-chip data-suggest="Build a report on my top products">Build a report on my top products</s-clickable-chip>
+          <s-clickable-chip data-suggest="Why did my margin drop last week?">Why did my margin drop last week?</s-clickable-chip>
+          <s-clickable-chip data-suggest="Which discount codes lose money?">Which discount codes lose money?</s-clickable-chip>
+        </s-stack>
+      </s-stack>
+    </div>
+
+    <!-- Estado: conversación -->
+    <div class="c-chat__scroll" id="thread" tabindex="0" aria-label="Conversation">
+      <div class="c-chat__col">
+
+        <div class="c-bubble">Build a report on my top products</div>
+
+        <div class="c-msg" data-role="assistant">
+          <s-paragraph>Here is the performance report for your top products over the last 30 days (September 12, 2026 – October 11, 2026), ranked by <s-text type="strong">Net Sales</s-text>:</s-paragraph>
+
+          <div class="c-chat-table" data-custom="MarkdownTable">
+            <table>
+              <thead><tr><th>Product Name</th><th>Net Sales</th><th>Gross Sales</th><th>Units Ordered</th><th>Cost of Goods</th><th>Return Rate</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Default Title</th><td>$4,732.83</td><td>$5,049.99</td><td>30</td><td>$1,712.73</td><td>10.0%</td></tr>
+                <tr><th scope="row">Cifra Margin Bleeder</th><td>$1,343.27</td><td>$1,343.27</td><td>5</td><td>$1,242.52</td><td>0.0%</td></tr>
+                <tr><th scope="row">Cifra Hero Cash Cow</th><td>$805.07</td><td>$805.07</td><td>4</td><td>$241.53</td><td>0.0%</td></tr>
+                <tr><th scope="row">Surge Batch</th><td>$802.25</td><td>$802.25</td><td>6</td><td>$441.23</td><td>0.0%</td></tr>
+                <tr><th scope="row">Cifra Inflation Spike Product</th><td>$671.41</td><td>$671.41</td><td>5</td><td>$288.51</td><td>0.0%</td></tr>
+                <tr><th scope="row">Normal Batch</th><td>$404.68</td><td>$404.68</td><td>3</td><td>$101.16</td><td>0.0%</td></tr>
+                <tr><th scope="row">Cifra Defective Batch Product</th><td>$0.62</td><td>$429.26</td><td>4</td><td>$160.98</td><td>100.0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <s-paragraph><s-text tone="neutral"><em>(Note: An additional $745.80 in net sales was recorded under adjustments/orders without an associated product title).</em></s-text></s-paragraph>
+          <s-divider></s-divider>
+          <s-heading>Highlights</s-heading>
+          <s-unordered-list>
+            <s-list-item><s-text type="strong">Top Revenue Driver: Default Title</s-text> generated the highest sales ($4,732.83 net sales across 30 units).</s-list-item>
+            <s-list-item><s-text type="strong">High Margin Performer: Cifra Hero Cash Cow</s-text> brought in $805.07 on a $241.53 COGS (~70% gross margin).</s-list-item>
+            <s-list-item><s-text type="strong">Return Alert: Cifra Defective Batch Product</s-text> had a 100% return rate ($429.26 gross sales reduced to $0.62 net sales).</s-list-item>
+          </s-unordered-list>
+          <s-paragraph>Your store also has a built-in <s-text type="strong">Top Products</s-text> template tracking these metrics. If you would like to save a custom report with specific filters, a different date range, or additional metrics (such as gross profit or discount rates), let me know!</s-paragraph>
+
+          <div class="c-feedback" data-custom="MessageFeedback">
+            <s-button variant="tertiary" icon="clipboard" accessibilityLabel="Copy"></s-button>
+            <s-button variant="tertiary" icon="thumbs-up" accessibilityLabel="Good response"></s-button>
+            <s-button variant="tertiary" icon="thumbs-down" accessibilityLabel="Bad response"></s-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Composer fijo -->
+    <form class="c-composer" id="composer" onsubmit="return false" data-custom="ChatComposer">
+      <span class="c-prompt__logo" aria-hidden="true">C</span>
+      <input type="text" id="composer-input" placeholder="Ask anything about your profit" aria-label="Ask Cifra" autocomplete="off">
+      <button type="button" class="c-ask__btn" aria-label="Attach"><s-icon type="plus"></s-icon></button>
+      <button type="submit" class="c-ask__send" aria-label="Send" id="composer-send" disabled><s-icon type="arrow-up"></s-icon></button>
+    </form>
+  </div>
+</s-page>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const $ = (id) => document.getElementById(id);
+  const thread = $("thread"), col = thread.querySelector(".c-chat__col");
+  const input = $("composer-input"), send = $("composer-send");
+
+  const showState = (name) => {
+    $("state-loading").hidden = name !== "loading";
+    $("state-empty").hidden = name !== "empty";
+    thread.hidden = name !== "thread";
+    $("chat-title").textContent = name === "empty" ? "New conversation" : "Build a report on my top products";
+  };
+  const hash = location.hash.slice(1);
+  showState(hash === "empty" ? "empty" : hash === "loading" ? "loading" : "thread");
+
+  input.addEventListener("input", () => { send.toggleAttribute("disabled", !input.value.trim()); });
+
+  const ask = (text) => {
+    if (!text.trim()) return;
+    if (thread.hidden) { col.innerHTML = ""; showState("thread"); $("chat-title").textContent = text; }
+    const b = document.createElement("div"); b.className = "c-bubble"; b.textContent = text; col.append(b);
+    const m = document.createElement("div"); m.className = "c-msg";
+    m.innerHTML = '<s-stack direction="inline" gap="small-200" alignItems="center"><s-spinner size="small"></s-spinner><s-text color="subdued">Thinking…</s-text></s-stack>';
+    col.append(m); thread.scrollTop = thread.scrollHeight;
+    input.value = ""; send.setAttribute("disabled", "");
+    setTimeout(() => {
+      m.innerHTML = '<s-paragraph>This is a prototype reply: in the app, this is where Cifra answers with your real data, tables and links to reports.</s-paragraph>';
+      thread.scrollTop = thread.scrollHeight;
+    }, 1400);
+  };
+  $("composer").addEventListener("submit", () => ask(input.value));
+  send.addEventListener("click", () => ask(input.value));
+  document.querySelectorAll("[data-suggest]").forEach((c) => c.addEventListener("click", () => ask(c.dataset.suggest)));
+});
+</script>
+
+</body>
+</html>

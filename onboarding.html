@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body class="no-fade">
+
+<!--
+  Pantalla: Onboarding  (/app/onboarding/:step) — tienda nueva
+  Pasos (hash):  #store-preferences (1/4) · #data-sources (2/4) · #congratulations
+  Panel izquierdo = formulario del paso + widget de sync; panel derecho = vista previa del dashboard que se arma.
+  Nativo → s-select, s-badge, s-button, s-spinner, s-heading, s-paragraph, s-icon
+  Custom → layout dividido, chips de rol (selección única), filas de fuentes de datos, widget de sync,
+           preview del dashboard (mini KPI cards, lista, estados "sin conectar") y card de Congrats.
+-->
+<div class="c-ob" id="ob" data-step="store-preferences">
+
+  <!-- ============== Paneles de pasos ============== -->
+  <section class="c-ob__panel" id="ob-panel">
+    <img class="c-ob__logo" src="assets/img/cifra-icon-blue.svg" alt="Cifra" width="48" height="48">
+
+    <!-- Paso 1 -->
+    <div class="c-ob__step" data-for="store-preferences">
+      <p class="c-ob__eyebrow">STEP <b>1</b>/4</p>
+      <h1 class="c-ob__title">Welcome, Jesus.</h1>
+      <s-paragraph color="subdued">We're already syncing your Shopify data. Two quick things and your dashboard is yours.</s-paragraph>
+
+      <fieldset class="c-ob__field">
+        <legend>What best describes you?</legend>
+        <div class="c-choicechips" role="radiogroup" aria-label="What best describes you?" data-custom="ChoiceChips">
+          <button type="button" role="radio" aria-checked="true">Owner</button>
+          <button type="button" role="radio" aria-checked="false">Marketer</button>
+          <button type="button" role="radio" aria-checked="false">Agency</button>
+          <button type="button" role="radio" aria-checked="false">Finance</button>
+        </div>
+      </fieldset>
+
+      <div class="c-ob__detected"><s-text type="strong">Detected from Shopify</s-text><s-badge tone="success">Pre-filled</s-badge></div>
+      <s-stack gap="base">
+        <s-select label="Default Currency" details="Sets the default currency for all dashboards and reports.">
+          <s-option value="usd" selected>United States Dollar (USD $)</s-option>
+          <s-option value="eur">Euro (EUR €)</s-option>
+          <s-option value="gbp">British Pound (GBP £)</s-option>
+        </s-select>
+        <s-select label="Time zone" details="Used to synchronize scheduled reports and data updates to your local time.">
+          <s-option value="ny" selected>(GMT-04:00) New York</s-option>
+          <s-option value="lon">(GMT+01:00) London</s-option>
+          <s-option value="mex">(GMT-06:00) Mexico City</s-option>
+        </s-select>
+      </s-stack>
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="c-ob__step" data-for="data-sources" hidden>
+      <p class="c-ob__eyebrow">STEP <b>2</b>/4</p>
+      <h1 class="c-ob__title">Connect your data sources</h1>
+      <s-paragraph color="subdued">Shopify only shows you revenue. Connect your ad and email tools to see true ROAS and real profit.</s-paragraph>
+
+      <div class="c-ob__row"><s-text type="strong">Data sources</s-text><s-badge tone="info">1 of 5 connected</s-badge></div>
+      <div class="c-sources" data-custom="SourceRows">
+        <div class="c-sources__row"><span class="c-brandbox c-brandbox--md"><img src="assets/logos/shopify-mark.svg" alt=""></span><span class="c-sources__text"><b>Shopify</b><span>Orders, products &amp; payments</span></span><s-badge tone="success">Connected</s-badge></div>
+        <div class="c-sources__row"><span class="c-brandbox c-brandbox--md"><img src="assets/logos/google_ads.svg" alt=""></span><span class="c-sources__text"><b>Google Ads</b><span>Ad spend &amp; true ROAS</span></span><s-button href="integration-meta.html">Add integration</s-button></div>
+        <div class="c-sources__row"><span class="c-brandbox c-brandbox--md"><img src="assets/logos/meta_ads.svg" alt=""></span><span class="c-sources__text"><b>Meta Ads</b><span>Blended paid ROAS</span></span><s-button href="integration-meta.html">Add integration</s-button></div>
+        <div class="c-sources__row"><span class="c-brandbox c-brandbox--md"><img src="assets/logos/klaviyo.svg" alt=""></span><span class="c-sources__text"><b>Klaviyo</b><span>Email &amp; SMS revenue</span></span><s-button href="integration-klaviyo.html">Add integration</s-button></div>
+        <div class="c-sources__row"><span class="c-brandbox c-brandbox--md"><img src="assets/logos/google_analytics.svg" alt=""></span><span class="c-sources__text"><b>Google Analytics</b><span>Traffic &amp; attribution</span></span><s-button href="integration-meta.html">Add integration</s-button></div>
+      </div>
+      <p class="c-ob__note"><s-icon type="clock" size="small"></s-icon>Each takes about 30 seconds. You can skip any of these.</p>
+    </div>
+
+    <!-- Widget de sync + navegación (pasos 1 y 2) -->
+    <div class="c-ob__foot" id="ob-foot">
+      <div class="c-sync" id="ob-sync" data-custom="SyncWidget" role="status">
+        <span class="c-sync__state"><s-spinner size="small" accessibilityLabel="Syncing"></s-spinner><span id="ob-sync-text">Syncing 0 orders</span></span>
+        <span class="c-sync__pct" id="ob-sync-pct">87%</span>
+      </div>
+      <div class="c-row" style="gap:8px">
+        <s-button id="ob-back" variant="tertiary" hidden>Back</s-button>
+        <s-button id="ob-next" variant="primary">Next</s-button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== Vista previa ============== -->
+  <aside class="c-ob__preview" id="ob-preview" aria-label="Dashboard preview">
+    <span class="c-previewtag"><i></i>Preview</span>
+    <div class="c-pv" data-custom="DashboardPreview">
+      <header class="c-pv__head">
+        <span class="c-pv__avatar">TO</span>
+        <span><b>testing-onboarding-yfiallla</b><span>testing-onboarding-yfiallla.myshopify.com</span></span>
+      </header>
+
+      <!-- Preview paso 1 -->
+      <div class="c-pv__body" data-for="store-preferences">
+        <h2 class="c-pv__title">Good evening. Here's what your dashboard will look like.</h2>
+        <div class="c-pv__filters" aria-hidden="true"><span class="c-pill"><s-icon type="calendar"></s-icon>Last 30 days</span><span class="c-pill"><s-icon type="calendar-compare"></s-icon>Previous period</span></div>
+        <div class="c-pv__grid">
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Cohorts &amp; LTV</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$148.50</span> <span class="c-delta c-delta--up">↗ 18%</span></span>
+                <span data-spark="rand:31:20" data-prev="rand:32:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Contribution Margin</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$42,800</span> <span class="c-delta c-delta--up">↗ 14%</span></span>
+                <span data-spark="rand:33:20" data-prev="rand:34:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Expenses by Category</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$18,400</span> <span class="c-delta c-delta--down">↘ 5%</span></span>
+                <span data-spark="rand:35:20" data-prev="rand:36:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Marketing Efficiency</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">3.8x</span> <span class="c-delta c-delta--up">↗ 12%</span></span>
+                <span data-spark="rand:37:20" data-prev="rand:38:20"></span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <article class="c-card c-pvw c-pvw--list" data-custom="TableWidget">
+          <div class="c-card__body">
+            <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Total Sales over Time</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+            <div class="c-indextable c-pvw__table"><div class="c-indextable__scroll"><table>
+              <thead><tr><th>Month</th><th class="c-num">Total sales</th><th class="c-num">Change</th></tr></thead>
+              <tbody>
+                <tr><td>Feb 1, 2025</td><td class="c-num"><b>$105,420</b></td><td class="c-num"><span class="c-delta c-delta--up">↗ 5%</span></td></tr>
+                <tr><td>Mar 1, 2025</td><td class="c-num"><b>$112,890</b></td><td class="c-num"><span class="c-delta c-delta--up">↗ 7%</span></td></tr>
+                <tr><td>Apr 1, 2025</td><td class="c-num"><b>$118,300</b></td><td class="c-num"><span class="c-delta c-delta--up">↗ 4%</span></td></tr>
+                <tr><td>May 1, 2025</td><td class="c-num"><b>$121,500</b></td><td class="c-num"><span class="c-delta c-delta--up">↗ 3%</span></td></tr>
+                <tr><td>Jun 1, 2025</td><td class="c-num"><b>$123,627</b></td><td class="c-num"><span class="c-delta c-delta--up">↗ 2%</span></td></tr>
+              </tbody>
+            </table></div></div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Preview paso 2 -->
+      <div class="c-pv__body" data-for="data-sources" hidden>
+        <h2 class="c-pv__title">Good evening. Here's what your dashboard will look like.</h2>
+        <div class="c-pv__filters" aria-hidden="true"><span class="c-pill"><s-icon type="calendar"></s-icon>Last 30 days</span><span class="c-pill"><s-icon type="calendar-compare"></s-icon>Previous period</span></div>
+        <p class="c-pv__label">Sales</p>
+        <div class="c-pv__grid">
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Total Sales</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$142,380</span> <span class="c-delta c-delta--up">↗ 12%</span></span>
+                <span data-spark="rand:41:20" data-prev="rand:42:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">AOV</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$86.40</span> <span class="c-delta c-delta--up">↗ 3%</span></span>
+                <span data-spark="rand:43:20" data-prev="rand:44:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Customers</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">1,648</span> <span class="c-delta c-delta--up">↗ 9%</span></span>
+                <span data-spark="rand:45:20" data-prev="rand:46:20"></span>
+              </div>
+            </div>
+          </article>
+          <article class="c-card c-pvw" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">LTV</h3><span class="c-source" data-source="shopify" role="img" aria-label="shopify" title="shopify"></span></div>
+              <div class="c-kpi__row">
+                <span class="c-pvw__figure"><span class="c-kpi__value">$214</span> <span class="c-delta c-delta--up">↗ 5%</span></span>
+                <span data-spark="rand:47:20" data-prev="rand:48:20"></span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <p class="c-pv__label">Marketing</p>
+        <div class="c-pv__grid">
+          <article class="c-card c-pvw c-pvw--locked" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Marketing Efficiency</h3></div>
+              <div class="c-pvw__ghost"><span class="c-skeleton"></span><span class="c-skeleton"></span></div>
+              <div class="c-pvw__cta"><span class="c-sourcestack__chips"><span class="c-source" data-source="meta_ads" role="img" aria-label="meta_ads" title="meta_ads"></span><span class="c-source" data-source="google_ads" role="img" aria-label="google_ads" title="google_ads"></span></span><span>Connect Meta and Google Ads</span></div>
+            </div>
+          </article>
+          <article class="c-card c-pvw c-pvw--locked" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Google Ads ROAS</h3></div>
+              <div class="c-pvw__ghost"><span class="c-skeleton"></span><span class="c-skeleton"></span></div>
+              <div class="c-pvw__cta"><span class="c-sourcestack__chips"><span class="c-source" data-source="google_ads" role="img" aria-label="google_ads" title="google_ads"></span></span><span>Connect Google Ads</span></div>
+            </div>
+          </article>
+        </div>
+        <p class="c-pv__label">Email &amp; SMS</p>
+        <div class="c-pv__grid">
+          <article class="c-card c-pvw c-pvw--locked" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Klaviyo Campaigns</h3></div>
+              <div class="c-pvw__ghost"><span class="c-skeleton"></span><span class="c-skeleton"></span></div>
+              <div class="c-pvw__cta"><span class="c-sourcestack__chips"><span class="c-source" data-source="klaviyo" role="img" aria-label="klaviyo" title="klaviyo"></span></span><span>Connect Klaviyo</span></div>
+            </div>
+          </article>
+        </div>
+        <p class="c-pv__label">Analytics</p>
+        <div class="c-pv__grid">
+          <article class="c-card c-pvw c-pvw--locked" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">Sessions</h3></div>
+              <div class="c-pvw__ghost"><span class="c-skeleton"></span><span class="c-skeleton"></span></div>
+              <div class="c-pvw__cta"><span class="c-sourcestack__chips"><span class="c-source" data-source="google_analytics" role="img" aria-label="google_analytics" title="google_analytics"></span></span><span>Connect Google Analytics</span></div>
+            </div>
+          </article>
+          <article class="c-card c-pvw c-pvw--locked" data-custom="KpiCard">
+            <div class="c-card__body">
+              <div class="c-pvw__head"><span class="c-grip" aria-hidden="true"><svg width="10" height="14" viewBox="0 0 10 14"><g fill="currentColor"><circle cx="2" cy="2" r="1.3"/><circle cx="8" cy="2" r="1.3"/><circle cx="2" cy="7" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="2" cy="12" r="1.3"/><circle cx="8" cy="12" r="1.3"/></g></svg></span><h3 class="c-card__title">GA4 Bounce Rate</h3></div>
+              <div class="c-pvw__ghost"><span class="c-skeleton"></span><span class="c-skeleton"></span></div>
+              <div class="c-pvw__cta"><span class="c-sourcestack__chips"><span class="c-source" data-source="google_analytics" role="img" aria-label="google_analytics" title="google_analytics"></span></span><span>Connect Google Analytics</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============== Congrats ============== -->
+  <section class="c-ob__done" id="ob-done" hidden>
+    <article class="c-done" data-custom="CongratsCard">
+      <img src="assets/img/cifra-icon-blue.svg" alt="Cifra" width="48" height="48">
+      <h1 class="c-ob__title">Congrats, you're all set</h1>
+      <s-paragraph color="subdued">You're now ready to receive actionable insights tailored to your Shopify store. From profitability analysis to growth opportunities, Cifra is here to help you make data-driven decisions that boost your business.</s-paragraph>
+      <div class="c-done__art"><img src="assets/img/onboarding-finish.png" alt="" width="190"></div>
+      <div class="c-done__stats">
+        <div class="c-stat"><span>Orders synced</span><b>0</b><span class="c-stat__spin"><s-spinner size="small" accessibilityLabel="Syncing"></s-spinner></span></div>
+        <div class="c-stat"><span>Products synced</span><b>0</b><span class="c-stat__spin"><s-spinner size="small" accessibilityLabel="Syncing"></s-spinner></span></div>
+        <div class="c-stat"><span>Connected sources</span><b>1</b><span class="c-stat__spin"><s-spinner size="small" accessibilityLabel="Syncing"></s-spinner></span></div>
+      </div>
+      <div class="c-help">
+        <span class="c-brandbox c-brandbox--md c-brandbox--cal"><img src="assets/img/cal-com.png" alt="Cal.com"></span>
+        <span class="c-sources__text"><b>Need help?</b><span>Schedule a quick call with our team (via cal.com)</span></span>
+        <s-button>Schedule a call</s-button>
+      </div>
+      <div class="c-row" style="justify-content:flex-end"><s-button variant="primary" href="home.html">Go to Home</s-button></div>
+    </article>
+  </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const STEPS = ["store-preferences", "data-sources", "congratulations"];
+  const ob = document.getElementById("ob");
+  const $ = (id) => document.getElementById(id);
+  const go = (step) => {
+    if (!STEPS.includes(step)) step = STEPS[0];
+    ob.dataset.step = step;
+    const done = step === "congratulations";
+    $("ob-panel").hidden = done; $("ob-preview").hidden = done; $("ob-done").hidden = !done;
+    document.querySelectorAll("[data-for]").forEach((e) => { e.hidden = e.dataset.for !== step; });
+    $("ob-back").hidden = step === STEPS[0];
+    $("ob-back").style.display = step === STEPS[0] ? "none" : "";
+    if (location.hash.slice(1) !== step) history.replaceState(null, "", "#" + step);
+    window.scrollTo(0, 0);
+  };
+  $("ob-next").addEventListener("click", () => go(STEPS[STEPS.indexOf(ob.dataset.step) + 1]));
+  $("ob-back").addEventListener("click", () => go(STEPS[STEPS.indexOf(ob.dataset.step) - 1]));
+  document.querySelectorAll(".c-choicechips button").forEach((b) => b.addEventListener("click", () => {
+    b.parentElement.querySelectorAll("button").forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+  }));
+  // sync terminado: onboarding.html?synced#data-sources
+  if (location.search.includes("synced")) {
+    $("ob-sync").classList.add("is-done");
+    $("ob-sync").querySelector("s-spinner").replaceWith(Object.assign(document.createElement("s-icon"), { }));
+    const ic = $("ob-sync").querySelector("s-icon"); ic.setAttribute("type", "check-circle");
+    $("ob-sync-text").textContent = "Synced 1,862 orders"; $("ob-sync-pct").textContent = "100%";
+  }
+  go(location.hash.slice(1));
+  window.addEventListener("hashchange", () => go(location.hash.slice(1)));
+});
+</script>
+</body>
+</html>

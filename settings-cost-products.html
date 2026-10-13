@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Product costs</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Settings › Costs › Product costs (/app/settings/costs/products)
+  Página ancha (sin el nav de Settings). Hoy el header es "← Product costs" dentro de la página;
+  en 2.0 lo resuelve s-page (breadcrumb + heading + acciones en el title bar).
+  Nativo → cards, s-number-field (sufijo %), s-checkbox, s-button, s-menu por fila.
+  Custom → IndexTable: tabs, toolbar, selección, orden, input editable por celda, footer con conteo.
+  "Manage Google Sheets" / "Manage" llevan al flujo OAuth (integration-meta.html es el mismo patrón).
+-->
+<s-page heading="Product costs" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="settings.html#costs">Costs</s-link>
+  <s-button slot="secondary-actions" href="integration-meta.html">Manage Google Sheets</s-button>
+
+  <s-stack gap="base">
+    <s-text color="subdued">The cost to make or buy each product.</s-text>
+
+    <s-section>
+      <s-stack gap="base">
+        <s-stack gap="none">
+          <s-text fontWeight="semibold">Default margin</s-text>
+          <s-text color="subdued">Applied to any product without its own cost, so you get an estimated profit before entering exact numbers</s-text>
+        </s-stack>
+        <s-box maxInlineSize="200px">
+          <s-number-field label="Default margin" value="12" suffix="%" min="0" max="100"></s-number-field>
+        </s-box>
+        <s-text color="subdued">e.g. a £50.00 product with a 40% margin gets an estimated cost of £30.00.</s-text>
+        <s-checkbox label="Use the discounted price instead of the list price to calculate the margin" checked></s-checkbox>
+        <s-checkbox label="Force the default margin on every product" details="Ignores Shopify's cost and any Cifra cost you've entered per product. Every product uses this margin instead. Your entered costs stay saved; turn this off to use them again."></s-checkbox>
+      </s-stack>
+    </s-section>
+
+    <s-section>
+      <s-grid gridTemplateColumns="1fr auto" gap="base" alignItems="start">
+        <s-stack gap="base">
+          <s-stack gap="none">
+            <s-text fontWeight="semibold">Google Sheets</s-text>
+            <s-text color="subdued">Collaborative tool for creating and editing spreadsheets in real-time.</s-text>
+          </s-stack>
+          <s-stack direction="inline" gap="small">
+            <s-button icon="settings" href="integration-meta.html">Manage</s-button>
+            <s-button icon="external">View template</s-button>
+          </s-stack>
+        </s-stack>
+        <s-box padding="small" border="base" borderRadius="large">
+          <img src="assets/logos/google_sheets.svg" alt="Google Sheets" width="40" height="40">
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <s-text color="subdued">Set a cost on any variant in the table below, or import them from a spreadsheet.</s-text>
+
+    <div class="c-indextable" data-custom="IndexTable">
+      <div class="c-indextable__bar">
+        <div class="c-tabs" role="tablist">
+          <button class="c-tabs__tab" role="tab" aria-selected="true">All</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Missing cost</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Estimated</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Overriding Shopify</button>
+        </div>
+        <div class="c-indextable__tools">
+          <s-button icon="search" accessibilityLabel="Search and filter"></s-button>
+          <s-button icon="layout-columns-3" accessibilityLabel="Edit columns"></s-button>
+          <s-button icon="sort" accessibilityLabel="Sort"></s-button>
+        </div>
+      </div>
+      <div class="c-indextable__scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="c-col-check"><s-checkbox accessibilityLabel="Select all"></s-checkbox></th>
+              <th><button type="button">Product <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Variant <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">SKU <s-icon type="sort" size="small"></s-icon></button></th>
+              <th class="c-num"><button type="button">Price <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Shopify cost <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Cifra Costs <s-icon type="sort" size="small"></s-icon></button></th>
+              <th class="c-col-actions"><span class="c-sr">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="c-indextable__foot">
+        <span>Showing 25 of 36 results</span>
+        <s-button-group>
+          <s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button>
+          <s-button icon="chevron-right" accessibilityLabel="Next page"></s-button>
+        </s-button-group>
+      </div>
+    </div>
+  </s-stack>
+</s-page>
+
+<script>
+  // [product, variant, sku, price, shopifyCost, cifraCost]
+  const rows = [
+    ['Gift Card', '$10', '44748377260193', '£10.00', 'Not set', '0'],
+    ['Gift Card', '$100', '44748377358497', '£100.00', 'Not set', '0'],
+    ['Gift Card', '$25', '44748377292961', '£25.00', 'Not set', '0'],
+    ['Gift Card', '$50', '44748377325729', '£50.00', 'Not set', '0'],
+    ['Selling Plans Ski Wax', 'Sample Selling Plans Ski Wax', '44748377587873', '£9.95', 'Not set', '3.1'],
+    ['Selling Plans Ski Wax', 'Selling Plans Ski Wax', '44748377456801', '£24.95', 'Not set', '9.2'],
+    ['Selling Plans Ski Wax', 'Special Selling Plans Ski Wax', '44748377555105', '£49.95', 'Not set', '18.4'],
+    ['The Archived Snowboard', 'Default Title', '44748377489569', '£629.95', 'Not set', '310'],
+    ['The Collection Snowboard: Hydrogen', 'Default Title', '44748377817249', '£600.00', 'Not set', '295'],
+    ['The Collection Snowboard: Liquid', 'Default Title', '44748378013857', '£749.95', 'Not set', '372.5'],
+    ['The Collection Snowboard: Oxygen', 'Default Title', '44748377915553', '£1,025.00', 'Not set', '505'],
+    ['The Compare at Price Snowboard', 'Default Title', '44748377850017', '£785.95', 'Not set', '390'],
+    ['The Complete Snowboard', 'Dawn', '44748377620641', '£699.95', 'Not set', '348'],
+    ['The Complete Snowboard', 'Electric', '44748377686177', '£699.95', 'Not set', '348'],
+    ['The Complete Snowboard', 'Ice', '44748377522337', '£699.95', 'Not set', '348'],
+    ['The Complete Snowboard', 'Powder', '44748377653409', '£699.95', 'Not set', '348'],
+    ['The Complete Snowboard', 'Sunset', '44748377718945', '£699.95', 'Not set', '348'],
+    ['The Draft Snowboard', 'Default Title', '44748377424033', '£2,629.95', 'Not set', '1290'],
+    ['The Hidden Snowboard', 'Default Title', '44748377751713', '£749.95', 'Not set', '372'],
+    ['The Minimal Snowboard', 'Default Title', '44748377391265', '£885.95', 'Not set', '440'],
+    ['The Multi-location Snowboard', 'Default Title', '44748377948321', '£729.95', 'Not set', '362'],
+    ['The Out of Stock Snowboard', 'Default Title', '44748377784481', '£885.95', 'Not set', '440'],
+    ['The Videographer Snowboard', 'Default Title', '44748377882785', '£885.95', 'Not set', '440'],
+    ['Cifra COGS Historical Test 20260531T234501Z-405dc6', 'Default Title', 'CIFRA-COGS-HIST-20260531T234501Z-405dc6', '£100.00', '£20.00', '12.5'],
+    ['Cifra COGS Historical NonTest 20260531T235635Z-4d8f9e', 'Default Title', 'CIFRA-COGS-NONTEST-20260531T235635Z-4d8f9e', '£100.00', '£20.00', ''],
+  ];
+  document.getElementById('rows').innerHTML = rows.map(([p, v, sku, price, sc, cc], i) => `
+    <tr>
+      <td class="c-col-check"><s-checkbox accessibilityLabel="Select ${p} ${v}"></s-checkbox></td>
+      <td>${p}</td>
+      <td>${v}</td>
+      <td class="c-strong">${sku}</td>
+      <td class="c-num">${price}</td>
+      <td${sc === 'Not set' ? '' : ' class="c-muted"'}>${sc}</td>
+      <td><input class="c-cellinput" type="text" inputmode="decimal" value="${cc}" placeholder="Not set" aria-label="Cifra cost for ${p} ${v}"></td>
+      <td class="c-col-actions">
+        <s-clickable commandFor="row-menu-${i}" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable>
+        <s-menu id="row-menu-${i}" accessibilityLabel="Row actions">
+          <s-button icon="edit">Edit</s-button>
+          <s-button icon="delete" tone="critical">Delete</s-button>
+        </s-menu>
+      </td>
+    </tr>`).join('');
+</script>
+</body>
+</html>

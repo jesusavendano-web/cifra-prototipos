@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventario de componentes</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+<style>
+  .inv-swatch { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 32px; }
+  .inv-code { font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--c-text-secondary); }
+  .inv-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr) 260px; gap: 12px 20px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--c-border); }
+  .inv-grid:first-of-type { border-top: 0; }
+  @media (max-width: 900px) { .inv-grid { grid-template-columns: 1fr; } }
+  .inv-status { font-size: 12px; font-weight: 600; }
+  .inv-status.ok { color: var(--c-positive); }
+  .inv-status.no { color: var(--c-negative); }
+</style>
+</head>
+<body class="no-fade">
+
+<s-page heading="Cifra · Inventario de componentes (Polaris Web Components 2.0-rc)" inlineSize="large">
+  <s-stack gap="base">
+
+    <s-banner tone="info" heading="Cómo usar estos prototipos">
+      <s-paragraph>Cada pantalla carga el script real <s-text type="strong">polaris-2.0-rc.js</s-text>, así que lo que ves es lo que renderiza Shopify. Todo lo que no existe como <s-text type="strong">&lt;s-*&gt;</s-text> está en <s-text type="strong">shared/cifra.css</s-text> con clases <s-text type="strong">.c-*</s-text>. Usa “Resaltar custom” en la barra superior para ver qué es custom en cada pantalla. Task: ENG-2281.</s-paragraph>
+    </s-banner>
+
+    <!-- Pantallas -->
+    <s-section heading="Pantallas">
+      <s-grid gridTemplateColumns="1fr 1fr 1fr" gap="base">
+        <s-clickable href="home.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Home</s-text><s-text color="subdued">KPI strip, prompt IA, insights, suggested actions, skeleton</s-text></s-stack></s-clickable>
+        <s-clickable href="onboarding.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Onboarding (3 pantallas)</s-text><s-text color="subdued">Store preferences, Data sources, Congrats + preview del dashboard y widget de sync. Hash: #store-preferences, #data-sources, #congratulations</s-text></s-stack></s-clickable>
+        <s-clickable href="chat.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Chat IA · Conversación</s-text><s-text color="subdued">Hilo con tabla de reporte, highlights, feedback y composer fijo. Estados: #loading, #empty</s-text></s-stack></s-clickable>
+        <s-clickable href="dashboard.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Dashboard · Profit &amp; Loss</s-text><s-text color="subdued">Tabs, filtros, KPI cards, line, donut, lista, modal crear</s-text></s-stack></s-clickable>
+        <s-clickable href="dashboard-customize.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Dashboard · Customize</s-text><s-text color="subdued">Editor a pantalla completa: biblioteca, drag &amp; drop, resize, menú de visualización</s-text></s-stack></s-clickable>
+        <s-clickable href="reports.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Reports · Lista</s-text><s-text color="subdued">Página aparte (no es tab): búsqueda, filtros Category/Author, orden, tabla con logo de Cifra</s-text></s-stack></s-clickable>
+        <s-clickable href="report.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Reporte · Gross Profit by Product</s-text><s-text color="subdued">Tabla de reporte, panel de configuración, lista de reportes</s-text></s-stack></s-clickable>
+        <s-clickable href="report.html#cohorts" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Reporte · Cohorts</s-text><s-text color="subdued">Vista cohort de Cifra: chart por cohorte + tabla heatmap, panel Measure / Cohort definition / Interval</s-text></s-stack></s-clickable>
+        <s-clickable href="report-new.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Reporte · Create custom report (empty)</s-text><s-text color="subdued">/reports/new: panel con solo Metrics activo + ilustración de Shopify (Standard y Cohorts)</s-text></s-stack></s-clickable>
+        <s-clickable href="schedule.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Schedule · Create</s-text><s-text color="subdued">Formulario nativo + segmented control, empty state</s-text></s-stack></s-clickable>
+        <s-clickable href="settings.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Settings (7 secciones + 4 páginas de costos)</s-text><s-text color="subdued">General, Costs, Reporting, Billing, Resources, Stores, Security · Custom / Product / Shipping / Gateway costs + modal Add Costs</s-text></s-stack></s-clickable>
+        <s-clickable href="metric-tree.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Metric tree · Net Profit</s-text><s-text color="subdued">Canvas con pan/zoom, nodos, conectores +/−, panel de métricas</s-text></s-stack></s-clickable>
+        <s-clickable href="insights.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Insights</s-text><s-text color="subdued">Tabs Active/Dismissed, filtros Type/Source, orden, cards</s-text></s-stack></s-clickable>
+        <s-clickable href="integrations.html" padding="base" border="base" borderRadius="large"><s-stack gap="small-200"><s-text type="strong">Integrations</s-text><s-text color="subdued">Lista por categoría + detalle OAuth (Meta) y API key (Klaviyo)</s-text></s-stack></s-clickable>
+        <s-box padding="base" border="base subdued dashed" borderRadius="large"><s-stack gap="small-200"><s-text type="strong" color="subdued">Pendiente</s-text><s-text color="subdued">Onboarding (después del mapeo), Chat IA</s-text></s-stack></s-box>
+      </s-grid>
+    </s-section>
+
+    <!-- Hallazgos -->
+    <s-section heading="Hallazgos al construir con 2.0-rc (importante para la implementación)">
+      <s-unordered-list>
+        <s-list-item><s-text type="strong">Funciona fuera del admin:</s-text> el script renderiza en un HTML suelto, con el tema Admin Next (cards de 20px de radio, botones píldora de 28px, ShopifyInter 13px).</s-list-item>
+        <s-list-item><s-text type="strong">Responsive:</s-text> los valores <s-text type="strong">@container</s-text> de s-grid/s-stack solo funcionan dentro de <s-text type="strong">&lt;s-query-container&gt;</s-text>. Sin eso, se aplica el valor por defecto.</s-list-item>
+        <s-list-item><s-text type="strong">Los tokens no son accesibles:</s-text> las variables CSS de Polaris viven dentro del shadow DOM con un hash (ej. <s-text type="strong">--p-space-400-6e076</s-text>). Los componentes custom necesitan sus propios tokens (definidos en cifra.css con los valores medidos).</s-list-item>
+        <s-list-item><s-text type="strong">Confirmado que NO existen</s-text> (customElements.get = undefined): s-tabs, s-segmented-control, s-chart, s-skeleton, s-date-range-picker, s-app-nav. Ver tabla abajo.</s-list-item>
+        <s-list-item><s-text type="strong">Title bar:</s-text> s-page con slots breadcrumb-actions, primary-action y secondary-actions cubre el header de cada pantalla (breadcrumb + Actions).</s-list-item>
+        <s-list-item><s-text type="strong">Menús y modales</s-text> se abren sin JS con <s-text type="strong">commandFor</s-text> + <s-text type="strong">command="--show"</s-text>.</s-list-item>
+      </s-unordered-list>
+    </s-section>
+
+    <!-- Galería nativa -->
+    <s-section heading="Componentes nativos que usa Cifra" padding="none">
+      <div class="inv-grid">
+        <s-text type="strong">Botones</s-text>
+        <div class="inv-swatch">
+          <s-button variant="primary">Create dashboard</s-button>
+          <s-button>Customize</s-button>
+          <s-button commandFor="inv-menu">Actions</s-button>
+          <s-menu id="inv-menu" accessibilityLabel="Actions"><s-button icon="edit">Rename</s-button><s-button icon="export">Export</s-button><s-button icon="delete" tone="critical">Delete</s-button></s-menu>
+          <s-button variant="tertiary" icon="plus" accessibilityLabel="Add"></s-button>
+          <s-button tone="critical">Delete</s-button>
+        </div>
+        <span class="inv-code">s-button · s-menu (commandFor)</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Badges y chips</s-text>
+        <div class="inv-swatch">
+          <s-badge tone="success">Configured</s-badge>
+          <s-badge tone="success">Connected</s-badge>
+          <s-badge tone="info" icon="info">Top performer</s-badge>
+          <s-badge>Profit</s-badge>
+          <s-badge tone="warning">Estimated</s-badge>
+          <s-chip>Last 30 days</s-chip>
+          <s-clickable-chip removable>jesus@getcifra.com</s-clickable-chip>
+        </div>
+        <span class="inv-code">s-badge · s-chip · s-clickable-chip</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Formularios</s-text>
+        <div class="inv-swatch">
+          <s-box inlineSize="200px"><s-text-field label="Name" placeholder="Enter title"></s-text-field></s-box>
+          <s-box inlineSize="160px"><s-select label="Currency" value="usd"><s-option value="usd">USD $</s-option><s-option value="gbp">GBP £</s-option></s-select></s-box>
+          <s-box inlineSize="140px"><s-number-field label="Margin" value="12" suffix="%"></s-number-field></s-box>
+          <s-box inlineSize="220px"><s-search-field label="Search" placeholder="Search reports"></s-search-field></s-box>
+          <s-checkbox label="Use discounted price" checked></s-checkbox>
+          <s-switch label="Email alerts"></s-switch>
+        </div>
+        <span class="inv-code">s-text-field · s-select · s-number-field · s-search-field · s-checkbox · s-switch</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Feedback</s-text>
+        <div class="inv-swatch" style="display:grid;width:100%">
+          <s-banner tone="warning" heading="Your data is still syncing">Some metrics may be incomplete.</s-banner>
+          <s-progress value="5" max="3000" accessibilityLabel="Orders used"></s-progress>
+          <s-stack direction="inline" gap="base" alignItems="center"><s-spinner accessibilityLabel="Loading"></s-spinner><s-text color="subdued">Loading…</s-text></s-stack>
+        </div>
+        <span class="inv-code">s-banner · s-progress · s-spinner · s-empty-state</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Tabla simple (listas)</s-text>
+        <div style="width:100%">
+          <s-table>
+            <s-table-header-row><s-table-header listSlot="primary">Name</s-table-header><s-table-header listSlot="inline">Category</s-table-header><s-table-header listSlot="secondary">Author</s-table-header></s-table-header-row>
+            <s-table-body>
+              <s-table-row><s-table-cell>Customer Growth</s-table-cell><s-table-cell><s-badge>Customer</s-badge></s-table-cell><s-table-cell>Cifra Analytics</s-table-cell></s-table-row>
+              <s-table-row><s-table-cell>Expenses by Category</s-table-cell><s-table-cell><s-badge>Profit</s-badge></s-table-cell><s-table-cell>Cifra Analytics</s-table-cell></s-table-row>
+            </s-table-body>
+          </s-table>
+        </div>
+        <span class="inv-code">s-table — sin orden, sin sticky. Para listas (dashboards, reports, costos). La tabla de reporte es custom.</span>
+      </div>
+    </s-section>
+
+    <!-- Galería custom -->
+    <s-section heading="Componentes custom (no existen en Web Components)" padding="none">
+      <div class="inv-grid">
+        <s-text type="strong">Tabs</s-text>
+        <div class="c-tabs" role="tablist" data-custom="Tabs">
+          <button class="c-tabs__tab" role="tab" aria-selected="true">Active</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Dismissed</button>
+        </div>
+        <span class="inv-code">.c-tabs · Dashboards, Insights, Integrations, Costs, panel de reporte</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Segmented control</s-text>
+        <div class="c-segmented" style="max-width:360px" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="true">Daily</button>
+          <button type="button" aria-pressed="false">Weekly</button>
+          <button type="button" aria-pressed="false">Monthly</button>
+        </div>
+        <span class="inv-code">.c-segmented · Schedules (3 usos)</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Pickers de filtro</s-text>
+        <div class="c-filterbar" data-custom="FilterBar">
+          <button class="c-pill" type="button"><s-icon type="calendar"></s-icon>Last 30 days</button>
+          <button class="c-pill" type="button"><s-icon type="calendar-compare"></s-icon>Previous period</button>
+        </div>
+        <span class="inv-code">.c-pill + .c-popover + .c-daterange (presets + s-date-picker type="range"). Ver Dashboard.</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">KPI card</s-text>
+        <article class="c-card" style="max-width:320px" data-custom="KpiCard">
+          <div class="c-card__body">
+            <h3 class="c-card__title">Gross Sales</h3>
+            <div class="c-kpi__row"><span><span class="c-kpi__value">$9,505.93</span> <span class="c-delta c-delta--up">↗ 180.56%</span></span><span data-spark="rand:1" data-prev="rand:2:30:60:30"></span></div>
+          </div>
+          <footer class="c-card__footer">From 1 source <span class="c-source" aria-label="Shopify">S</span></footer>
+        </article>
+        <span class="inv-code">.c-card + .c-kpi__* + sparkline · Dashboard y Home</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Gráficas</s-text>
+        <s-grid gridTemplateColumns="2fr 1fr" gap="base">
+          <div class="c-card"><div class="c-card__body"><span data-line="rand:11:30:45:35" data-prev="rand:12:30:30:30" data-labels='["Sep 12","Sep 27","Oct 11"]' data-suffix="%"></span></div></div>
+          <div class="c-card"><div class="c-card__body"><span data-donut='[["payroll",42572],["rent",11581],["other",8164]]'></span></div></div>
+        </s-grid>
+        <span class="inv-code">Mantener la librería actual; solo ajustar paleta (--c-chart-*) y tipografía</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Skeleton</s-text>
+        <div class="c-stack" style="gap:8px;max-width:320px" data-custom="Skeleton"><span class="c-skeleton" style="width:40%"></span><span class="c-skeleton"></span><span class="c-skeleton" style="width:70%"></span></div>
+        <span class="inv-code">.c-skeleton · estados de carga</span>
+      </div>
+      <div class="inv-grid">
+        <s-text type="strong">Otros custom</s-text>
+        <s-text color="subdued">Tabla de reporte (sticky + totales + orden), panel de configuración de reporte, nav lateral de Settings, canvas del metric tree, grid editable del dashboard, prompt de IA, ilustraciones.</s-text>
+        <span class="inv-code">Ver report.html, settings.html, home.html</span>
+      </div>
+    </s-section>
+
+    <!-- Verificación en vivo -->
+    <s-section heading="Verificación en vivo: ¿existe el componente en este bundle?">
+      <div id="check" class="inv-swatch"></div>
+    </s-section>
+
+  </s-stack>
+</s-page>
+
+<script>
+  window.addEventListener('load', () => {
+    const tags = ['s-page','s-section','s-stack','s-grid','s-box','s-table','s-button','s-menu','s-popover','s-modal','s-badge','s-banner','s-chip','s-clickable','s-clickable-chip','s-date-picker','s-date-field','s-select','s-switch','s-progress','s-spinner','s-empty-state','s-tooltip','s-query-container','s-number','s-tabs','s-segmented-control','s-chart','s-skeleton','s-date-range-picker','s-app-nav'];
+    document.getElementById('check').innerHTML = tags.map(t => {
+      const ok = !!customElements.get(t);
+      return `<span class="inv-status ${ok ? 'ok' : 'no'}">${ok ? '✓' : '✗'} ${t}</span>`;
+    }).join('<span class="c-muted">·</span>');
+  });
+</script>
+</body>
+</html>

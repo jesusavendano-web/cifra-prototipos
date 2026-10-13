@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Custom costs</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Settings › Costs › Custom costs (/app/settings/costs/custom)
+  Nativo → s-page (breadcrumb + acciones), card Google Sheets, s-badge de estado, s-menu por fila,
+           modal Add Costs (s-modal + s-text-field + s-number-field + s-select + s-date-field).
+  Custom → IndexTable (tabs, selección, orden, footer), choice cards Fixed/Variable, segmented One time/Recurring,
+           callout informativo.
+  Filas que vienen de Google Sheet son de solo lectura (checkbox deshabilitado, texto atenuado).
+-->
+<s-page heading="Custom costs" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="settings.html#costs">Costs</s-link>
+  <s-button slot="primary-action" variant="primary" commandFor="add-costs" command="--show">Add costs</s-button>
+  <s-button slot="secondary-actions" href="integration-meta.html">Manage Google Sheets</s-button>
+
+  <s-stack gap="base">
+    <s-text color="subdued">Fixed costs like rent, payroll, software, or one-off expenses.</s-text>
+
+    <s-section>
+      <s-grid gridTemplateColumns="1fr auto" gap="base" alignItems="start">
+        <s-stack gap="base">
+          <s-stack gap="none">
+            <s-text fontWeight="semibold">Google Sheets</s-text>
+            <s-text color="subdued">Collaborative tool for creating and editing spreadsheets in real-time.</s-text>
+          </s-stack>
+          <s-stack direction="inline" gap="small">
+            <s-button icon="settings" href="integration-meta.html">Manage</s-button>
+            <s-button icon="external">View template</s-button>
+          </s-stack>
+        </s-stack>
+        <s-box padding="small" border="base" borderRadius="large">
+          <img src="assets/logos/google_sheets.svg" alt="Google Sheets" width="40" height="40">
+        </s-box>
+      </s-grid>
+    </s-section>
+
+    <div class="c-indextable" data-custom="IndexTable">
+      <div class="c-indextable__bar">
+        <div class="c-tabs" role="tablist">
+          <button class="c-tabs__tab" role="tab" aria-selected="true">All</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Active</button>
+          <button class="c-tabs__tab" role="tab" aria-selected="false">Ended</button>
+        </div>
+        <div class="c-indextable__tools">
+          <s-button icon="search" accessibilityLabel="Search and filter"></s-button>
+          <s-button icon="layout-columns-3" accessibilityLabel="Edit columns"></s-button>
+          <s-button icon="sort" accessibilityLabel="Sort"></s-button>
+        </div>
+      </div>
+      <div class="c-indextable__scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="c-col-check"><s-checkbox accessibilityLabel="Select all"></s-checkbox></th>
+              <th><button type="button">Name <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Amount <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Frequency <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Source <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Status <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Date range <s-icon type="sort" size="small"></s-icon></button></th>
+              <th class="c-col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="c-indextable__foot">
+        <span>Showing 17 of 17 results</span>
+        <s-button-group>
+          <s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button>
+          <s-button icon="chevron-right" accessibilityLabel="Next page" disabled></s-button>
+        </s-button-group>
+      </div>
+    </div>
+  </s-stack>
+
+  <!-- ===================== Modal Add Costs ===================== -->
+  <s-modal id="add-costs" heading="Add Costs">
+    <s-stack gap="base">
+      <s-text-field label="Name" placeholder="e.g. Store rent"></s-text-field>
+
+      <s-stack gap="small-200">
+        <s-text>Cost type</s-text>
+        <div class="c-choicecards" data-custom="ChoiceCards">
+          <label class="c-choicecard"><input type="radio" name="cost-type" value="fixed" checked><strong>Fixed Cost</strong><span>A set amount, like rent or a software subscription.</span></label>
+          <label class="c-choicecard"><input type="radio" name="cost-type" value="variable"><strong>Variable Cost</strong><span>A percentage or a per-order fee, like an agency commission on ad spend.</span></label>
+        </div>
+      </s-stack>
+
+      <!-- Fixed -->
+      <div data-cost="fixed">
+        <s-stack gap="base">
+          <s-number-field label="Amount" placeholder="0.00" suffix="GBP" min="0"></s-number-field>
+          <s-stack gap="small-200">
+            <s-text>Billing</s-text>
+            <div class="c-segmented" data-panels="billing" data-custom="SegmentedControl">
+              <button type="button" aria-pressed="true" data-value="once">One time</button>
+              <button type="button" aria-pressed="false" data-value="recurring">Recurring</button>
+            </div>
+          </s-stack>
+          <div data-panel-group="billing" data-panel="once">
+            <s-date-field label="Date" placeholder="mm/dd/yyyy"></s-date-field>
+          </div>
+          <div data-panel-group="billing" data-panel="recurring" hidden>
+            <s-stack gap="base">
+              <s-select label="Frequency" value="monthly" details="Recurring costs are spread evenly across each day of the period.">
+                <s-option value="weekly">Weekly</s-option>
+                <s-option value="monthly">Monthly</s-option>
+                <s-option value="quarterly">Quarterly</s-option>
+                <s-option value="yearly">Yearly</s-option>
+              </s-select>
+              <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+                <s-date-field label="Start date" placeholder="mm/dd/yyyy"></s-date-field>
+                <s-date-field label="End date" placeholder="mm/dd/yyyy" details="Leave empty if ongoing."></s-date-field>
+              </s-grid>
+            </s-stack>
+          </div>
+          <div class="c-callout" data-custom="Callout">
+            <span class="c-callout__icon"><s-icon type="info" tone="info"></s-icon></span>
+            <s-text>Enter an amount and a date to see how this reaches your reports. This is how the cost reaches your reports: split across the days it covers.</s-text>
+          </div>
+        </s-stack>
+      </div>
+
+      <!-- Variable -->
+      <div data-cost="variable" hidden>
+        <s-stack gap="base">
+          <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+            <s-number-field label="Amount" placeholder="0" suffix="%" min="0" max="100"></s-number-field>
+            <s-select label="Applied to" value="revenue">
+              <s-option value="revenue">% of Revenue</s-option>
+              <s-option value="ad-spend">% of Ad Spend</s-option>
+              <s-option value="gross-profit">% of Gross Profit</s-option>
+              <s-option value="per-order">Per order</s-option>
+            </s-select>
+          </s-grid>
+          <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+            <s-date-field label="Start date" placeholder="mm/dd/yyyy"></s-date-field>
+            <s-date-field label="End date" placeholder="mm/dd/yyyy"></s-date-field>
+          </s-grid>
+          <s-text color="subdued">Recurring costs are spread evenly across each day of the period.</s-text>
+          <div class="c-callout" data-custom="Callout">
+            <span class="c-callout__icon"><s-icon type="info" tone="info"></s-icon></span>
+            <s-text>Enter a percentage to see how this reaches your reports. A rate applies to every day in the range.</s-text>
+          </div>
+        </s-stack>
+      </div>
+    </s-stack>
+
+    <s-button slot="secondary-actions" commandFor="add-costs" command="--hide">Cancel</s-button>
+    <s-button slot="primary-action" variant="primary" commandFor="add-costs" command="--hide">Save</s-button>
+  </s-modal>
+</s-page>
+
+<script>
+  // [name, amount, frequency, source, status, range, readonly]
+  const rows = [
+    ['t 1', '£1.00', 'One time', 'Manual', 'Active', 'Sep 16, 2026'],
+    ['t 2', '£12.00', 'Monthly', 'Manual', 'Active', 'Sep 15, 2026 – Oct 22, 2026'],
+    ['Trade show booth', '£12,000.00', 'One time', 'File import', 'Active', 'May 20, 2026'],
+    ['Marketing', '$7,500.00', 'One time', 'Google Sheet', 'Ended', 'Mar 14, 2026', true],
+    ['Marketing agency', '£7,500.00', 'One time', 'File import', 'Active', 'Mar 14, 2026'],
+    ['Warehouse storage', '$3,100.00', 'Quarterly', 'Google Sheet', 'Active', 'Feb 1, 2026 – Dec 31, 2026', true],
+    ['Warehouse storage', '£3,100.00', 'Quarterly', 'File import', 'Active', 'Feb 1, 2026 – Dec 31, 2026'],
+    ['Packaging supplies', '£1,250.00', 'Weekly', 'File import', 'Active', 'Feb 1, 2026 – Nov 30, 2026'],
+    ['Customer support tool', '£89.00', 'Monthly', 'File import', 'Active', 'Jan 15, 2026 – ongoing'],
+    ['Software', '$249.00', 'Monthly', 'Google Sheet', 'Active', 'Jan 5, 2026 – Dec 31, 2026', true],
+    ['Software', '£249.00', 'Monthly', 'File import', 'Active', 'Jan 5, 2026 – Dec 31, 2026'],
+    ['Payroll', '$18,500.00', 'Monthly', 'Google Sheet', 'Active', 'Jan 1, 2026 – Dec 31, 2026', true],
+    ['Rent', '€4,200.00', 'Monthly', 'Google Sheet', 'Active', 'Jan 1, 2026 – ongoing', true],
+    ['Payroll', '£18,500.00', 'Monthly', 'File import', 'Active', 'Jan 1, 2026 – Dec 31, 2026'],
+    ['Accounting', '£450.00', 'Monthly', 'File import', 'Active', 'Jan 1, 2026 – ongoing'],
+    ['Rent', '£4,200.00', 'Monthly', 'File import', 'Active', 'Jan 1, 2026 – ongoing'],
+    ['Insurance', '£980.00', 'Quarterly', 'File import', 'Active', 'Jan 1, 2026 – ongoing'],
+  ];
+  document.getElementById('rows').innerHTML = rows.map(([n, a, f, s, st, r, ro], i) => `
+    <tr${ro ? ' data-readonly' : ''}>
+      <td class="c-col-check"><s-checkbox accessibilityLabel="Select ${n}"${ro ? ' disabled' : ''}></s-checkbox></td>
+      <td class="c-strong">${n}</td>
+      <td>${a}</td>
+      <td>${f}</td>
+      <td>${s}</td>
+      <td><s-badge${st === 'Active' ? ' tone="success"' : ''}>${st}</s-badge></td>
+      <td>${r}</td>
+      <td class="c-col-actions">
+        <s-clickable commandFor="row-menu-${i}" accessibilityLabel="Actions" padding="small-200" borderRadius="base"><i class="c-icon-mask c-icon-mask--menu-horizontal" aria-hidden="true"></i></s-clickable>
+        <s-menu id="row-menu-${i}" accessibilityLabel="Row actions">
+          <s-button icon="edit"${ro ? ' disabled' : ''}>Edit</s-button>
+          <s-button icon="delete" tone="critical"${ro ? ' disabled' : ''}>Delete</s-button>
+        </s-menu>
+      </td>
+    </tr>`).join('');
+
+  // Fixed / Variable
+  document.querySelectorAll('input[name="cost-type"]').forEach((r) => r.addEventListener('change', () => {
+    document.querySelectorAll('[data-cost]').forEach((p) => { p.hidden = p.dataset.cost !== r.value; });
+  }));
+</script>
+</body>
+</html>

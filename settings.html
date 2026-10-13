@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Settings (/app/settings/:section)
+  Layout real: contenedor centrado (~950px), nav a la izquierda (1/3) y contenido (2/3).
+  Cada sección es una card con título + descripción DENTRO de la card.
+  En el prototipo las secciones se cambian con el hash (#general, #costs, ...); en la app son rutas.
+  Custom → nav lateral (s-clickable no da el estado "current"). Todo lo demás es nativo.
+  Subpáginas de costos: settings-cost-custom.html, -products, -shipping, -gateways.
+-->
+<s-page inlineSize="large">
+  <div class="c-settings2">
+
+    <!-- Nav -->
+    <s-section padding="none">
+      <nav class="c-settingsnav" aria-label="Settings" data-custom="SettingsNav">
+        <a href="#general"><s-icon type="work"></s-icon>General</a>
+        <a href="#costs"><s-icon type="cash-dollar"></s-icon>Costs</a>
+        <a href="#reporting"><s-icon type="file"></s-icon>Reporting</a>
+        <a href="#billing"><s-icon type="receipt"></s-icon>Billing</a>
+        <a href="#resources"><s-icon type="pin"></s-icon>Resources</a>
+        <a href="#stores"><s-icon type="store"></s-icon>Stores</a>
+        <a href="#security"><s-icon type="lock"></s-icon>Security &amp; access</a>
+      </nav>
+    </s-section>
+
+    <div>
+      <!-- ============ General ============ -->
+      <div class="c-settings-view" data-view="general">
+        <s-section>
+          <s-stack gap="base">
+            <s-stack gap="none">
+              <s-text fontWeight="semibold">General</s-text>
+              <s-text color="subdued">Manage your default preferences and settings.</s-text>
+            </s-stack>
+            <s-select label="Default Language" value="en" details="Select the language you want to use across the entire application interface.">
+              <s-option value="en">English</s-option>
+              <s-option value="es">Español</s-option>
+              <s-option value="pt">Português</s-option>
+              <s-option value="fr">Français</s-option>
+            </s-select>
+            <s-select label="Time zone" value="ny" details="Used to synchronize scheduled reports and data updates to your local time.">
+              <s-option value="ny">(GMT-04:00) New York</s-option>
+              <s-option value="caracas">(GMT-04:00) Caracas</s-option>
+              <s-option value="london">(GMT+01:00) London</s-option>
+            </s-select>
+            <s-select label="Default Currency" value="usd" details="Sets the default currency for all dashboards and reports.">
+              <s-option value="usd">United States Dollar (USD $)</s-option>
+              <s-option value="gbp">British Pound (GBP £)</s-option>
+              <s-option value="eur">Euro (EUR €)</s-option>
+            </s-select>
+          </s-stack>
+        </s-section>
+      </div>
+
+      <!-- ============ Costs ============ -->
+      <div class="c-settings-view" data-view="costs" hidden>
+        <s-section padding="none">
+          <s-box padding="base">
+            <s-stack gap="none">
+              <s-text fontWeight="semibold">Costs</s-text>
+              <s-text color="subdued">Configure the cost types Cifra uses to calculate your profit metrics.</s-text>
+            </s-stack>
+          </s-box>
+          <a class="c-listrow" href="settings-cost-custom.html">
+            <span><span class="c-listrow__title">Custom costs</span><br><span class="c-listrow__desc">Fixed costs like rent, payroll, or software.</span></span>
+            <s-badge tone="success">Configured</s-badge><s-icon type="chevron-right" color="subdued"></s-icon>
+          </a>
+          <a class="c-listrow" href="settings-cost-products.html">
+            <span><span class="c-listrow__title">Product costs</span><br><span class="c-listrow__desc">What each product costs you to make or buy.</span></span>
+            <s-badge tone="success">Configured</s-badge><s-icon type="chevron-right" color="subdued"></s-icon>
+          </a>
+          <a class="c-listrow" href="settings-cost-shipping.html">
+            <span><span class="c-listrow__title">Shipping costs</span><br><span class="c-listrow__desc">What you pay to ship orders, not what you charge.</span></span>
+            <s-badge tone="success">Configured</s-badge><s-icon type="chevron-right" color="subdued"></s-icon>
+          </a>
+          <a class="c-listrow" href="settings-cost-gateways.html">
+            <span><span class="c-listrow__title">Payment gateway costs</span><br><span class="c-listrow__desc">Processing fees charged on each transaction.</span></span>
+            <s-badge tone="success">Configured</s-badge><s-icon type="chevron-right" color="subdued"></s-icon>
+          </a>
+        </s-section>
+      </div>
+
+      <!-- ============ Reporting ============ -->
+      <div class="c-settings-view" data-view="reporting" hidden>
+        <s-section>
+          <s-stack gap="base">
+            <s-stack gap="none">
+              <s-text fontWeight="semibold">Reporting</s-text>
+              <s-text color="subdued">Configure your channel preferences for exporting performance reports.</s-text>
+            </s-stack>
+            <div class="c-inset">
+              <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+                <span class="c-brandbox" data-custom="BrandIcon"><img src="assets/logos/slack.svg" alt="Slack"></span>
+                <span><span class="c-listrow__title">Slack</span><br><span class="c-listrow__desc">Connect your Slack channel to receive performance reports.</span></span>
+                <s-button icon="link">Connect</s-button>
+              </div>
+            </div>
+          </s-stack>
+        </s-section>
+      </div>
+
+      <!-- ============ Billing ============ -->
+      <div class="c-settings-view" data-view="billing" hidden>
+        <s-stack gap="base">
+          <s-section>
+            <s-stack gap="base">
+              <s-stack direction="inline" justifyContent="space-between" alignItems="start">
+                <s-stack gap="none">
+                  <s-text fontWeight="semibold">Billing</s-text>
+                  <s-text color="subdued">Manage your subscription plan, payment method, and billing history.</s-text>
+                </s-stack>
+                <s-button>Change Plan</s-button>
+              </s-stack>
+              <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+                <s-box padding="small base" border="base" borderRadius="large">
+                  <s-stack direction="inline" gap="small" alignItems="center">
+                    <s-box padding="small-200" border="base" borderRadius="base"><s-icon type="receipt" tone="info"></s-icon></s-box>
+                    <s-stack gap="none"><s-text fontWeight="semibold">Advanced - $1490.00</s-text><s-text color="subdued">Billed annually</s-text></s-stack>
+                  </s-stack>
+                </s-box>
+                <s-box padding="small base" border="base" borderRadius="large">
+                  <s-stack gap="none"><s-text fontWeight="semibold">Billing Cycle</s-text><s-text color="subdued">Billed annually</s-text></s-stack>
+                </s-box>
+              </s-grid>
+              <s-box padding="base" border="base" borderRadius="large">
+                <s-stack gap="small-200">
+                  <s-text fontWeight="semibold">Billing timeline</s-text>
+                  <s-text>Trial ends on Oct 22, 2026.</s-text>
+                  <s-text>First payment due on Oct 22, 2026.</s-text>
+                </s-stack>
+              </s-box>
+            </s-stack>
+          </s-section>
+
+          <s-section>
+            <s-stack gap="base">
+              <s-stack gap="none">
+                <s-text fontWeight="semibold">Usage this billing period</s-text>
+                <s-text color="subdued">Usage processed in this billing cycle.</s-text>
+              </s-stack>
+              <s-stack gap="small">
+                <s-text fontWeight="semibold">Orders</s-text>
+                <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                  <s-text fontWeight="semibold">5 / 3000 orders</s-text>
+                  <s-text color="subdued">2995 remaining</s-text>
+                </s-stack>
+                <s-progress value="5" max="3000" accessibilityLabel="Orders used this billing period"></s-progress>
+                <s-stack direction="inline" justifyContent="space-between">
+                  <s-text color="subdued">Period resets on Oct 31, 2026</s-text>
+                  <s-text color="subdued">5 total monthly orders</s-text>
+                </s-stack>
+              </s-stack>
+            </s-stack>
+          </s-section>
+
+          <s-section>
+            <s-stack gap="base">
+              <s-stack gap="none">
+                <s-text fontWeight="semibold">This period's bill</s-text>
+                <s-text color="subdued">Estimated total based on current usage.</s-text>
+              </s-stack>
+              <s-box padding="base" border="base" borderRadius="large">
+                <s-stack gap="base">
+                  <s-stack direction="inline" justifyContent="space-between" alignItems="center">
+                    <s-stack gap="none"><s-text fontWeight="semibold">Advanced Plan</s-text><s-text color="subdued">Billed annually</s-text></s-stack>
+                    <s-text fontWeight="semibold">$1,490.00</s-text>
+                  </s-stack>
+                  <s-divider></s-divider>
+                  <s-stack direction="inline" justifyContent="space-between">
+                    <s-text fontWeight="semibold">Estimated total</s-text>
+                    <s-text fontWeight="semibold">$1,490.00</s-text>
+                  </s-stack>
+                </s-stack>
+              </s-box>
+              <s-text color="subdued">Final amount will be billed on Oct 31, 2026</s-text>
+            </s-stack>
+          </s-section>
+        </s-stack>
+      </div>
+
+      <!-- ============ Resources ============ -->
+      <div class="c-settings-view" data-view="resources" hidden>
+        <s-section>
+          <s-stack gap="base">
+            <s-stack gap="none">
+              <s-text fontWeight="semibold">Resources</s-text>
+              <s-text color="subdued">Access helpful resources to maximize your use of Cifra.</s-text>
+            </s-stack>
+            <div class="c-inset">
+              <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+                <s-icon type="clock" color="subdued"></s-icon><span>Change Log</span><s-link href="#">View change log</s-link>
+              </div>
+              <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+                <s-icon type="question-circle" color="subdued"></s-icon><span>Frequently Asked Questions</span><s-link href="#">Explore FAQs</s-link>
+              </div>
+              <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+                <s-icon type="chat" color="subdued"></s-icon><span>Chat with Us</span><s-link href="#">Let's chat</s-link>
+              </div>
+            </div>
+          </s-stack>
+        </s-section>
+      </div>
+
+      <!-- ============ Stores ============ -->
+      <div class="c-settings-view" data-view="stores" hidden>
+        <s-section>
+          <s-stack gap="base">
+            <s-stack direction="inline" justifyContent="space-between" alignItems="start">
+              <s-stack gap="none">
+                <s-text fontWeight="semibold">Stores</s-text>
+                <s-text color="subdued">Manage your stores and view global performance.</s-text>
+              </s-stack>
+              <s-button variant="primary" icon="plus">Connect New Store</s-button>
+            </s-stack>
+            <div class="c-inset">
+              <div class="c-listrow" style="grid-template-columns:auto minmax(0,1fr) auto">
+                <s-avatar initials="CA" alt="cifra-analytics-dev"></s-avatar>
+                <span><span class="c-listrow__title">cifra-analytics-dev</span><br><span class="c-listrow__desc">cifra-analytics-dev.myshopify.com</span></span>
+                <s-badge tone="info">Principal</s-badge>
+              </div>
+            </div>
+            <s-stack direction="inline"><s-link href="#">Enter pairing code</s-link></s-stack>
+          </s-stack>
+        </s-section>
+      </div>
+
+      <!-- ============ Security & access ============ -->
+      <div class="c-settings-view" data-view="security" hidden>
+        <s-section>
+          <s-stack gap="base">
+            <s-stack gap="none">
+              <s-text fontWeight="semibold">Authorized apps</s-text>
+              <s-text color="subdued">Applications that have access to your Cifra account.</s-text>
+            </s-stack>
+            <s-empty-state heading="No authorized apps">
+              <s-icon slot="graphic" type="link"></s-icon>
+              <s-text slot="subheading">You haven't connected any apps to your Cifra account yet.</s-text>
+            </s-empty-state>
+          </s-stack>
+        </s-section>
+      </div>
+    </div>
+  </div>
+</s-page>
+
+<script>
+  (function () {
+    const views = [...document.querySelectorAll('[data-view]')];
+    const links = [...document.querySelectorAll('.c-settingsnav a')];
+    function route() {
+      const id = (location.hash || '#general').slice(1);
+      const target = views.some((v) => v.dataset.view === id) ? id : 'general';
+      views.forEach((v) => { v.hidden = v.dataset.view !== target; });
+      links.forEach((a) => {
+        if (a.getAttribute('href') === '#' + target) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    window.addEventListener('hashchange', route);
+    route();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integration · Klaviyo</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Integrations › Klaviyo (/app/integrations/klaviyo)
+  Patrón API key (Klaviyo y futuras: Attentive, Omnisend). 100% nativo.
+  Title bar: Refresh / Delete (deshabilitados mientras está Inactive) + Save al escribir la key.
+-->
+<s-page heading="Klaviyo" inlineSize="base">
+  <s-link slot="breadcrumb-actions" href="integrations.html">Integrations</s-link>
+  <s-button slot="primary-action" variant="primary" disabled>Save</s-button>
+  <s-button slot="secondary-actions" icon="refresh" disabled>Refresh</s-button>
+  <s-button slot="secondary-actions" icon="delete" tone="critical" disabled>Delete</s-button>
+
+  <s-stack gap="base">
+    <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+      <s-section heading="Status">
+        <s-badge>Inactive</s-badge>
+      </s-section>
+      <s-section heading="Last sync">
+        <s-text color="subdued">Never synced</s-text>
+      </s-section>
+    </s-grid>
+
+    <s-section heading="Klaviyo API Key">
+      <s-stack gap="base">
+        <s-paragraph>Enter your Klaviyo API Key to connect your marketing data with Cifra. We'll use this key to establish a safe and seamless data transfer and start gathering insights from your marketing automation strategies.</s-paragraph>
+        <s-password-field label="API key" labelAccessibilityVisibility="exclusive" placeholder="eg. pk_31585740a8472b22b1d82cf345b150b3"></s-password-field>
+        <s-text color="subdued">Explore how to find your API key with <s-link href="#" target="_blank">this guide</s-link>.</s-text>
+      </s-stack>
+    </s-section>
+
+    <s-divider></s-divider>
+    <s-text color="subdued">Estado conectado (referencia):</s-text>
+    <s-grid gridTemplateColumns="1fr 1fr" gap="base">
+      <s-section heading="Status">
+        <s-badge tone="success">Active</s-badge>
+      </s-section>
+      <s-section heading="Last sync">
+        <s-text>Oct 12, 2026 at 9:41 AM</s-text>
+      </s-section>
+    </s-grid>
+  </s-stack>
+</s-page>
+
+</body>
+</html>

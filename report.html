@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte · Gross Profit by Product</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Reports › Gross Profit by Product  (/app/reports/:id)
+  Patrón para TODOS los reportes. Lista de reportes al final (s-table nativo).
+  Custom → filtros, tabla de datos (sticky header + 1ra columna, fila de totales,
+           dos valores por celda, orden), panel de configuración con tabs.
+-->
+<s-page heading="Gross Profit by Product" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="reports.html">Reports</s-link>
+  <s-button slot="secondary-actions" commandFor="report-actions">Actions</s-button>
+  <s-menu id="report-actions" accessibilityLabel="Report actions">
+    <s-button icon="edit">Rename</s-button>
+    <s-button icon="export">Export</s-button>
+    <s-button icon="plus">Add to dashboard</s-button>
+    <s-button icon="view">View metric tree</s-button>
+    <s-button icon="delete" tone="critical">Delete</s-button>
+  </s-menu>
+
+  <div class="c-stack">
+    <div class="c-stack-inner" style="display:contents">
+    <s-text color="subdued">On 1 dashboard: <s-link href="dashboard.html">Products</s-link></s-text>
+
+    <div class="c-row c-row--between">
+      <div class="c-filterbar">
+        <button class="c-pill" type="button" data-custom="DateRangePicker">
+          <s-icon type="calendar"></s-icon>
+          <span data-cohort-text="Last 12 months">Last 30 days</span>
+        </button>
+        <button class="c-pill" type="button" data-custom="ComparisonPicker" data-only="standard">
+          <s-icon type="calendar-compare"></s-icon>
+          Previous period
+        </button>
+        <button class="c-pill" type="button" data-only="standard" commandFor="granularity">Entire range <s-icon type="chevron-down" size="small"></s-icon></button>
+        <s-menu id="granularity" accessibilityLabel="Granularity">
+          <s-button>Entire range</s-button>
+          <s-button>Day</s-button>
+          <s-button>Week</s-button>
+          <s-button>Month</s-button>
+        </s-menu>
+        <button class="c-pill" type="button"><s-icon type="currency-convert"></s-icon>USD $</button>
+      </div>
+      <div class="c-xbar" data-custom="ReportActionBar">
+        <button class="c-pill" type="button" id="btn-controls" aria-pressed="true"><s-icon type="adjust"></s-icon>Controls</button>
+      </div>
+    </div>
+
+    <div class="c-xlayout" id="xlayout">
+      <div id="main-standard" data-xmain>
+      <!-- Tabla de datos -->
+      <div class="c-datatable" data-sortable data-custom="ReportTable">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><button type="button">Product Name</button></th>
+              <th scope="col" aria-sort="descending"><button type="button">Gross Profit <s-icon type="sort" size="small"></s-icon></button></th>
+              <th scope="col"><button type="button">Gross Profit Margin <s-icon type="sort" size="small"></s-icon></button></th>
+              <th scope="col"><button type="button">Net Sales <s-icon type="sort" size="small"></s-icon></button></th>
+              <th scope="col"><button type="button">Cost of Goods <s-icon type="sort" size="small"></s-icon></button></th>
+              <th scope="col"><button type="button">Total Ordered Items <s-icon type="sort" size="small"></s-icon></button></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="c-total">
+              <td>Sep 12–Oct 11, 2026<span class="c-sub">Aug 13–Sep 11, 2026</span><span class="c-sub">% Change</span></td>
+              <td>$4,571.48<span class="c-sub">$1,361.45</span><span class="c-delta c-delta--up">↗ 235.78%</span></td>
+              <td>52.1%<span class="c-sub">40.1%</span><span class="c-delta c-delta--up">↗ 29.93%</span></td>
+              <td>$8,760.13<span class="c-sub">$3,388.17</span><span class="c-delta c-delta--up">↗ 158.55%</span></td>
+              <td>$4,188.66<span class="c-sub">$2,026.72</span><span class="c-delta c-delta--down">↘ 106.67%</span></td>
+              <td>214<span class="c-sub">97</span><span class="c-delta c-delta--up">↗ 120.62%</span></td>
+            </tr>
+            <tr><td>Default Title<span class="c-sub">—</span></td><td>$3,020.10<span class="c-sub">—</span></td><td>63.8%<span class="c-sub">—</span></td><td>$4,732.83<span class="c-sub">—</span></td><td>$1,712.73<span class="c-sub">—</span></td><td>13<span class="c-sub">—</span></td></tr>
+            <tr><td>Cifra Hero Cash Cow<span class="c-sub">Cifra Hero Cash Cow</span></td><td>$563.56<span class="c-sub">$1,137.89</span></td><td>70%<span class="c-sub">70%</span></td><td>$805.07<span class="c-sub">$1,625.54</span></td><td>$241.51<span class="c-sub">$487.65</span></td><td>23<span class="c-sub">46</span></td></tr>
+            <tr><td>Cifra Inflation Spike Product<span class="c-sub">Cifra Inflation Spike Product</span></td><td>$382.91<span class="c-sub">$101.52</span></td><td>57%<span class="c-sub">74.9%</span></td><td>$671.41<span class="c-sub">$135.37</span></td><td>$288.50<span class="c-sub">$33.85</span></td><td>31<span class="c-sub">8</span></td></tr>
+            <tr><td>Surge Batch<span class="c-sub">—</span></td><td>$361.01<span class="c-sub">—</span></td><td>44.9%<span class="c-sub">—</span></td><td>$802.25<span class="c-sub">—</span></td><td>$441.24<span class="c-sub">—</span></td><td>45<span class="c-sub">—</span></td></tr>
+            <tr><td>Normal Batch<span class="c-sub">—</span></td><td>$303.50<span class="c-sub">—</span></td><td>74.9%<span class="c-sub">—</span></td><td>$404.68<span class="c-sub">—</span></td><td>$101.18<span class="c-sub">—</span></td><td>17<span class="c-sub">—</span></td></tr>
+            <tr><td>Cifra Margin Bleeder<span class="c-sub">Cifra Margin Bleeder</span></td><td>$100.75<span class="c-sub">$122.04</span></td><td>7.5%<span class="c-sub">7.4%</span></td><td>$1,343.27<span class="c-sub">$1,627.26</span></td><td>$1,242.52<span class="c-sub">$1,505.22</span></td><td>52<span class="c-sub">43</span></td></tr>
+            <tr><td>Cifra Defective Batch Product<span class="c-sub">—</span></td><td>-$160.35<span class="c-sub">—</span></td><td>-25,862.9%<span class="c-sub">—</span></td><td>$0.62<span class="c-sub">—</span></td><td>$160.97<span class="c-sub">—</span></td><td>33<span class="c-sub">—</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+            </div>
+
+      <!-- Vista Cohorts (chart de líneas por cohorte + tabla heatmap) -->
+      <div id="main-cohort" data-xmain hidden data-custom="CohortReport">
+        <article class="c-cohortcard">
+          <div class="c-cohortcard__head">
+            <div>
+              <h3 class="c-card__title">Average CAC</h3>
+              <div class="c-cohortcard__value">$366.04</div>
+            </div>
+            <span class="c-sourcestack" data-custom="SourceStack" title="Shopify, Meta Ads" tabindex="0"><span class="c-card__sources">2 sources</span><span class="c-sourcestack__chips"><span class="c-source" data-source="shopify" aria-label="Shopify"></span><span class="c-source" data-source="meta_ads" aria-label="Meta Ads"></span></span></span>
+          </div>
+          <div class="c-cohortchart" data-cohort-chart data-prefix="$" data-title="Average CAC by cohort" data-series='[[0,0,0,0,0,0,0,0,0,0,0,0],[3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23,3313.23],[0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0],[0,0,0,0],[123.8,624.14,693.6],[103.66,103.66]]'></div>
+          <div class="c-cohortlegend" data-custom="ChartLegend"><span><i style="background:#13acf0"></i>Oct 2025</span><span><i style="background:#6a42e9"></i>Nov 2025</span><span><i style="background:#597eed"></i>Dec 2025</span><span><i style="background:#d147ac"></i>Jan 2026</span><span><i style="background:#23baba"></i>Feb 2026</span><span><i style="background:#9b3cdd"></i>Mar 2026</span><span><i style="background:#9e84f2"></i>Apr 2026</span><span><i style="background:#128ac0"></i>May 2026</span><span><i style="background:#d75eb7"></i>Jun 2026</span><span><i style="background:#305ee8"></i>Jul 2026</span><span class="c-cohortlegend__more">+2 more</span></div>
+          <div class="c-cohorttable" data-custom="CohortTable">
+            <table>
+              <thead><tr><th scope="col">Date <s-icon type="sort" size="small"></s-icon></th><th scope="col">Customers</th><th scope="col">CAC <s-icon type="alert-triangle" size="small"></s-icon></th><th scope="col">R-%</th><th scope="col">First order</th><th scope="col">Month 1</th><th scope="col">Month 2</th><th scope="col">Month 3</th><th scope="col">Month 4</th><th scope="col">Month 5</th></tr></thead>
+              <tbody>
+                <tr class="c-total"><th scope="row">All cohorts</th><td>13</td><td></td><td>76.9%</td><td>$366.04</td><td>$750.92</td><td>$931.75</td><td>$3,313.23</td><td>$3,313.23</td><td>$3,313.23</td></tr>
+                <tr><th scope="row">Oct 2025</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Nov 2025</th><td>1</td><td></td><td>0.0%</td><td class="h4">$3,313.23</td><td class="h4">$3,313.23</td><td class="h4">$3,313.23</td><td class="h4">$3,313.23</td><td class="h4">$3,313.23</td><td class="h4">$3,313.23</td></tr>
+                <tr><th scope="row">Dec 2025</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Jan 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Feb 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Mar 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Apr 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">May 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td></tr>
+                <tr><th scope="row">Jun 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td></td></tr>
+                <tr><th scope="row">Jul 2026</th><td>0</td><td></td><td></td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td class="h0">$0.00</td><td></td><td></td></tr>
+                <tr><th scope="row">Aug 2026</th><td>10</td><td></td><td>100.0%</td><td class="h1">$123.80</td><td class="h2">$624.14</td><td class="h2">$693.60</td><td></td><td></td><td></td></tr>
+                <tr><th scope="row">Sep 2026</th><td>2</td><td></td><td>0.0%</td><td class="h1">$103.66</td><td class="h1">$103.66</td><td></td><td></td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="c-cohortfoot">Showing 12 of 12 cohorts</div>
+        </article>
+      </div>
+
+      <!-- Panel de configuración (mismas medidas que el explorador de Shopify) -->
+      <aside class="c-xpanel" aria-label="Report settings" data-custom="ReportConfigPanel">
+        <div class="c-xtabs" role="tablist" data-custom="ExplorationTabs">
+          <button class="c-xtab" role="tab" aria-selected="true" data-xtab="standard"><i class="c-icon-mask c-icon-mask--chart-vertical-filled" aria-hidden="true"></i>Standard</button>
+          <button class="c-xtab" role="tab" aria-selected="false" data-xtab="cohort"><s-icon type="chart-cohort"></s-icon>Cohorts</button>
+        </div>
+
+        <div class="c-xbody" data-xbody="standard">
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Metrics</span><s-button icon="plus" variant="tertiary" accessibilityLabel="Add metric"></s-button></div>
+            <div class="c-xgroup__item">Gross Profit</div>
+            <div class="c-xgroup__item">Gross Profit Margin</div>
+            <div class="c-xgroup__item">Net Sales</div>
+            <div class="c-xgroup__item">Cost of Goods</div>
+            <div class="c-xgroup__item">Total Ordered Items</div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Dimensions</span><s-button icon="plus" variant="tertiary" accessibilityLabel="Add dimension"></s-button></div>
+            <div class="c-xgroup__item">Product Name</div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Visualization</span></div>
+            <div class="c-xgroup__item c-xgroup__item--control">
+              <s-select label="Visualization" labelAccessibilityVisibility="exclusive" value="table">
+                <s-option value="table">Display Table</s-option><s-option value="number">Number</s-option><s-option value="line">Line chart</s-option><s-option value="bar">Bar chart</s-option><s-option value="donut">Donut</s-option>
+              </s-select>
+            </div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Comparison</span></div>
+            <div class="c-xgroup__item c-xgroup__item--control">
+              <s-select label="Comparison" labelAccessibilityVisibility="exclusive" value="previous">
+                <s-option value="previous">Previous period</s-option><s-option value="year">Previous year</s-option><s-option value="none">No comparison</s-option>
+              </s-select>
+            </div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Filters</span><s-button icon="plus" variant="tertiary" accessibilityLabel="Add filter"></s-button></div>
+            <div class="c-xgroup__item"><s-stack gap="small-200"><s-text color="subdued">Date range</s-text><s-chip>Last 30 days</s-chip></s-stack></div>
+          </div>
+        </div>
+
+        <div class="c-xbody" data-xbody="cohort" hidden>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Measure</span></div>
+            <div class="c-xgroup__item c-xgroup__item--control"><s-select label="Measure" labelAccessibilityVisibility="exclusive" value="ltv"><s-option value="ltv">LTV</s-option><s-option value="orders">Orders</s-option><s-option value="retention">Retention</s-option></s-select></div>
+            <div class="c-xgroup__sub"><span>Show cumulative</span><s-switch label="Show cumulative" labelAccessibilityVisibility="exclusive" checked></s-switch></div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Cohort definition</span></div>
+            <div class="c-xgroup__item"><span>First order</span><s-icon type="filter"></s-icon></div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Visualization</span></div>
+            <div class="c-xgroup__item c-xgroup__item--control"><s-select label="Visualization" labelAccessibilityVisibility="exclusive" value="line"><s-option value="line">Line chart</s-option><s-option value="bar">Bar chart</s-option><s-option value="table">Table</s-option></s-select></div>
+            <div class="c-xgroup__item"><div class="c-segmented" data-custom="SegmentedControl" style="width:100%"><button type="button" aria-pressed="true" data-value="currency" style="flex:1">Currency</button><button type="button" aria-pressed="false" data-value="percent" style="flex:1">Percent</button></div></div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>Interval</span></div>
+            <div class="c-xgroup__item c-xgroup__item--control"><s-select label="Interval" labelAccessibilityVisibility="exclusive" value="month"><s-option value="week">Week</s-option><s-option value="month" selected>Month</s-option></s-select></div>
+            <div class="c-xgroup__sub"><span>Show first order</span><s-switch label="Show first order" labelAccessibilityVisibility="exclusive" checked></s-switch></div>
+          </div>
+          <div class="c-xgroup">
+            <div class="c-xgroup__head"><span>CAC Payback</span><s-button icon="plus" variant="tertiary" accessibilityLabel="Add CAC payback"></s-button></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    </div>
+
+    
+  </div>
+</s-page>
+
+<script>
+// Explorador: tabs Standard/Cohorts (cambian panel + contenido) y botón Controls (muestra/oculta el panel)
+document.addEventListener("DOMContentLoaded", () => {
+  const layout = document.getElementById("xlayout");
+  const tabs = [...document.querySelectorAll(".c-xtab")];
+  const setMode = (mode) => {
+    tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.xtab === mode)));
+    document.querySelectorAll("[data-xbody]").forEach((b) => { b.hidden = b.dataset.xbody !== mode; });
+    document.getElementById("main-standard").hidden = mode !== "standard";
+    document.getElementById("main-cohort").hidden = mode !== "cohort";
+    document.querySelectorAll("[data-only=standard]").forEach((e) => { e.hidden = mode !== "standard"; });
+    const d = document.querySelector("[data-cohort-text]");
+    d.textContent = mode === "cohort" ? d.dataset.cohortText : "Last 30 days";
+  };
+  tabs.forEach((t) => t.addEventListener("click", () => setMode(t.dataset.xtab)));
+  document.getElementById("btn-controls").addEventListener("click", (e) => {
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", String(on));
+    layout.classList.toggle("is-panel-hidden", !on);
+  });
+  if (location.hash === "#cohorts") setMode("cohort");
+});
+</script>
+
+</body>
+</html>

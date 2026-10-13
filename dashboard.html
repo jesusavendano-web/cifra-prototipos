@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard · Profit &amp; Loss</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Dashboards › Profit & Loss  (/app/dashboards)
+  Title bar → s-page (breadcrumb-actions, primary/secondary actions)
+  Custom   → tabs, filtros (date range / comparison / currency), KPI cards, gráficas
+-->
+<s-page heading="Profit &amp; Loss" inlineSize="large">
+  <s-link slot="breadcrumb-actions" href="dashboard.html">Dashboards</s-link>
+
+  <s-button slot="primary-action" variant="primary" id="pa-create" commandFor="create-dashboard" command="--show">Create dashboard</s-button>
+  <s-button slot="secondary-actions" icon="maximize">Fullscreen</s-button>
+  <s-button slot="secondary-actions" icon="edit" href="dashboard-customize.html">Customize</s-button>
+  <s-button slot="secondary-actions" commandFor="dash-actions">Actions</s-button>
+  <s-menu id="dash-actions" accessibilityLabel="Dashboard actions">
+    <s-button icon="edit">Rename</s-button>
+    <s-button icon="duplicate">Duplicate</s-button>
+    <s-button icon="export">Export PDF</s-button>
+    <s-button icon="pin">Pin dashboard</s-button>
+    <s-button icon="delete" tone="critical">Delete</s-button>
+  </s-menu>
+
+  <div class="c-stack">
+
+    <!-- Tabs: dashboard actual (con selector) / All Dashboards -->
+    <div class="c-tabs" role="tablist" data-custom="Tabs">
+      <button class="c-tabs__tab" role="tab" aria-selected="true" aria-controls="dash-view">Profit &amp; Loss
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="c-tabs__tab" role="tab" aria-selected="false" aria-controls="dash-all">All Dashboards</button>
+    </div>
+
+    <div id="dash-view" data-tabpanel class="c-stack">
+    <!-- Barra de filtros -->
+    <div class="c-filterbar">
+      <button class="c-pill" type="button" data-custom="DateRangePicker"><s-icon type="calendar"></s-icon><span data-label>Last 30 days</span></button>
+
+      <button class="c-pill" type="button" data-custom="ComparisonPicker">
+        <s-icon type="calendar-compare"></s-icon>
+        Previous period
+      </button>
+
+      <s-button commandFor="currency-menu" icon="currency-convert">USD $</s-button>
+      <s-menu id="currency-menu" accessibilityLabel="Currency">
+        <s-button>USD $</s-button>
+        <s-button>EUR €</s-button>
+        <s-button>GBP £</s-button>
+      </s-menu>
+
+      <span class="c-filterbar__meta">
+        <s-text color="subdued" interestFor="sync-tip">Last data synced 7 min ago</s-text>
+        <s-tooltip id="sync-tip">Data from Shopify syncs every 15 minutes.</s-tooltip>
+      </span>
+    </div>
+
+    <!-- Fila 1: 4 KPI cards -->
+    <div class="c-grid-4">
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Gross Sales</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$9,505.93</span> <span class="c-delta c-delta--up">↗ 180.56%</span></span>
+            <span data-spark="rand:1" data-prev="rand:2:30:60:30"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Total Discounts</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$0.00</span> <span class="c-delta c-delta--flat">–</span></span>
+            <span data-spark="[0,0,0,0,0,0,0,0]"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Total Returns</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$0.00</span> <span class="c-delta c-delta--flat">–</span></span>
+            <span data-spark="[0,0,0,0,0,0,0,0]"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Net Sales</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$9,505.93</span> <span class="c-delta c-delta--up">↗ 180.56%</span></span>
+            <span data-spark="rand:1" data-prev="rand:2:30:60:30"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+    </div>
+
+    <!-- Fila 2 -->
+    <div class="c-grid-4">
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Cost of Goods</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$4,188.66</span> <span class="c-delta c-delta--down">↘ 106.67%</span></span>
+            <span data-spark="rand:3" data-prev="rand:4:30:70:30"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Shipping Charged</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$904.29</span> <span class="c-delta c-delta--up">↗ 60.76%</span></span>
+            <span data-spark="rand:5" data-prev="rand:6:30:80:30"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Payment Gateway Fees</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$0.00</span> <span class="c-delta c-delta--flat">–</span></span>
+            <span data-spark="[0,0,0,0,0,0,0,0]"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Blended Ad Spend</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$0.00</span> <span class="c-delta c-delta--flat">–</span></span>
+            <span data-spark="[0,0,0,0,0,0,0,0]"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer"><s-link href="#">Connect an ad platform</s-link></footer>
+      </article>
+    </div>
+
+    <!-- Fila 3: KPIs anchos -->
+    <div class="c-grid-2">
+      <article class="c-card" data-custom="KpiCard (wide)">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Gross Profit</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">$5,317.28</span> <span class="c-delta c-delta--up">↗ 290.56%</span></span>
+            <span data-spark="rand:7" data-prev="rand:8:30:50:25"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="KpiCard (wide)">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Net Profit</h3>
+          <div class="c-kpi__row">
+            <span><span class="c-kpi__value">-$58,706.44</span> <span class="c-delta c-delta--up">↗ 7.02%</span></span>
+            <span data-spark="rand:9" data-prev="rand:10"></span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+    </div>
+
+    <!-- Fila 4: line charts con comparación -->
+    <div class="c-grid-2">
+      <article class="c-card" data-custom="LineChart">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Gross Profit Margin</h3>
+          <div class="c-row" style="margin:8px 0 4px">
+            <span class="c-kpi__value c-kpi__value--large">55.9%</span>
+            <span class="c-delta c-delta--up">↗ 39.40%</span>
+          </div>
+          <span data-line="rand:11:30:45:35" data-prev="rand:12:30:30:30" data-labels='["Sep 12","Sep 19","Sep 27","Oct 4","Oct 11"]' data-suffix="%" data-label="Gross profit margin over time"></span>
+          <div class="c-legend">
+            <span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Sep 12–Oct 11, 2026</span>
+            <span><span class="c-legend__dash"></span>Aug 13–Sep 11, 2026</span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+      <article class="c-card" data-custom="LineChart">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Net Profit Margin</h3>
+          <div class="c-row" style="margin:8px 0 4px">
+            <span class="c-kpi__value c-kpi__value--large">-617.6%</span>
+            <span class="c-delta c-delta--up">↗ 12.10%</span>
+          </div>
+          <span data-line="rand:13:30:-300:500" data-prev="rand:14:30:-500:600" data-labels='["Sep 12","Sep 19","Sep 27","Oct 4","Oct 11"]' data-suffix="%" data-label="Net profit margin over time"></span>
+          <div class="c-legend">
+            <span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Sep 12–Oct 11, 2026</span>
+            <span><span class="c-legend__dash"></span>Aug 13–Sep 11, 2026</span>
+          </div>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+    </div>
+
+    <!-- Fila 5: empty state, donut vacío, donut con datos -->
+    <div class="c-grid-3">
+      <article class="c-card">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Discounts by Code</h3>
+          <div class="c-chart-empty" data-custom="WidgetEmptyState">No data found for this date range</div>
+        </div>
+      </article>
+      <article class="c-card">
+        <div class="c-card__body">
+          <h3 class="c-card__title">Payment Fees by Gateway</h3>
+          <div class="c-chart-empty" data-custom="WidgetEmptyState">No data found for this date range</div>
+        </div>
+      </article>
+      <article class="c-card" data-custom="DonutChart">
+        <div class="c-card__body">
+          <div class="c-row c-row--between">
+            <h3 class="c-card__title">Expenses by Category</h3>
+            <span class="c-delta c-delta--up">↗ 0.74%</span>
+          </div>
+          <span data-donut='[["payroll",42572.71],["rent",11581.65],["other",8164.63],["warehouse storage",1011],["software",693.72]]' data-label="Expenses by category"></span>
+        </div>
+        <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+      </article>
+    </div>
+    </div>
+
+    <!-- Lista "All Dashboards" (segunda tab): reemplaza la vista del dashboard, como en la app -->
+    <div id="dash-all" data-tabpanel hidden class="c-stack">
+      <div class="c-indextable" data-custom="IndexTable">
+        <div class="c-indextable__bar c-indextable__bar--stack">
+          <div class="c-indextable__search">
+            <s-search-field label="Search dashboards" labelAccessibilityVisibility="exclusive" placeholder="Search dashboards"></s-search-field>
+            <s-button icon="sort" accessibilityLabel="Sort" commandFor="dash-sort"></s-button>
+          </div>
+          <div class="c-indextable__filters">
+            <s-button icon="chevron-down" commandFor="dash-author">Author</s-button>
+            <s-popover id="dash-author"><s-box padding="small-200"><s-choice-list label="Author" labelAccessibilityVisibility="exclusive" multiple name="author"><s-choice value="cifra analytics">Cifra Analytics</s-choice><s-choice value="jesus avendaño">Jesus Avendaño</s-choice></s-choice-list></s-box></s-popover>
+          </div>
+        </div>
+        <div class="c-indextable__scroll">
+          <table>
+            <thead><tr>
+              <th class="c-col-check"><s-checkbox accessibilityLabel="Select all"></s-checkbox></th>
+              <th><button type="button">Name <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Created on <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Last edited <s-icon type="sort" size="small"></s-icon></button></th>
+              <th><button type="button">Author <s-icon type="sort" size="small"></s-icon></button></th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select Profit &amp; Loss"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">Profit &amp; Loss</a><s-icon type="pin-filled" size="small"></s-icon></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 12, 2026 9:28 AM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select Ads &amp; Acquisition"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">Ads &amp; Acquisition</a></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 12, 2026 9:28 AM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select LTV &amp; Retention"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">LTV &amp; Retention</a></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 11, 2026 10:45 PM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select Overview"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">Overview</a></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 12, 2026 9:27 AM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select Products"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">Products</a></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 11, 2026 10:43 PM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select Promotions"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">Promotions</a></span></td><td>Oct 5, 2026 7:19 PM</td><td>Oct 11, 2026 10:43 PM</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select test"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">test</a></span></td><td>Oct 9, 2026 9:31 AM</td><td>Oct 9, 2026 9:31 AM</td><td><span class="c-author"><s-avatar initials="JA" size="small"></s-avatar>Jesus Avendaño</span></td></tr>
+              <tr><td class="c-col-check"><s-checkbox accessibilityLabel="Select test 1"></s-checkbox></td><td class="c-strong"><span class="c-author"><a class="c-rowlink" href="dashboard.html">test 1</a></span></td><td>Oct 9, 2026 9:31 AM</td><td>Oct 9, 2026 9:32 AM</td><td><span class="c-author"><s-avatar initials="JA" size="small"></s-avatar>Jesus Avendaño</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="c-indextable__foot">
+        <span>Showing 8 of 8 results</span>
+        <span class="c-row" style="gap:4px"><s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button><s-button icon="chevron-right" accessibilityLabel="Next page" disabled></s-button></span>
+      </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Create dashboard -->
+  <s-modal id="create-dashboard" heading="Create dashboard">
+    <s-stack gap="base">
+      <s-paragraph>Enter your dashboard name below, and select the type of template you wish to use. If you wish, you can also start from scratch by creating a blank dashboard.</s-paragraph>
+      <s-text-field label="Name" placeholder="Enter title" maxLength="80"></s-text-field>
+      <s-choice-list label="Select a dashboard type" name="template">
+        <s-choice value="blank" selected>Blank dashboard<s-text slot="details">Start from scratch and pick your own metrics.</s-text></s-choice>
+        <s-choice value="pl">Profit &amp; Loss<s-text slot="details">Last month, from gross sales down to net profit, and where the money went.</s-text></s-choice>
+        <s-choice value="promotions">Promotions<s-text slot="details">How a sale or discount code is performing.</s-text></s-choice>
+        <s-choice value="ltv">LTV &amp; Retention<s-text slot="details">Whether customers come back, and what they're worth.</s-text></s-choice>
+        <s-choice value="products">Products<s-text slot="details">Which products sell, earn, lose money and get returned.</s-text></s-choice>
+        <s-choice value="ads">Ads &amp; Acquisition<s-text slot="details">Last week's ad spend and what it brought in.</s-text></s-choice>
+      </s-choice-list>
+    </s-stack>
+    <s-button slot="secondary-actions" commandFor="create-dashboard" command="--hide">Cancel</s-button>
+    <s-button slot="primary-action" variant="primary" commandFor="create-dashboard" command="--hide">Create dashboard</s-button>
+  </s-modal>
+</s-page>
+
+<script>
+// Tab "All Dashboards" cambia el título y las acciones de la página (como la app real).
+// Las acciones se ocultan moviéndolas a un slot sin asignar (el display de s-button no se puede pisar).
+document.addEventListener("DOMContentLoaded", () => {
+  const page = document.querySelector("s-page");
+  const items = [...page.querySelectorAll(":scope > [slot]")].filter((e) => e.tagName === "S-BUTTON" || e.tagName === "S-LINK");
+  items.forEach((e) => { e.dataset.slot = e.getAttribute("slot"); });
+  const sync = (all) => {
+    page.setAttribute("heading", all ? "Dashboards" : "Profit & Loss");
+    items.forEach((e) => {
+      const create = e.id === "pa-create";
+      e.setAttribute("slot", (create ? all : !all) ? e.dataset.slot : "unused");
+      e.style.display = "";
+    });
+  };
+  document.querySelector(".c-tabs").addEventListener("click", (e) => {
+    const t = e.target.closest(".c-tabs__tab");
+    if (t) sync(t.getAttribute("aria-controls") === "dash-all");
+  });
+  sync(false);
+  if (location.hash === "#all") window.addEventListener("load", () => document.querySelector("[aria-controls=dash-all]").click());
+});
+</script>
+
+</body>
+</html>
