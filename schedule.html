@@ -22,12 +22,13 @@
 
   <s-stack gap="base">
 
-    <s-section heading="Schedule details">
+    <s-section>
+      <div class="c-cardhead"><span class="c-cardhead__title">Schedule details</span></div>
       <s-text-field label="Schedule name" value="Untitled" details="Enter a name and date range for schedule."></s-text-field>
     </s-section>
 
-    <s-section heading="Recipients">
-      <s-button slot="secondary-actions" disabled>Send test</s-button>
+    <s-section>
+      <div class="c-cardhead"><span class="c-cardhead__title">Recipients</span><s-button disabled>Send test</s-button></div>
       <s-stack gap="base">
         <div class="c-segmented" data-panels="recipients" data-custom="SegmentedControl">
           <button type="button" aria-pressed="true" data-value="email">Email</button>
@@ -50,7 +51,8 @@
       </s-stack>
     </s-section>
 
-    <s-section heading="When to send">
+    <s-section>
+      <div class="c-cardhead"><span class="c-cardhead__title">When to send</span></div>
       <s-stack gap="base">
         <s-text color="subdued">Choose when to send your schedule to all selected users.</s-text>
         <div class="c-segmented" data-custom="SegmentedControl">
@@ -83,7 +85,8 @@
       </s-stack>
     </s-section>
 
-    <s-section heading="What to send">
+    <s-section>
+      <div class="c-cardhead"><span class="c-cardhead__title">What to send</span></div>
       <s-stack gap="base">
         <div class="c-segmented" data-panels="what" data-custom="SegmentedControl">
           <button type="button" aria-pressed="true" data-value="dashboard">Dashboard</button>
@@ -105,7 +108,8 @@
       </s-stack>
     </s-section>
 
-    <s-section heading="How to send">
+    <s-section>
+      <div class="c-cardhead"><span class="c-cardhead__title">How to send</span></div>
       <s-select label="Format" value="pdf" details="Users will receive a preview embedded in the email body content.">
         <s-option value="pdf">PDF (.pdf)</s-option>
         <s-option value="xlsx">Excel (.xlsx)</s-option>
