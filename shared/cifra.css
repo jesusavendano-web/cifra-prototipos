@@ -157,9 +157,6 @@ body.show-custom [data-custom]::before {
 /* ------------------------------------------------------------------ */
 /* Segmented control                                                    */
 /* ------------------------------------------------------------------ */
-/* Titular dentro de la card (Schedules › Create), como en el admin de Shopify */
-.c-cardhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.c-cardhead__title { font: 550 13px/20px var(--c-font); color: var(--c-text); }
 .c-segmented {
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   padding: 2px; gap: 2px;
