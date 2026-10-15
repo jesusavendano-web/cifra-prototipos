@@ -522,6 +522,28 @@ a.c-listrow:hover { background: var(--c-surface-hover); }
 .c-author { display: inline-flex; align-items: center; gap: 8px; }
 .c-brandbox.c-brandbox--sm { width: 24px; height: 24px; border-radius: 8px; border: 0; background: none; }
 .c-brandbox.c-brandbox--sm img { width: 24px; height: 24px; }
+/* Variante "list" (Reports) — medida en admin.shopify.com/.../analytics/reports:
+   búsqueda sin borde, pills con borde punteado, encabezado gris a ancho completo */
+.c-indextable--list .c-indextable__bar { padding: 0; gap: 0; }
+.c-indextable--list .c-indextable__search { padding: 6px 12px 6px 8px; border-bottom: 1px solid #f2f2f2; }
+.c-indextable--list .c-indextable__searchbox { display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 4px; color: var(--c-text-secondary); cursor: text; }
+.c-indextable--list .c-indextable__searchbox input { all: unset; flex: 1; min-width: 0; font: 13px/20px var(--c-font); color: var(--c-text); }
+.c-indextable--list .c-indextable__searchbox input::placeholder { color: var(--c-text-secondary); }
+.c-indextable--list .c-indextable__filters { padding: 8px 12px; gap: 6px; }
+.c-fpill {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 2px; height: 24px; padding: 0 4px 0 10px;
+  background: var(--c-surface); border: 1px dashed #ddd; border-radius: 9999px;
+  font: 13px/20px var(--c-font); color: var(--c-text);
+}
+.c-fpill:hover { background: var(--c-surface-hover); }
+.c-fpill:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-fpill s-icon { color: var(--c-text-secondary); }
+.c-indextable--list .c-indextable__scroll { padding: 0; }
+.c-indextable--list th { background: #f7f7f7; height: 36px; padding: 8px 6px 8px 12px; border-top: 1px solid #ebebeb; border-bottom: 1px solid #ebebeb; border-radius: 0; }
+.c-indextable--list th:first-child { padding-left: 16px; border-radius: 0; }
+.c-indextable--list th:last-child { border-radius: 0; }
+.c-indextable--list td:first-child { padding-left: 16px; }
 .c-indextable__foot {
   display: flex; align-items: center; justify-content: space-between;
   padding: 8px 12px; color: var(--c-text-secondary); font-size: 12px;
