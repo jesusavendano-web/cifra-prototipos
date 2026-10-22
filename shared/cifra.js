@@ -15,6 +15,7 @@
     ['integrations.html', 'Integrations'],
     ['schedule.html', 'Schedule'],
     ['settings.html', 'Settings'],
+    ['system-states.html', 'System states'],
   ];
 
   const svgNS = 'http://www.w3.org/2000/svg';

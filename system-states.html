@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System states</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Estados del sistema (mantenimiento / error / no encontrado)
+  Nativo → s-empty-state (graphic + subheading + primary/secondary actions), s-image, s-button.
+  Ojo: el slot subheading de s-empty-state solo renderiza texto (lo envuelve en s-text subdued);
+  un s-stack ahí no se pinta. Por eso el código de error va fuera, debajo.
+  Custom → nada. El switcher de estados es solo del prototipo.
+  Hash: #maintenance (default), #error-500, #not-found.
+  Ojo: maintenance se sirve por DNS cuando Railway está caído → en prod es un HTML estático
+  (sin backend) que carga app-bridge.js + polaris con el client id real en shopify-api-key.
+  Ilustraciones: placeholders en assets/img/system-*.svg, se reemplazan con las finales.
+-->
+<s-page inlineSize="small">
+
+  <s-stack gap="large">
+
+    <!-- Solo prototipo: cambiar de estado -->
+    <s-stack direction="inline" justifyContent="center">
+      <s-stack id="state-switch" direction="inline" gap="small-200">
+        <s-button data-state="maintenance">Maintenance · 503</s-button>
+        <s-button data-state="error-500">Error · 500</s-button>
+        <s-button data-state="not-found">Not found · 404</s-button>
+      </s-stack>
+    </s-stack>
+
+    <!-- 503 · Mantenimiento -->
+    <div data-state-view="maintenance">
+      <s-box paddingBlock="large-400">
+        <s-empty-state heading="We'll be back shortly">
+          <s-image slot="graphic" src="assets/img/system-maintenance.svg" alt="Cifra Analytics is under maintenance" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-paragraph slot="subheading">Cifra is getting some improvements and is temporarily unavailable. Your store data is safe and syncing will resume automatically once we're back.</s-paragraph>
+          <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Try again</s-button>
+        </s-empty-state>
+        <s-stack alignItems="center" paddingBlockStart="base">
+          <s-text color="subdued">Error code: 503</s-text>
+        </s-stack>
+      </s-box>
+    </div>
+
+    <!-- 500 · Error -->
+    <div data-state-view="error-500" hidden>
+      <s-box paddingBlock="large-400">
+        <s-empty-state heading="Something went wrong">
+          <s-image slot="graphic" src="assets/img/system-error-500.svg" alt="Something went wrong" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-paragraph slot="subheading">There's a technical problem preventing this page from loading. Try reloading the page or navigating to another page in Cifra. If the problem persists, contact our support team.</s-paragraph>
+          <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Reload</s-button>
+          <s-button slot="secondary-actions" href="mailto:support@getcifra.com">Contact support</s-button>
+        </s-empty-state>
+        <s-stack alignItems="center" paddingBlockStart="base">
+          <s-text color="subdued">Error code: 500</s-text>
+        </s-stack>
+      </s-box>
+    </div>
+
+    <!-- 404 · No encontrado -->
+    <div data-state-view="not-found" hidden>
+      <s-box paddingBlock="large-400">
+        <s-empty-state heading="Page not found">
+          <s-image slot="graphic" src="assets/img/system-not-found.svg" alt="Page not found" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-paragraph slot="subheading">The page you're looking for doesn't exist or may have moved. Check the URL for typos, or head back to your dashboards.</s-paragraph>
+          <s-button slot="primary-action" variant="primary" icon="home" href="dashboard.html">Go to Dashboards</s-button>
+        </s-empty-state>
+        <s-stack alignItems="center" paddingBlockStart="base">
+          <s-text color="subdued">Error code: 404</s-text>
+        </s-stack>
+      </s-box>
+    </div>
+
+  </s-stack>
+</s-page>
+
+<script>
+(function () {
+  const states = ['maintenance', 'error-500', 'not-found'];
+  const buttons = document.querySelectorAll('#state-switch s-button');
+  function go(state) {
+    if (!states.includes(state)) state = states[0];
+    document.querySelectorAll('[data-state-view]').forEach((v) => { v.hidden = v.dataset.stateView !== state; });
+    buttons.forEach((b) => b.setAttribute('variant', b.dataset.state === state ? 'secondary' : 'tertiary'));
+    if (location.hash.slice(1) !== state) history.replaceState(null, '', '#' + state);
+  }
+  buttons.forEach((b) => b.addEventListener('click', () => go(b.dataset.state)));
+  window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+  go(location.hash.slice(1));
+})();
+</script>
+
+</body>
+</html>
