@@ -20,7 +20,7 @@
   Hash: #maintenance (default), #error-500, #not-found.
   Ojo: maintenance se sirve por DNS cuando Railway está caído → en prod es un HTML estático
   (sin backend) que carga app-bridge.js + polaris con el client id real en shopify-api-key.
-  Ilustraciones: placeholders en assets/img/system-*.svg, se reemplazan con las finales.
+  Ilustraciones: assets/img/system-*.webp exportadas @2x (380px de alto → ~190px en pantalla).
 -->
 <s-page inlineSize="small">
 
@@ -39,7 +39,7 @@
     <div data-state-view="maintenance">
       <s-box paddingBlock="large-400">
         <s-empty-state heading="We'll be back shortly">
-          <s-image slot="graphic" src="assets/img/system-maintenance.svg" alt="Cifra Analytics is under maintenance" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-image slot="graphic" src="assets/img/system-maintenance.webp" srcSet="assets/img/system-maintenance.webp 2x" alt="Cifra Analytics is under maintenance" aspectRatio="386/380" inlineSize="auto"></s-image>
           <s-paragraph slot="subheading">Cifra is getting some improvements and is temporarily unavailable. Your store data is safe and syncing will resume automatically once we're back.</s-paragraph>
           <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Try again</s-button>
         </s-empty-state>
@@ -53,7 +53,7 @@
     <div data-state-view="error-500" hidden>
       <s-box paddingBlock="large-400">
         <s-empty-state heading="Something went wrong">
-          <s-image slot="graphic" src="assets/img/system-error-500.svg" alt="Something went wrong" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-image slot="graphic" src="assets/img/system-error-500.webp" srcSet="assets/img/system-error-500.webp 2x" alt="Something went wrong" aspectRatio="344/380" inlineSize="auto"></s-image>
           <s-paragraph slot="subheading">There's a technical problem preventing this page from loading. Try reloading the page or navigating to another page in Cifra. If the problem persists, contact our support team.</s-paragraph>
           <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Reload</s-button>
           <s-button slot="secondary-actions" href="mailto:support@getcifra.com">Contact support</s-button>
@@ -68,7 +68,7 @@
     <div data-state-view="not-found" hidden>
       <s-box paddingBlock="large-400">
         <s-empty-state heading="Page not found">
-          <s-image slot="graphic" src="assets/img/system-not-found.svg" alt="Page not found" aspectRatio="4/3" inlineSize="auto"></s-image>
+          <s-image slot="graphic" src="assets/img/system-not-found.webp" srcSet="assets/img/system-not-found.webp 2x" alt="Page not found" aspectRatio="428/380" inlineSize="auto"></s-image>
           <s-paragraph slot="subheading">The page you're looking for doesn't exist or may have moved. Check the URL for typos, or head back to your dashboards.</s-paragraph>
           <s-button slot="primary-action" variant="primary" icon="home" href="dashboard.html">Go to Dashboards</s-button>
         </s-empty-state>
