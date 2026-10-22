@@ -1148,5 +1148,5 @@ body.no-fade::after { display: none; }
 .c-stat .c-stat__spin { grid-row: 1; grid-column: 2; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
 .c-stat .c-stat__spin s-spinner { position: static !important; grid-row: auto; grid-column: auto; }
 /* System states: s-empty-state no deja espacio entre el gráfico y el título ni centra el subheading */
-.c-empty-graphic { padding-block-end: 32px; }
+.c-empty-graphic { padding-block-end: 24px; }
 .c-empty-text { text-align: center; }

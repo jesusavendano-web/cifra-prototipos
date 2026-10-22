@@ -6,7 +6,7 @@
 <title>System states</title>
 <meta name="shopify-api-key" content="prototype">
 <script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
-<link rel="stylesheet" href="shared/cifra.css">
+<link rel="stylesheet" href="shared/cifra.css?v=2">
 <script src="shared/cifra.js" defer></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
   Nativo → s-empty-state (graphic + subheading + primary/secondary actions), s-image, s-button.
   Ojo: el slot subheading de s-empty-state solo renderiza texto (lo envuelve en s-text subdued);
   un s-stack ahí no se pinta. Por eso el código de error va fuera, debajo.
-  Custom → .c-empty-graphic (32px entre ilustración y título) y .c-empty-text (descripción centrada; va en s-text porque el <p> interno de s-paragraph reinicia text-align):
+  Custom → .c-empty-graphic (24px entre ilustración y título) y .c-empty-text (descripción centrada; va en s-text porque el <p> interno de s-paragraph reinicia text-align):
            s-empty-state no expone espaciado ni alineación (s-image y s-paragraph son display: contents).
   El switcher de estados es solo del prototipo.
   Hash: #maintenance (default), #error-500, #not-found.
