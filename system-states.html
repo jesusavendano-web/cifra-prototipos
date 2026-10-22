@@ -16,7 +16,9 @@
   Nativo → s-empty-state (graphic + subheading + primary/secondary actions), s-image, s-button.
   Ojo: el slot subheading de s-empty-state solo renderiza texto (lo envuelve en s-text subdued);
   un s-stack ahí no se pinta. Por eso el código de error va fuera, debajo.
-  Custom → nada. El switcher de estados es solo del prototipo.
+  Custom → .c-empty-graphic (32px entre ilustración y título) y .c-empty-text (descripción centrada; va en s-text porque el <p> interno de s-paragraph reinicia text-align):
+           s-empty-state no expone espaciado ni alineación (s-image y s-paragraph son display: contents).
+  El switcher de estados es solo del prototipo.
   Hash: #maintenance (default), #error-500, #not-found.
   Ojo: maintenance se sirve por DNS cuando Railway está caído → en prod es un HTML estático
   (sin backend) que carga app-bridge.js + polaris con el client id real en shopify-api-key.
@@ -39,8 +41,10 @@
     <div data-state-view="maintenance">
       <s-box paddingBlock="large-400">
         <s-empty-state heading="We'll be back shortly">
-          <s-image slot="graphic" src="assets/img/system-maintenance.webp" srcSet="assets/img/system-maintenance.webp 2x" alt="Cifra Analytics is under maintenance" aspectRatio="386/380" inlineSize="auto"></s-image>
-          <s-paragraph slot="subheading">Cifra is getting some improvements and is temporarily unavailable. Your store data is safe and syncing will resume automatically once we're back.</s-paragraph>
+          <div slot="graphic" class="c-empty-graphic" data-custom="EmptyStateSpacing">
+            <s-image src="assets/img/system-maintenance.webp" srcSet="assets/img/system-maintenance.webp 2x" alt="Cifra Analytics is under maintenance" aspectRatio="386/380" inlineSize="auto"></s-image>
+          </div>
+          <s-text slot="subheading" class="c-empty-text">Cifra is getting some improvements and is temporarily unavailable. Your store data is safe and syncing will resume automatically once we're back.</s-text>
           <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Try again</s-button>
         </s-empty-state>
         <s-stack alignItems="center" paddingBlockStart="base">
@@ -53,8 +57,10 @@
     <div data-state-view="error-500" hidden>
       <s-box paddingBlock="large-400">
         <s-empty-state heading="Something went wrong">
-          <s-image slot="graphic" src="assets/img/system-error-500.webp" srcSet="assets/img/system-error-500.webp 2x" alt="Something went wrong" aspectRatio="344/380" inlineSize="auto"></s-image>
-          <s-paragraph slot="subheading">There's a technical problem preventing this page from loading. Try reloading the page or navigating to another page in Cifra. If the problem persists, contact our support team.</s-paragraph>
+          <div slot="graphic" class="c-empty-graphic" data-custom="EmptyStateSpacing">
+            <s-image src="assets/img/system-error-500.webp" srcSet="assets/img/system-error-500.webp 2x" alt="Something went wrong" aspectRatio="344/380" inlineSize="auto"></s-image>
+          </div>
+          <s-text slot="subheading" class="c-empty-text">There's a technical problem preventing this page from loading. Try reloading the page or navigating to another page in Cifra. If the problem persists, contact our support team.</s-text>
           <s-button slot="primary-action" variant="primary" icon="refresh" onclick="location.reload()">Reload</s-button>
           <s-button slot="secondary-actions" href="mailto:support@getcifra.com">Contact support</s-button>
         </s-empty-state>
@@ -68,8 +74,10 @@
     <div data-state-view="not-found" hidden>
       <s-box paddingBlock="large-400">
         <s-empty-state heading="Page not found">
-          <s-image slot="graphic" src="assets/img/system-not-found.webp" srcSet="assets/img/system-not-found.webp 2x" alt="Page not found" aspectRatio="428/380" inlineSize="auto"></s-image>
-          <s-paragraph slot="subheading">The page you're looking for doesn't exist or may have moved. Check the URL for typos, or head back to your dashboards.</s-paragraph>
+          <div slot="graphic" class="c-empty-graphic" data-custom="EmptyStateSpacing">
+            <s-image src="assets/img/system-not-found.webp" srcSet="assets/img/system-not-found.webp 2x" alt="Page not found" aspectRatio="428/380" inlineSize="auto"></s-image>
+          </div>
+          <s-text slot="subheading" class="c-empty-text">The page you're looking for doesn't exist or may have moved. Check the URL for typos, or head back to your dashboards.</s-text>
           <s-button slot="primary-action" variant="primary" icon="home" href="dashboard.html">Go to Dashboards</s-button>
         </s-empty-state>
         <s-stack alignItems="center" paddingBlockStart="base">
