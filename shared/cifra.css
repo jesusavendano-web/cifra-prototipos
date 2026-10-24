@@ -1153,3 +1153,5 @@ body.no-fade::after { display: none; }
 /* Home · Sync: margen del s-banner de sincronización arriba del strip de métricas */
 .c-syncbanner { margin-top: 20px; }
 .c-syncbanner[hidden] { display: none; }
+/* s-banner pone título y descripción en la misma línea si caben: así siempre van en dos líneas (como el de error) */
+.c-syncbanner s-banner > s-paragraph { display: block; min-inline-size: min(600px, 50vw); }
