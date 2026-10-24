@@ -1150,3 +1150,6 @@ body.no-fade::after { display: none; }
 /* System states: s-empty-state no deja espacio entre el gráfico y el título ni centra el subheading */
 .c-empty-graphic { padding-block-end: 24px; }
 .c-empty-text { text-align: center; }
+/* Home · Sync: margen del s-banner de sincronización arriba del strip de métricas */
+.c-syncbanner { margin-top: 24px; }
+.c-syncbanner[hidden] { display: none; }

@@ -5,6 +5,7 @@
   const PAGES = [
     ['index.html', 'Inventario'],
     ['home.html', 'Home'],
+    ['home-sync.html', 'Home · Sync'],
     ['onboarding.html', 'Onboarding'],
     ['chat.html', 'Chat IA'],
     ['dashboard.html', 'Dashboard'],

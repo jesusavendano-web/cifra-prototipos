@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home · Sync</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Home durante la sincronización (/app recién instalada, antes de tener datos reales)
+  Estados (hash): #syncing (default) → sample data mientras sincroniza · #error → algunos ítems fallaron.
+  Nativo → s-banner (info / critical, dismissible, secondary-actions), s-popover (commandFor), s-box, s-stack, s-icon, s-spinner,
+           s-tooltip (interestFor), s-button.
+  Custom → lo mismo que home.html (strip de métricas, hero, cards) + 24px sobre el banner.
+  Reemplaza el banner custom celeste actual por s-banner. "View sync status" abre el mismo popover que hoy (lista por tipo de dato + progreso).
+  Datos demo tomados de la app (testing-onboarding-yfiallla).
+-->
+<s-page inlineSize="large">
+  <div class="c-home" id="home">
+
+    <!-- Banners de sync (s-banner nativo, uno por estado) -->
+    <div class="c-syncbanner" data-sync-view="syncing">
+      <s-banner tone="info" heading="You're viewing sample data while your store syncs">
+        <s-paragraph>Your real numbers will replace this sample automatically as soon as the sync finishes.</s-paragraph>
+        <s-button slot="secondary-actions" commandFor="sync-status">View sync status</s-button>
+      </s-banner>
+    </div>
+    <div class="c-syncbanner" data-sync-view="error" hidden>
+      <s-banner tone="critical" heading="We couldn't sync some of your Shopify data" dismissible>
+        <s-paragraph>Refunds and Collections didn't sync. The numbers below may be incomplete until they're retried.</s-paragraph>
+        <s-button slot="secondary-actions" data-retry>Retry sync</s-button>
+        <s-button slot="secondary-actions" commandFor="sync-status">View sync status</s-button>
+      </s-banner>
+    </div>
+
+
+
+    <!-- Strip de métricas (cada una abre su gráfica al hover, como el Home de Shopify) -->
+    <div class="c-metricstrip" data-custom="MetricStrip">
+      <div class="c-metricstrip__range" role="group" aria-label="Date range and comparison" data-custom="RangeButtons"><button type="button" class="c-metricstrip__btn">Last 90 days</button><span aria-hidden="true">·</span><button type="button" class="c-metricstrip__btn">Previous period</button></div>
+      <div class="c-metricstrip__items">
+        <div class="c-mstat" tabindex="0">
+          <span class="c-mstat__label" title="Gross Profit">Gross Profit</span>
+          <span class="c-mstat__row"><b data-metric="0"></b><span data-spark="rand:21:20"></span></span>
+          <div class="c-mstat__pop" role="dialog" aria-label="Gross Profit over time">
+            <div class="c-mstat__head"><div class="c-mstat__value" data-metric="0"></div><s-icon type="edit" accessibilityLabel="Edit metric"></s-icon></div>
+            <h3 class="c-mstat__title">Gross Profit over time</h3>
+            <p class="c-mstat__desc">Net sales minus the cost of goods sold.</p>
+            <s-icon class="c-mstat__info" type="info"></s-icon>
+            <span data-line="rand:11:30:70:50" data-prev="rand:12:30:60:50" data-labels='["Jul 14","Aug 12","Sep 10","Oct 11"]' data-prefix="$" data-label="Gross Profit"></span>
+            <div class="c-legend"><span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Jul 14–Oct 11, 2026</span><span><span class="c-legend__dash"></span>Apr 15–Jul 13, 2026</span></div>
+          </div>
+        </div>
+        <div class="c-mstat" tabindex="0">
+          <span class="c-mstat__label" title="Contribution Margin">Contribution Margin</span>
+          <span class="c-mstat__row"><b data-metric="1"></b><span data-spark="rand:22:20"></span></span>
+          <div class="c-mstat__pop" role="dialog" aria-label="Contribution Margin over time">
+            <div class="c-mstat__head"><div class="c-mstat__value" data-metric="1"></div><s-icon type="edit" accessibilityLabel="Edit metric"></s-icon></div>
+            <h3 class="c-mstat__title">Contribution Margin over time</h3>
+            <p class="c-mstat__desc">Net sales minus cost of goods, shipping, fees and ad spend.</p>
+            <s-icon class="c-mstat__info" type="info"></s-icon>
+            <span data-line="rand:13:30:-60:40" data-prev="rand:14:30:-30:40" data-labels='["Jul 14","Aug 12","Sep 10","Oct 11"]' data-prefix="$" data-label="Contribution Margin"></span>
+            <div class="c-legend"><span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Jul 14–Oct 11, 2026</span><span><span class="c-legend__dash"></span>Apr 15–Jul 13, 2026</span></div>
+          </div>
+        </div>
+        <div class="c-mstat" tabindex="0">
+          <span class="c-mstat__label" title="Customer Acquisition Cost">Customer Acquisition Cost</span>
+          <span class="c-mstat__row"><b data-metric="2"></b><span data-spark="[0,0,0,0,0,0,0,0]"></span></span>
+          <div class="c-mstat__pop" role="dialog" aria-label="Customer Acquisition Cost over time">
+            <div class="c-mstat__head"><div class="c-mstat__value" data-metric="2"></div><s-icon type="edit" accessibilityLabel="Edit metric"></s-icon></div>
+            <h3 class="c-mstat__title">Customer Acquisition Cost over time</h3>
+            <p class="c-mstat__desc">Ad spend divided by new customers acquired.</p>
+            <s-icon class="c-mstat__info" type="info"></s-icon>
+            <span data-line="rand:15:30:150:90" data-prev="rand:16:30:120:80" data-labels='["Jul 14","Aug 12","Sep 10","Oct 11"]' data-prefix="$" data-label="Customer Acquisition Cost"></span>
+            <div class="c-legend"><span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Jul 14–Oct 11, 2026</span><span><span class="c-legend__dash"></span>Apr 15–Jul 13, 2026</span></div>
+          </div>
+        </div>
+        <div class="c-mstat" tabindex="0">
+          <span class="c-mstat__label" title="Total Orders">Total Orders</span>
+          <span class="c-mstat__row"><b data-metric="3"></b><span data-spark="rand:24:20"></span></span>
+          <div class="c-mstat__pop" role="dialog" aria-label="Total Orders over time">
+            <div class="c-mstat__head"><div class="c-mstat__value" data-metric="3"></div><s-icon type="edit" accessibilityLabel="Edit metric"></s-icon></div>
+            <h3 class="c-mstat__title">Total Orders over time</h3>
+            <p class="c-mstat__desc">Number of orders placed in your store.</p>
+            <s-icon class="c-mstat__info" type="info"></s-icon>
+            <span data-line="rand:17:30:3:3" data-prev="rand:18:30:2:2" data-labels='["Jul 14","Aug 12","Sep 10","Oct 11"]' data-label="Total Orders"></span>
+            <div class="c-legend"><span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Jul 14–Oct 11, 2026</span><span><span class="c-legend__dash"></span>Apr 15–Jul 13, 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero + prompt IA -->
+    <div class="c-hero" data-custom="AiPrompt">
+      <h2>Good evening, Jesus!</h2>
+      <p>Let's keep your profit growing.</p>
+      <form class="c-ask" onsubmit="return false" data-custom="AskBar">
+        <textarea class="c-ask__input" rows="1" placeholder="Which products make me the most profit?" aria-label="Ask Cifra"></textarea>
+        <div class="c-ask__bar">
+          <span class="c-prompt__logo" aria-hidden="true">C</span>
+          <span class="c-ask__tools">
+            <button type="button" class="c-ask__recents"><s-icon type="clock"></s-icon>Recents</button>
+            <span class="c-ask__sep" aria-hidden="true"></span>
+            <button type="button" class="c-ask__btn" aria-label="Attach"><s-icon type="plus"></s-icon></button>
+            <button type="submit" class="c-ask__send" aria-label="Send" disabled><s-icon type="arrow-up"></s-icon></button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <!-- Insights -->
+    <div class="c-home__section">
+      <div class="c-row c-row--between c-section-label"><span>Insights</span><span>Updated today at 8:00 PM</span></div>
+      <article class="c-homecard c-homecard--insight" data-custom="HomeCard">
+        <h3 class="c-homecard__title">Top Profit Product</h3>
+        <s-paragraph>Default Title generated $1,816.86 in profit over Sep 14 – Oct 13, 2026 across 13 orders (69.9% margin). Return rate is 0%.</s-paragraph>
+        <div class="c-homecard__actions"><a class="c-homebtn" href="report.html">See product report</a></div>
+        <img class="c-homecard__img" style="width:136px;right:0;bottom:-12px" src="assets/img/top-performer.webp" alt="">
+      </article>
+    </div>
+
+    <!-- Suggested actions -->
+    <div class="c-home__section">
+      <div class="c-section-label">Suggested actions</div>
+      <div class="c-home__grid c-home__grid--3">
+        <article class="c-homecard" data-custom="HomeCard">
+          <h3 class="c-homecard__title">Add your product costs</h3>
+          <s-paragraph>Without cost of goods, every margin Cifra shows is a guess. Enter a cost per variant, or import them in bulk.</s-paragraph>
+          <div class="c-homecard__actions"><a class="c-homebtn" href="settings-cost-products.html">Add costs</a></div>
+          <img class="c-homecard__img" style="width:150px;right:6px;bottom:24px" src="assets/img/product-costs.webp" alt="">
+        </article>
+        <article class="c-homecard" data-custom="HomeCard">
+          <h3 class="c-homecard__title">Analyze customer LTV</h3>
+          <s-paragraph>See how much revenue each group of customers brings back over time.</s-paragraph>
+          <div class="c-homecard__actions"><a class="c-homebtn" href="report.html#cohorts">Open cohort report</a></div>
+          <img class="c-homecard__img" style="width:182px;right:6px;bottom:4px" src="assets/img/analyze-customer-ltv.webp" alt="">
+        </article>
+        <article class="c-homecard" data-custom="HomeCard">
+          <h3 class="c-homecard__title">Create a custom metric</h3>
+          <s-paragraph>Build a metric from your own formula and use it across your dashboards.</s-paragraph>
+          <div class="c-homecard__actions"><a class="c-homebtn" href="metric-tree.html">Create metric</a></div>
+          <img class="c-homecard__img" style="width:176px;right:14px;bottom:20px" src="assets/img/create-custom-metric.webp" alt="">
+        </article>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="c-home__section">
+      <div class="c-section-label">Resources</div>
+      <div class="c-home__grid c-home__grid--2">
+        <article class="c-homecard c-homecard--short" data-custom="HomeCard">
+          <h3 class="c-homecard__title">Schedule a call</h3>
+          <s-paragraph>Book a call with our team to streamline your account setup and discover how to maximize all Cifra features for your Shopify business.</s-paragraph>
+          <div class="c-homecard__actions"><a class="c-homebtn" href="#">Schedule a call</a></div>
+          <img class="c-homecard__img" style="width:92px;right:56px;bottom:8px" src="assets/img/resource_schedule_call.webp" alt="">
+        </article>
+        <article class="c-homecard c-homecard--short" data-custom="HomeCard">
+          <h3 class="c-homecard__title">Get support</h3>
+          <s-paragraph>We're here to help. Send a message to our support team, or explore our comprehensive FAQs for quick answers to common questions..</s-paragraph>
+          <div class="c-homecard__actions"><a class="c-homebtn" href="#">Send a message</a></div>
+          <img class="c-homecard__img" style="width:84px;right:16px;bottom:10px" src="assets/img/resource_get_support.webp" alt="">
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popover: estado del sync (se abre desde "View sync status") -->
+  <s-popover id="sync-status" inlineSize="360px">
+    <s-box padding="small">
+      <s-stack gap="small-500" data-sync-rows></s-stack>
+      <s-box paddingInline="small" paddingBlockStart="small">
+        <s-stack direction="inline" justifyContent="end" alignItems="center" gap="small-200">
+          <s-text color="subdued" data-sync-summary></s-text>
+          <s-icon type="info" color="subdued" interestFor="sync-progress-tip"></s-icon>
+        </s-stack>
+      </s-box>
+      <div data-sync-view="error" hidden><s-box paddingInline="small" paddingBlockStart="small">
+        <s-button variant="primary" data-retry>Retry failed items</s-button>
+      </s-box></div>
+    </s-box>
+  </s-popover>
+  <s-tooltip id="sync-progress-tip">How much of your historical data has finished importing</s-tooltip>
+
+  <!-- Estado de carga (skeleton): home.html#loading -->
+  <div class="c-home" id="home-loading" hidden aria-busy="true" data-custom="Skeleton">
+    <span class="c-skeleton" style="width:60%;height:28px;margin:60px auto 12px"></span>
+    <span class="c-skeleton" style="width:640px;max-width:100%;height:48px;margin:0 auto 32px;border-radius:24px;display:block"></span>
+    <div class="c-home__grid c-home__grid--3">
+      <div class="c-homecard"><span class="c-skeleton" style="width:50%;height:16px"></span><span class="c-skeleton" style="width:90%;margin-top:12px"></span><span class="c-skeleton" style="width:70%;margin-top:8px"></span></div>
+      <div class="c-homecard"><span class="c-skeleton" style="width:50%;height:16px"></span><span class="c-skeleton" style="width:90%;margin-top:12px"></span><span class="c-skeleton" style="width:70%;margin-top:8px"></span></div>
+      <div class="c-homecard"><span class="c-skeleton" style="width:50%;height:16px"></span><span class="c-skeleton" style="width:90%;margin-top:12px"></span><span class="c-skeleton" style="width:70%;margin-top:8px"></span></div>
+    </div>
+  </div>
+</s-page>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const t = document.querySelector(".c-ask__input"), b = document.querySelector(".c-ask__send");
+  t.addEventListener("input", () => { b.disabled = !t.value.trim(); });
+  t.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (t.value.trim()) location.href = "chat.html"; } });
+  b.addEventListener("click", () => { location.href = "chat.html"; });
+});
+if (location.hash === "#loading") {
+  document.getElementById("home").hidden = true;
+  document.getElementById("home-loading").hidden = false;
+}
+</script>
+<script>
+(function () {
+  // Datos demo por estado
+  const STATES = {
+    syncing: {
+      metrics: ['$8.2M', '$8.2M', '$0', '82.3K'],
+      progress: 82,
+      rows: [
+        ['Orders', 'synced'], ['Products', 'synced'], ['Customers', 'synced'],
+        ['Discounts', 'synced'], ['Refunds', 'syncing'], ['Collections', 'pending'],
+      ],
+    },
+    error: {
+      metrics: ['$39.5K', '$39.4K', '$0', '8'],
+      progress: 95,
+      rows: [
+        ['Orders', 'synced'], ['Products', 'synced'], ['Customers', 'synced'],
+        ['Discounts', 'synced'], ['Refunds', 'failed'], ['Collections', 'failed'],
+      ],
+    },
+  };
+  // ícono + texto de estado por fila (el ítem en curso va resaltado, como en la app)
+  // Estilo Shopify: íconos y estado en gris (subdued); el color solo aparece si algo falla
+  const ROW = {
+    synced: ['<s-icon type="check-circle" color="subdued"></s-icon>', '<s-text color="subdued">Synced</s-text>'],
+    syncing: ['<s-spinner size="base" accessibilityLabel="Syncing"></s-spinner>', '<s-text color="subdued">Syncing now</s-text>'],
+    pending: ['<s-icon type="circle-dashed" color="subdued"></s-icon>', '<s-text color="subdued">Pending</s-text>'],
+    failed: ['<s-icon type="alert-circle" tone="critical"></s-icon>', '<s-text tone="critical">Failed</s-text>'],
+  };
+
+  function go(name) {
+    if (!STATES[name]) name = 'syncing';
+    const st = STATES[name];
+    document.querySelectorAll('[data-sync-view]').forEach((el) => { el.hidden = el.dataset.syncView !== name; });
+    document.querySelectorAll('[data-metric]').forEach((el) => { el.textContent = st.metrics[+el.dataset.metric]; });
+    document.querySelector('[data-sync-summary]').textContent = 'Data sync progress: ' + st.progress + '%';
+    document.querySelector('[data-sync-rows]').innerHTML = st.rows.map(([n, k]) =>
+      '<s-box padding="small-200 small" borderRadius="base"' + (k === 'syncing' ? ' background="subdued"' : '') + '>' +
+        '<s-stack direction="inline" justifyContent="space-between" alignItems="center" gap="base">' +
+          '<s-stack direction="inline" alignItems="center" gap="small-200">' + ROW[k][0] + '<s-text type="strong">' + n + '</s-text></s-stack>' +
+          ROW[k][1] +
+        '</s-stack>' +
+      '</s-box>').join('');
+    if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
+  }
+
+  // Prototipo: "Retry" vuelve al estado de sincronización
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-retry]')) { document.getElementById('sync-status').hidePopover?.(); go('syncing'); }
+  });
+  window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+  go(location.hash.slice(1));
+})();
+</script>
+
+</body>
+</html>
