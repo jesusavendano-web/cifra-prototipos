@@ -1151,5 +1151,5 @@ body.no-fade::after { display: none; }
 .c-empty-graphic { padding-block-end: 24px; }
 .c-empty-text { text-align: center; }
 /* Home · Sync: margen del s-banner de sincronización arriba del strip de métricas */
-.c-syncbanner { margin-top: 24px; }
+.c-syncbanner { margin-top: 20px; }
 .c-syncbanner[hidden] { display: none; }
