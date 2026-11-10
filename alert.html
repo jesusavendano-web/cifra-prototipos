@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alert · Create</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+<script src="shared/alerts.js"></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Alerts › Create/Edit  (/app/schedules/alerts/new · /app/schedules/alerts/:id)  — ENG-2595
+  Antes: las alertas solo se creaban desde el chat y no se podían editar.
+  Ahora: página propia con la misma estructura que Schedule › Create.
+    1. Describe your alert → Cifra llena la regla a partir de una frase (IA simulada en el prototipo)
+    2. Rule → periodo (segmented, igual que "When to send"), métrica, condición y valor
+    3. Preview → cuántas veces habría saltado y cuándo (gráfica + tabla, como "Preview scheduled calendar")
+    4. Recipients → Email | Slack + Send test (igual que en schedules)
+    5. When to check → hora, AM/PM y "notify once per period"
+  Edición: alert.html?id=a1 (heading con el nombre, Pause/Delete como acciones de página).
+  Nativo → s-page, s-section, s-text-field, s-select, s-number-field, s-email-field, s-clickable-chip,
+           s-checkbox, s-banner, s-table, s-modal, s-badge. Custom → segmented, prompt de Cifra, gráfica, toast.
+-->
+<s-page heading="New alert" inlineSize="base" id="page">
+  <s-link slot="breadcrumb-actions" href="schedules.html">Schedules</s-link>
+  <s-button slot="primary-action" variant="primary" id="save">Save</s-button>
+
+  <s-stack gap="base">
+
+    <s-banner tone="info" id="from-chat" hidden>This alert was created from the chat. You can now edit it here.</s-banner>
+
+    <!-- 1. Describe your alert -->
+    <s-section heading="Describe your alert" id="describe">
+      <s-stack gap="small">
+        <s-text color="subdued">Write it the way you’d say it. Cifra fills in the rule so you can check it before saving.</s-text>
+        <form class="c-prompt c-alert-prompt" id="ai-form" onsubmit="return false" data-custom="CifraPrompt">
+          <span class="c-prompt__logo">C</span>
+          <input type="text" id="ai-input" placeholder="eg. Email me if a day’s net sales drop more than 20%" aria-label="Describe your alert" autocomplete="off">
+          <button type="submit" class="c-ask__send" id="ai-send" aria-label="Fill in the rule" disabled><s-icon type="arrow-up"></s-icon></button>
+        </form>
+        <s-stack direction="inline" gap="small-200">
+          <s-clickable-chip data-ex="Email me if a day's net sales drop more than 20%">Email me if a day’s net sales drop more than 20%</s-clickable-chip>
+          <s-clickable-chip data-ex="Alert me on Slack if ROAS falls below 2 in a week">Alert me if ROAS falls below 2 in a week</s-clickable-chip>
+          <s-clickable-chip data-ex="Email me if weekly orders drop 20% vs the week before">Email me if weekly orders drop 20% vs the week before</s-clickable-chip>
+        </s-stack>
+      </s-stack>
+    </s-section>
+
+    <!-- Detalles -->
+    <s-section heading="Alert details">
+      <s-text-field label="Alert name" id="f-name" maxLength="80" details="Cifra suggests a name from the rule. You can change it."></s-text-field>
+    </s-section>
+
+    <!-- 2. Rule -->
+    <s-section heading="Rule" id="rule">
+      <s-stack gap="base">
+        <s-text color="subdued">Choose the metric to watch and when you want to hear about it.</s-text>
+        <div class="c-segmented" id="f-window" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="false" data-value="day">Daily</button>
+          <button type="button" aria-pressed="false" data-value="week">Weekly</button>
+          <button type="button" aria-pressed="false" data-value="month">Monthly</button>
+        </div>
+        <s-select label="Metric" id="f-metric"></s-select>
+        <s-grid gridTemplateColumns="1fr 1fr" gap="small">
+          <s-select label="Condition" id="f-condition"></s-select>
+          <s-number-field label="Value" id="f-value" min="0"></s-number-field>
+        </s-grid>
+        <s-box padding="small" background="subdued" borderRadius="base">
+          <s-text id="rule-sentence"></s-text>
+        </s-box>
+      </s-stack>
+    </s-section>
+
+    <!-- 3. Preview -->
+    <s-section heading="Preview">
+      <s-stack gap="base">
+        <s-stack direction="inline" justifyContent="space-between" alignItems="end" gap="small">
+          <s-stack gap="small-100">
+            <span class="c-alert-count" id="pv-count"></span>
+            <s-text color="subdued" id="pv-sub"></s-text>
+          </s-stack>
+          <span class="c-alert-legend"><span><i style="background:var(--c-chart-1)"></i><span id="pv-metric"></span></span><span><i style="background:var(--c-negative)"></i>Would have alerted</span></span>
+        </s-stack>
+        <div id="pv-chart" data-custom="AlertPreviewChart"></div>
+        <div id="pv-hint"></div>
+        <s-box border="base" borderRadius="large" overflow="hidden" id="pv-table-wrap">
+          <s-table>
+            <s-table-header-row>
+              <s-table-header listSlot="primary">Date</s-table-header>
+              <s-table-header listSlot="secondary" id="pv-col-value">Value</s-table-header>
+              <s-table-header listSlot="inline" id="pv-col-change">Change</s-table-header>
+            </s-table-header-row>
+            <s-table-body id="pv-rows"></s-table-body>
+          </s-table>
+        </s-box>
+        <s-text color="subdued">Preview based on your last data. Cifra checks complete periods only.</s-text>
+      </s-stack>
+    </s-section>
+
+    <!-- 4. Recipients -->
+    <s-section heading="Recipients">
+      <s-button slot="secondary-actions" id="send-test">Send test</s-button>
+      <s-stack gap="base">
+        <div class="c-segmented" id="f-channel" data-custom="SegmentedControl">
+          <button type="button" aria-pressed="true" data-value="email">Email</button>
+          <button type="button" aria-pressed="false" data-value="slack">Slack</button>
+        </div>
+        <div id="ch-email">
+          <s-stack gap="small">
+            <s-email-field label="Email address" id="f-email" placeholder="eg. example@email.com" details="Press enter to add more emails"></s-email-field>
+            <s-stack direction="inline" gap="small-200" id="chips"></s-stack>
+          </s-stack>
+        </div>
+        <div id="ch-slack" hidden>
+          <s-select label="Channel" id="f-slack">
+            <s-option value="#alerts">#alerts</s-option>
+            <s-option value="#marketing">#marketing</s-option>
+            <s-option value="#ventas">#ventas</s-option>
+          </s-select>
+        </div>
+      </s-stack>
+    </s-section>
+
+    <!-- 5. When to check -->
+    <s-section heading="When to check">
+      <s-stack gap="base">
+        <s-text color="subdued" id="check-help"></s-text>
+        <s-grid gridTemplateColumns="120px 120px" gap="small">
+          <s-select label="Hour" id="f-hour">
+            <s-option value="6">6</s-option><s-option value="7">7</s-option><s-option value="8">8</s-option><s-option value="9">9</s-option><s-option value="10">10</s-option><s-option value="11">11</s-option><s-option value="12">12</s-option>
+          </s-select>
+          <s-select label="AM/PM" id="f-ampm">
+            <s-option value="am">AM</s-option><s-option value="pm">PM</s-option>
+          </s-select>
+        </s-grid>
+        <s-checkbox id="f-once" label="Notify only once per period" details="If the rule keeps holding, you get one alert per period instead of one on every check."></s-checkbox>
+        <s-text color="subdued">This alert will be checked at the local time set in your app (UTC-05:00)</s-text>
+      </s-stack>
+    </s-section>
+
+  </s-stack>
+</s-page>
+
+<!-- Send test -->
+<s-modal id="test-modal" heading="Test alert sent">
+  <s-stack gap="base">
+    <s-paragraph id="test-to"></s-paragraph>
+    <s-box border="base" borderRadius="large" padding="base">
+      <s-stack gap="small">
+        <s-text color="subdued">From: Cifra Analytics · alerts@getcifra.com</s-text>
+        <s-heading id="test-subject"></s-heading>
+        <s-paragraph id="test-body"></s-paragraph>
+        <s-box><s-button variant="primary">View in Cifra</s-button></s-box>
+      </s-stack>
+    </s-box>
+  </s-stack>
+  <s-button slot="primary-action" variant="primary" commandFor="test-modal" command="--hide">Done</s-button>
+</s-modal>
+
+<!-- Delete -->
+<s-modal id="delete-modal" heading="Delete alert?">
+  <s-paragraph id="delete-text"></s-paragraph>
+  <s-button slot="secondary-actions" commandFor="delete-modal" command="--hide">Cancel</s-button>
+  <s-button slot="primary-action" variant="primary" tone="critical" id="delete-confirm">Delete alert</s-button>
+</s-modal>
+
+<script>
+(function () {
+  const A = window.CifraAlerts;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const items = A.load();
+  const id = new URLSearchParams(location.search).get('id');
+  const existing = id ? items.find((x) => x.id === id) : null;
+  const isNew = !existing;
+  const d = existing ? JSON.parse(JSON.stringify(existing)) : {
+    id: null, type: 'alert', name: '', status: 'active', lastSent: 'Not yet', author: 'Jesus Avendaño', createdVia: 'form',
+    rule: { metric: 'net_sales', condition: 'drops_pct', value: 20, window: 'day' },
+    channel: 'email', recipients: ['jesus.avendano@getcifra.com'], slackChannel: '#alerts', hour: 8, ampm: 'am', once: true,
+  };
+  let nameTouched = !isNew;
+
+  // ---------------------------------------------------------------- opciones
+  $('f-metric').innerHTML = Object.entries(A.METRICS).map(([k, m]) => `<s-option value="${k}">${m.label}</s-option>`).join('');
+  $('f-condition').innerHTML = Object.entries(A.CONDITIONS).map(([k, c]) => `<s-option value="${k}">${c.label}</s-option>`).join('');
+
+  // ---------------------------------------------------------------- encabezado según modo
+  const page = $('page');
+  if (!isNew) {
+    page.setAttribute('heading', d.name);
+    document.title = d.name + ' · Alert';
+    $('describe').style.display = 'none';
+    page.insertAdjacentHTML('beforeend', '<s-button slot="secondary-actions" id="toggle">Pause</s-button><s-button slot="secondary-actions" id="delete" tone="critical">Delete</s-button>');
+    $('from-chat').hidden = d.createdVia !== 'chat';
+  }
+
+  // ---------------------------------------------------------------- pintar valores
+  function setSeg(groupId, value) {
+    $(groupId).querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.value === value)));
+  }
+  function fill() {
+    setSeg('f-window', d.rule.window);
+    setSeg('f-channel', d.channel);
+    $('f-metric').value = d.rule.metric;
+    $('f-condition').value = d.rule.condition;
+    $('f-value').value = String(d.rule.value);
+    $('f-slack').value = d.slackChannel;
+    $('f-hour').value = String(d.hour);
+    $('f-ampm').value = d.ampm;
+    $('f-once').checked = d.once;
+    $('f-name').value = d.name || A.autoName(d.rule);
+    if ($('toggle')) $('toggle').textContent = d.status === 'active' ? 'Pause' : 'Resume';
+  }
+
+  function refresh() {
+    const r = d.rule, c = A.CONDITIONS[r.condition], w = A.WINDOWS[r.window];
+    const vf = $('f-value');
+    vf.setAttribute('label', c.pct ? 'Change' : 'Threshold');
+    vf.setAttribute('suffix', A.unitSuffix(r));
+    vf.setAttribute('prefix', A.unitPrefix(r));
+    $('rule-sentence').innerHTML = `Alert when <b>${esc(A.lc(A.ruleText(r)))}</b>.`;
+
+    const { s, hits } = A.evaluate(r);
+    const n = s.length - 1;
+    $('pv-count').textContent = hits.length === 0 ? 'No alerts' : `${hits.length} alert${hits.length > 1 ? 's' : ''}`;
+    $('pv-sub').textContent = `would have been sent in the last ${n} ${w.unit}`;
+    $('pv-metric').textContent = A.METRICS[r.metric].label;
+    $('pv-chart').innerHTML = A.chart(r, $('pv-chart').clientWidth);
+    const rate = hits.length / n;
+    $('pv-hint').innerHTML = hits.length === 0
+      ? `<s-banner tone="warning">This rule wouldn’t have alerted you in the last ${n} ${w.unit}. Try a ${c.pct ? 'smaller change' : 'different threshold'} to hear about it more often.</s-banner>`
+      : rate > .35 ? `<s-banner tone="warning">This would alert you ${hits.length} times in ${n} ${w.unit}. Try a ${c.pct ? 'bigger change' : 'different threshold'} so it only flags what matters.</s-banner>` : '';
+    $('pv-table-wrap').style.display = hits.length === 0 ? 'none' : '';
+    $('pv-col-value').textContent = A.METRICS[r.metric].label;
+    $('pv-col-change').textContent = `vs ${w.prev}`;
+    $('pv-rows').innerHTML = hits.slice().reverse().slice(0, 5).map((i) => {
+      const ch = ((s[i] - s[i - 1]) / s[i - 1]) * 100;
+      return `<s-table-row><s-table-cell>${A.pointLabel(r.window, i, s.length, true)}</s-table-cell><s-table-cell>${A.fmt(r.metric, s[i])}</s-table-cell><s-table-cell><span class="c-delta ${ch < 0 ? 'c-delta--down' : 'c-delta--up'}">${Math.abs(ch).toFixed(1)}%</span></s-table-cell></s-table-row>`;
+    }).join('');
+    if (window.CifraAssets) CifraAssets.hydrate($('pv-rows'));
+
+    $('ch-email').hidden = d.channel !== 'email';
+    $('ch-slack').hidden = d.channel !== 'slack';
+    $('chips').innerHTML = d.recipients.map((e, i) => `<s-clickable-chip removable data-i="${i}">${esc(e)}</s-clickable-chip>`).join('');
+    $('chips').querySelectorAll('s-clickable-chip').forEach((ch) => ch.addEventListener('remove', () => { d.recipients.splice(+ch.dataset.i, 1); refresh(); }));
+
+    $('check-help').textContent = {
+      day: 'Cifra checks yesterday’s numbers every day at this time.',
+      week: 'Cifra checks last week’s numbers every Monday at this time.',
+      month: 'Cifra checks last month’s numbers on the 1st at this time.',
+    }[r.window];
+
+    if (!nameTouched) $('f-name').value = A.autoName(r);
+  }
+
+  // ---------------------------------------------------------------- eventos del formulario
+  $('f-window').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; d.rule.window = b.dataset.value; refresh(); });
+  $('f-channel').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; d.channel = b.dataset.value; refresh(); });
+  $('f-metric').addEventListener('change', (e) => {
+    d.rule.metric = e.currentTarget.value;
+    if (!A.CONDITIONS[d.rule.condition].pct) resetThreshold();
+    refresh();
+  });
+  $('f-condition').addEventListener('change', (e) => {
+    const was = A.CONDITIONS[d.rule.condition].pct;
+    d.rule.condition = e.currentTarget.value;
+    const now = A.CONDITIONS[d.rule.condition].pct;
+    if (was !== now) { if (now) { d.rule.value = 20; $('f-value').value = '20'; } else resetThreshold(); }
+    refresh();
+  });
+  function resetThreshold() {
+    const m = A.METRICS[d.rule.metric];
+    const v = m.base * A.scaleFor(d.rule.metric, d.rule.window) * (d.rule.condition === 'below' ? .75 : 1.25);
+    d.rule.value = +(m.unit === 'ratio' || m.unit === 'percent' ? v.toFixed(1) : Math.round(v / 10) * 10);
+    $('f-value').value = String(d.rule.value);
+  }
+  $('f-value').addEventListener('input', (e) => { d.rule.value = parseFloat(e.currentTarget.value) || 0; refresh(); });
+  $('f-name').addEventListener('input', (e) => { nameTouched = true; d.name = e.currentTarget.value; });
+  $('f-slack').addEventListener('change', (e) => { d.slackChannel = e.currentTarget.value; });
+  $('f-hour').addEventListener('change', (e) => { d.hour = +e.currentTarget.value; });
+  $('f-ampm').addEventListener('change', (e) => { d.ampm = e.currentTarget.value; });
+  $('f-once').addEventListener('change', (e) => { d.once = e.currentTarget.checked; });
+  $('f-email').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const f = e.currentTarget, v = (f.value || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { f.error = 'Enter a valid email address'; return; }
+    f.error = '';
+    if (!d.recipients.includes(v)) d.recipients.push(v);
+    f.value = '';
+    refresh();
+  });
+
+  // ---------------------------------------------------------------- Describe your alert
+  const input = $('ai-input'), send = $('ai-send');
+  input.addEventListener('input', () => { send.disabled = !input.value.trim(); });
+  function describe(text) {
+    const p = A.parsePrompt(text);
+    if (!p.rule.metric && !p.rule.condition) { A.toast('Try naming a metric, like net sales, orders or ROAS'); return; }
+    send.disabled = true;
+    input.disabled = true;
+    setTimeout(() => {
+      Object.entries(p.rule).forEach(([k, v]) => { if (v !== undefined) d.rule[k] = v; });
+      if (p.channel) d.channel = p.channel;
+      if (p.recipients.length) d.recipients = p.recipients;
+      nameTouched = false;
+      fill(); refresh();
+      input.disabled = false; send.disabled = false;
+      const sec = $('rule');
+      sec.classList.remove('c-flash'); void sec.offsetWidth; sec.classList.add('c-flash');
+      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      A.toast('Cifra filled in the rule');
+    }, 600);
+  }
+  $('ai-form').addEventListener('submit', () => describe(input.value));
+  document.querySelectorAll('[data-ex]').forEach((chip) => chip.addEventListener('click', () => {
+    input.value = chip.dataset.ex; send.disabled = false; describe(chip.dataset.ex);
+  }));
+
+  // ---------------------------------------------------------------- Send test
+  $('send-test').addEventListener('click', () => {
+    const r = d.rule, { s, hits } = A.evaluate(r);
+    const i = hits.length ? hits[hits.length - 1] : s.length - 1;
+    const ch = ((s[i] - s[i - 1]) / s[i - 1]) * 100;
+    $('test-to').textContent = d.channel === 'email'
+      ? `We sent a test to ${d.recipients.join(', ') || 'you'}. This is what it looks like:`
+      : `We posted a test to ${d.slackChannel}. This is what it looks like:`;
+    $('test-subject').textContent = $('f-name').value || A.autoName(r);
+    $('test-body').textContent = `${A.METRICS[r.metric].label} was ${A.fmt(r.metric, s[i])} for ${A.pointLabel(r.window, i, s.length, true)}, ` +
+      `${ch < 0 ? 'down' : 'up'} ${Math.abs(ch).toFixed(1)}% vs ${A.WINDOWS[r.window].prev}. You get this alert when ${A.lc(A.ruleText(r))}.`;
+    $('test-modal').showOverlay();
+  });
+
+  // ---------------------------------------------------------------- Save / Pause / Delete
+  $('save').addEventListener('click', () => {
+    if (d.channel === 'email' && d.recipients.length === 0) { $('f-email').error = 'Add at least one email address'; $('f-email').scrollIntoView({ block: 'center' }); return; }
+    if (!(d.rule.value > 0)) { $('f-value').error = 'Enter a value greater than 0'; return; }
+    d.name = ($('f-name').value || A.autoName(d.rule)).trim();
+    if (isNew) { d.id = 'a' + Date.now(); items.push(d); }
+    else items[items.findIndex((x) => x.id === d.id)] = d;
+    A.save(items);
+    A.flash(isNew ? 'Alert created' : 'Alert saved');
+    location.href = 'schedules.html';
+  });
+  if (!isNew) $('toggle').addEventListener('click', () => {
+    d.status = d.status === 'active' ? 'paused' : 'active';
+    const it = items.find((x) => x.id === d.id); if (it) it.status = d.status;
+    A.save(items);
+    $('toggle').textContent = d.status === 'active' ? 'Pause' : 'Resume';
+    A.toast(d.status === 'active' ? 'Alert resumed' : 'Alert paused');
+  });
+  if (!isNew) $('delete').addEventListener('click', () => {
+    $('delete-text').textContent = `“${d.name}” will be deleted and nobody will get it anymore. This can’t be undone.`;
+    $('delete-modal').showOverlay();
+  });
+  $('delete-confirm').addEventListener('click', () => {
+    A.save(items.filter((x) => x.id !== d.id));
+    A.flash('Alert deleted');
+    location.href = 'schedules.html';
+  });
+
+  customElements.whenDefined('s-select').then(() => { fill(); refresh(); });
+  let rw; window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(refresh, 150); });
+})();
+</script>
+</body>
+</html>

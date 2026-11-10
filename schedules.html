@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedules</title>
+<meta name="shopify-api-key" content="prototype">
+<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
+<link rel="stylesheet" href="shared/cifra.css">
+<script src="shared/cifra.js" defer></script>
+<script src="shared/alerts.js"></script>
+</head>
+<body>
+
+<!--
+  Pantalla: Schedules  (/app/schedules)  — réplica de la lista actual + alertas (ENG-2595)
+  Igual que hoy: filtro All | Schedules | Alerts, buscador, orden, columnas y badges.
+  Cambia: "Create alert" abre alert.html (antes abría el chat), las alertas se abren para editarlas
+          y el menú de cada fila suma Edit y Duplicate.
+  Nativo → s-page, s-badge, s-avatar, s-button, s-menu. Custom → segmented (filtro), IndexTable, toast.
+-->
+<s-page heading="Schedules" inlineSize="large">
+  <s-button slot="primary-action" variant="primary" href="schedule.html">Create schedule</s-button>
+  <s-button slot="secondary-actions" href="alert.html">Create alert</s-button>
+
+  <s-stack gap="base">
+    <div class="c-segmented c-segmented--inline" id="type-filter" data-custom="SegmentedControl">
+      <button type="button" aria-pressed="true" data-value="all">All</button>
+      <button type="button" aria-pressed="false" data-value="schedule">Schedules</button>
+      <button type="button" aria-pressed="false" data-value="alert">Alerts</button>
+    </div>
+
+    <div class="c-indextable c-indextable--list c-indextable--alerts" data-custom="IndexTable">
+      <div class="c-indextable__bar c-indextable__bar--stack">
+        <div class="c-indextable__search">
+          <label class="c-indextable__searchbox">
+            <s-icon type="search" size="small"></s-icon>
+            <input type="search" id="q" placeholder="Search schedules and alerts" aria-label="Search schedules and alerts">
+          </label>
+          <s-button icon="sort" accessibilityLabel="Sort"></s-button>
+        </div>
+      </div>
+      <div class="c-indextable__scroll">
+        <table>
+          <thead><tr>
+            <th><button type="button">Name</button></th>
+            <th><button type="button">Type</button></th>
+            <th aria-sort="ascending"><button type="button" class="c-th-active">Status <s-icon type="arrow-up" size="small"></s-icon></button></th>
+            <th><button type="button">Last sent <s-icon type="sort" size="small"></s-icon></button></th>
+            <th><button type="button">Next scheduled send <s-icon type="sort" size="small"></s-icon></button></th>
+            <th><button type="button">Author</button></th>
+            <th class="c-col-actions"></th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="c-alerts-empty" id="empty" hidden>
+        <s-empty-state heading="No alerts yet">
+          <s-icon slot="graphic" type="notification"></s-icon>
+          <s-text slot="subheading">Get an email or a Slack message when a metric crosses a limit you set.</s-text>
+          <s-button slot="primary-action" variant="primary" href="alert.html">Create alert</s-button>
+        </s-empty-state>
+      </div>
+    </div>
+  </s-stack>
+</s-page>
+
+<s-modal id="delete-modal" heading="Delete alert?">
+  <s-paragraph id="delete-text"></s-paragraph>
+  <s-button slot="secondary-actions" commandFor="delete-modal" command="--hide">Cancel</s-button>
+  <s-button slot="primary-action" variant="primary" tone="critical" id="delete-confirm">Delete</s-button>
+</s-modal>
+
+<script>
+(function () {
+  const A = window.CifraAlerts;
+  let items = A.load();
+  let filter = 'all', query = '';
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const initials = (n) => n.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase();
+
+  function row(x) {
+    const isAlert = x.type === 'alert';
+    const name = isAlert
+      ? `<a class="c-rowlink c-strong" href="alert.html?id=${x.id}">${esc(x.name)}</a>
+         <div class="c-alert-sub">${esc(x.rule ? A.ruleText(x.rule) : '')}</div>
+         <div class="c-alert-sub">${x.channel === 'slack' ? 'Slack: ' + esc(x.slackChannel) : 'Email: ' + esc(x.recipients.join(', '))}</div>`
+      : `<span class="c-strong">${esc(x.name)}</span>`;
+    const author = x.author
+      ? `<span class="c-author"><s-avatar size="small-200" initials="${initials(x.author)}"></s-avatar>${esc(x.author)}</span>`
+      : '—';
+    const menu = `
+      <s-button variant="tertiary" icon="menu-horizontal" accessibilityLabel="Actions for ${esc(x.name)}" commandFor="m-${x.id}"></s-button>
+      <s-menu id="m-${x.id}" accessibilityLabel="Actions">
+        ${isAlert ? `<s-button icon="edit" href="alert.html?id=${x.id}">Edit</s-button>
+        <s-button icon="duplicate" data-act="dup" data-id="${x.id}">Duplicate</s-button>` : ''}
+        <s-button icon="${x.status === 'active' ? 'pause-circle' : 'play-circle'}" data-act="toggle" data-id="${x.id}">${x.status === 'active' ? 'Pause' : 'Resume'}</s-button>
+        <s-button icon="delete" tone="critical" data-act="delete" data-id="${x.id}">Delete</s-button>
+      </s-menu>`;
+    return `<tr${isAlert ? ' class="c-row-tall"' : ''}>
+      <td>${name}</td>
+      <td>${isAlert ? '<s-badge tone="info">Alert</s-badge>' : '<s-badge>Schedule</s-badge>'}</td>
+      <td>${x.status === 'active' ? '<s-badge tone="success">Active</s-badge>' : '<s-badge>Paused</s-badge>'}</td>
+      <td>${esc(x.lastSent)}</td>
+      <td>${isAlert ? '<span class="c-muted">When its rule holds</span>' : esc(x.next)}</td>
+      <td>${author}</td>
+      <td class="c-col-actions">${menu}</td>
+    </tr>`;
+  }
+
+  function render() {
+    const q = query.trim().toLowerCase();
+    const list = items
+      .filter((x) => filter === 'all' || x.type === filter)
+      .filter((x) => !q || x.name.toLowerCase().includes(q) || (x.rule && A.ruleText(x.rule).toLowerCase().includes(q)));
+    document.getElementById('rows').innerHTML = list.map(row).join('') ||
+      (q ? `<tr><td colspan="7" class="c-muted">No results for “${esc(query)}”</td></tr>` : '');
+    const showEmpty = filter === 'alert' && !q && list.length === 0;
+    document.getElementById('empty').hidden = !showEmpty;
+    document.querySelector('.c-indextable__scroll').hidden = showEmpty;
+    document.querySelectorAll('#rows [data-act]').forEach((b) => b.addEventListener('click', () => act(b.dataset.act, b.dataset.id)));
+  }
+
+  function act(what, id) {
+    const x = items.find((i) => i.id === id);
+    if (!x) return;
+    if (what === 'toggle') {
+      x.status = x.status === 'active' ? 'paused' : 'active';
+      A.save(items); render();
+      A.toast(`${x.type === 'alert' ? 'Alert' : 'Schedule'} ${x.status === 'active' ? 'resumed' : 'paused'}`);
+    }
+    if (what === 'dup') {
+      const c = JSON.parse(JSON.stringify(x));
+      c.id = 'a' + Date.now(); c.name = x.name + ' (copy)'; c.status = 'paused'; c.lastSent = 'Not yet'; c.author = 'Jesus Avendaño';
+      items.splice(items.indexOf(x) + 1, 0, c);
+      A.save(items); render();
+      A.toast('Alert duplicated');
+    }
+    if (what === 'delete') {
+      const m = document.getElementById('delete-modal');
+      m.setAttribute('heading', `Delete ${x.type}?`);
+      document.getElementById('delete-text').textContent = `“${x.name}” will be deleted and nobody will get it anymore. This can’t be undone.`;
+      document.getElementById('delete-confirm').textContent = `Delete ${x.type}`;
+      document.getElementById('delete-confirm').onclick = () => {
+        items = items.filter((i) => i.id !== id);
+        A.save(items); render(); m.hideOverlay();
+        A.toast(`${x.type === 'alert' ? 'Alert' : 'Schedule'} deleted`);
+      };
+      m.showOverlay();
+    }
+  }
+
+  document.getElementById('type-filter').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    filter = b.dataset.value; render();
+  });
+  document.getElementById('q').addEventListener('input', (e) => { query = e.target.value; render(); });
+
+  render();
+  const msg = A.takeFlash();
+  if (msg) setTimeout(() => A.toast(msg), 300);
+})();
+</script>
+</body>
+</html>
