@@ -6,7 +6,7 @@
 <title>Schedules</title>
 <meta name="shopify-api-key" content="prototype">
 <script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
-<link rel="stylesheet" href="shared/cifra.css?v=3">
+<link rel="stylesheet" href="shared/cifra.css?v=4">
 <script src="shared/cifra.js" defer></script>
 <script src="shared/alerts.js?v=3"></script>
 </head>
@@ -33,10 +33,7 @@
     <div class="c-indextable c-indextable--list c-indextable--alerts" data-custom="IndexTable">
       <div class="c-indextable__bar c-indextable__bar--stack">
         <div class="c-indextable__search">
-          <label class="c-indextable__searchbox">
-            <s-icon type="search" size="small"></s-icon>
-            <input type="search" id="q" placeholder="Search schedules and alerts" aria-label="Search schedules and alerts">
-          </label>
+          <s-search-field id="q" label="Search" labelAccessibilityVisibility="exclusive" placeholder="Search schedules and alerts"></s-search-field>
           <button type="button" class="c-sortbtn" aria-label="Sort"><s-icon type="sort"></s-icon></button>
         </div>
       </div>
@@ -169,10 +166,10 @@
     if (filter === 'all') { if (!s.isConnected) page.insertBefore(s, p.nextSibling); }
     else if (s.isConnected) s.remove();
     document.querySelector('.c-indextable--alerts').classList.toggle('c-hide-type', filter !== 'all');
-    document.getElementById('q').placeholder =
-      filter === 'alert' ? 'Search alerts' : filter === 'schedule' ? 'Search schedules' : 'Search schedules and alerts';
+    document.getElementById('q').setAttribute('placeholder',
+      filter === 'alert' ? 'Search alerts' : filter === 'schedule' ? 'Search schedules' : 'Search schedules and alerts');
   }
-  document.getElementById('q').addEventListener('input', (e) => { query = e.target.value; render(); });
+  document.getElementById('q').addEventListener('input', (e) => { query = e.currentTarget.value || ''; render(); });
 
   render();
   const msg = A.takeFlash();
