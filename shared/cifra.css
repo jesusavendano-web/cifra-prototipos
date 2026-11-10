@@ -1281,3 +1281,11 @@ body.c-has-aipanel { padding-right: 400px; }
 .c-indextable--alerts td { padding: 8px 12px; color: #303030; }
 .c-indextable--alerts .c-alert-sub { font-size: 13px; line-height: 20px; color: #4a4a4a; }
 .c-indextable--alerts.c-hide-type th:nth-child(2), .c-indextable--alerts.c-hide-type td:nth-child(2) { display: none; }
+/* Encabezado de la tabla de Schedules: 32px como en la app, iconos Shopify a tamaño base */
+.c-indextable--alerts th { height: 32px; }
+.c-indextable--alerts th button { display: inline-flex; align-items: center; gap: 2px; }
+.c-indextable--alerts th .c-th-active { font-weight: 600; }
+.c-indextable--alerts td { height: 40px; box-sizing: border-box; }
+.c-author__ai { width: 20px; height: 20px; border-radius: 6px; background: #fff; box-shadow: inset 0 0 0 1px #e3e3e3; display: inline-grid; place-items: center; flex: none; }
+.c-author__ai img { width: 14px; height: 14px; display: block; }
+.c-indextable--alerts td { padding-top: 6px; padding-bottom: 6px; }

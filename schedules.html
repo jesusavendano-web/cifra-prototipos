@@ -6,7 +6,7 @@
 <title>Schedules</title>
 <meta name="shopify-api-key" content="prototype">
 <script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
-<link rel="stylesheet" href="shared/cifra.css?v=4">
+<link rel="stylesheet" href="shared/cifra.css?v=5">
 <script src="shared/cifra.js" defer></script>
 <script src="shared/alerts.js?v=3"></script>
 </head>
@@ -42,9 +42,9 @@
           <thead><tr>
             <th><button type="button">Name</button></th>
             <th><button type="button">Type</button></th>
-            <th aria-sort="ascending"><button type="button" class="c-th-active">Status <s-icon type="arrow-up" size="small"></s-icon></button></th>
-            <th><button type="button">Last sent <s-icon type="sort" size="small"></s-icon></button></th>
-            <th><button type="button">Next scheduled send <s-icon type="sort" size="small"></s-icon></button></th>
+            <th aria-sort="ascending"><button type="button" class="c-th-active">Status <s-icon type="arrow-up"></s-icon></button></th>
+            <th><button type="button">Last sent <s-icon type="sort"></s-icon></button></th>
+            <th><button type="button">Next scheduled send <s-icon type="sort"></s-icon></button></th>
             <th><button type="button">Author</button></th>
             <th class="c-col-actions"></th>
           </tr></thead>
@@ -83,7 +83,10 @@
          <div class="c-alert-sub">${esc(x.rule ? A.ruleText(x.rule) : '')}</div>
          <div class="c-alert-sub">${x.channel === 'slack' ? 'Slack: ' + esc(x.slackChannel) : 'Email: ' + esc(x.recipients.join(', '))}</div>`
       : `<span class="c-strong">${esc(x.name)}</span>`;
-    const author = x.author
+    const byAI = x.type === 'alert' && (x.createdVia === 'chat' || x.createdVia === 'ai');
+    const author = byAI
+      ? `<span class="c-author"><span class="c-author__ai"><img src="assets/img/cifra-icon-blue.svg" alt=""></span>Cifra AI</span>`
+      : x.author
       ? `<span class="c-author"><s-avatar size="small-200" initials="${initials(x.author)}"></s-avatar>${esc(x.author)}</span>`
       : '—';
     const menu = `

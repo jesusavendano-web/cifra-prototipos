@@ -365,6 +365,7 @@
       if (p.channel) d.channel = p.channel;
       if (p.recipients.length) d.recipients = p.recipients;
       nameTouched = false;
+      if (isNew) d.createdVia = 'ai'; // en la lista sale como autor "Cifra AI"
       fill(); refresh();
       const r = d.rule, { s, hits } = A.evaluate(r), w = A.WINDOWS[r.window];
       const to = d.channel === 'email' ? `email <b>${esc(d.recipients.join(', ') || 'you')}</b>` : `post to <b>Slack ${esc(d.slackChannel)}</b>`;
