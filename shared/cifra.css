@@ -1155,3 +1155,33 @@ body.no-fade::after { display: none; }
 .c-syncbanner[hidden] { display: none; }
 /* s-banner pone título y descripción en la misma línea si caben: así siempre van en dos líneas (como el de error) */
 .c-syncbanner s-banner > s-paragraph { display: block; min-inline-size: min(600px, 50vw); }
+
+/* ------------------------------------------------------------------ */
+/* Alerts (ENG-2595)                                                    */
+/* ------------------------------------------------------------------ */
+.c-segmented--inline { display: inline-grid; grid-auto-columns: auto; justify-self: start; width: max-content; }
+.c-indextable--alerts table { font-size: 13px; }
+.c-segmented--inline button { padding: 0 14px; }
+.c-indextable tr.c-row-tall td { padding-top: 8px; padding-bottom: 8px; }
+.c-alert-sub { color: var(--c-text-secondary); font-size: 12px; line-height: 18px; white-space: normal; }
+.c-muted { color: var(--c-text-secondary); }
+.c-th-active { color: var(--c-text) !important; font-weight: 600; }
+.c-alerts-empty { padding: 24px 16px 32px; }
+.c-alert-prompt { max-width: none; margin: 0; box-shadow: none; border: 1px solid var(--c-border-strong); }
+.c-alert-prompt:focus-within { border-color: var(--c-text); }
+.c-alert-prompt input:disabled { color: var(--c-text-secondary); }
+.c-alert-count { font-size: var(--c-fs-kpi); line-height: 28px; font-weight: 600; }
+.c-alert-legend { display: inline-flex; gap: 14px; flex-wrap: wrap; font-size: var(--c-fs-small); color: var(--c-text-secondary); }
+.c-alert-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+#pv-chart .c-chart { height: 220px; width: 100%; }
+.c-flash { animation: c-flash 1.4s ease-out; border-radius: var(--c-radius-card); }
+@keyframes c-flash { 0% { box-shadow: 0 0 0 3px rgba(47,108,246,.45); } 100% { box-shadow: 0 0 0 0 rgba(47,108,246,0); } }
+.c-toast {
+  position: fixed; left: 50%; bottom: 24px; z-index: 100;
+  transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  background: #1a1a1a; color: #fff; border-radius: 12px; padding: 10px 16px;
+  font: 500 var(--c-fs-base)/20px var(--c-font); box-shadow: var(--c-shadow-popover);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.c-toast[data-show="true"] { opacity: 1; transform: translate(-50%, 0); }
+.c-alert-prompt .c-ask__send:not([disabled]) s-icon { color: #fff; --p-color-icon: #fff; }

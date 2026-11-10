@@ -14,7 +14,9 @@
     ['metric-tree.html', 'Metric tree'],
     ['insights.html', 'Insights'],
     ['integrations.html', 'Integrations'],
+    ['schedules.html', 'Schedules'],
     ['schedule.html', 'Schedule'],
+    ['alert.html', 'Alert'],
     ['settings.html', 'Settings'],
     ['system-states.html', 'System states'],
   ];
