@@ -1161,7 +1161,19 @@ body.no-fade::after { display: none; }
 /* ------------------------------------------------------------------ */
 .c-segmented--inline { display: inline-grid; grid-auto-columns: auto; justify-self: start; width: max-content; }
 .c-indextable--alerts table { font-size: 13px; }
-.c-segmented--inline button { padding: 0 14px; }
+/* Filtro de la lista de Schedules: igual que en la app (píldora gris con borde, activo blanco) */
+.c-segmented--inline {
+  padding: 2px; gap: 0; border-radius: 999px;
+  background: #ebebeb; box-shadow: inset 0 0 0 1px #dedede;
+}
+.c-segmented--inline button {
+  height: 28px; padding: 0 12px; border-radius: 999px;
+  color: #303030; font: 500 13px/16px var(--c-font);
+}
+.c-segmented--inline button[aria-pressed="true"] {
+  background: #fff; color: #303030;
+  box-shadow: 0 0 0 1px #d4d4d4, 0 1px 1px rgba(0,0,0,.08);
+}
 .c-indextable tr.c-row-tall td { padding-top: 8px; padding-bottom: 8px; }
 .c-alert-sub { color: var(--c-text-secondary); font-size: 12px; line-height: 18px; white-space: normal; }
 .c-muted { color: var(--c-text-secondary); }

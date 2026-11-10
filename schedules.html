@@ -20,8 +20,8 @@
   Nativo → s-page, s-badge, s-avatar, s-button, s-menu. Custom → segmented (filtro), IndexTable, toast.
 -->
 <s-page heading="Schedules" inlineSize="large">
-  <s-button slot="primary-action" variant="primary" href="schedule.html">Create schedule</s-button>
-  <s-button slot="secondary-actions" href="alert.html">Create alert</s-button>
+  <s-button slot="primary-action" variant="primary" href="schedule.html" id="primary-btn">Create schedule</s-button>
+  <s-button slot="secondary-actions" href="alert.html" id="secondary-btn">Create alert</s-button>
 
   <s-stack gap="base">
     <div class="c-segmented c-segmented--inline" id="type-filter" data-custom="SegmentedControl">
@@ -152,8 +152,21 @@
 
   document.getElementById('type-filter').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
-    filter = b.dataset.value; render();
+    filter = b.dataset.value;
+    b.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    headerActions(); render();
   });
+
+  // Como en la app: en el tab Alerts, "Create alert" pasa a primario y "Create schedule" desaparece (y al revés en Schedules)
+  function headerActions() {
+    const p = document.getElementById('primary-btn'), s = document.getElementById('secondary-btn');
+    const alerts = filter === 'alert';
+    p.textContent = alerts ? 'Create alert' : 'Create schedule';
+    p.setAttribute('href', alerts ? 'alert.html' : 'schedule.html');
+    s.style.display = filter === 'all' ? '' : 'none';
+    document.getElementById('q').placeholder =
+      filter === 'alert' ? 'Search alerts' : filter === 'schedule' ? 'Search schedules' : 'Search schedules and alerts';
+  }
   document.getElementById('q').addEventListener('input', (e) => { query = e.target.value; render(); });
 
   render();
