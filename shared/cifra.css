@@ -1185,3 +1185,20 @@ body.no-fade::after { display: none; }
 }
 .c-toast[data-show="true"] { opacity: 1; transform: translate(-50%, 0); }
 .c-alert-prompt .c-ask__send:not([disabled]) s-icon { color: #fff; --p-color-icon: #fff; }
+
+/* Alerts · formulario en cards (mismo patrón que /schedules/new) */
+.c-composer.c-alert-prompt {
+  position: static; transform: none; left: auto; bottom: auto; width: 100%; max-width: none; margin: 0; border: 0;
+  height: 44px; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.10), 0 -8px 24px rgba(184,140,255,.14);
+}
+.c-cardhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; }
+.c-collapse { border: 1px solid var(--c-border); border-radius: var(--c-radius-inner); background: var(--c-surface); }
+.c-collapse summary {
+  list-style: none; display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 12px 14px; font-weight: 500; color: var(--c-text);
+}
+.c-collapse summary::-webkit-details-marker { display: none; }
+.c-collapse__meta { color: var(--c-text-secondary); font-weight: 400; }
+.c-collapse__chev { margin-left: auto; transition: transform .15s ease; }
+.c-collapse:not([open]) .c-collapse__chev { transform: rotate(180deg); }
+.c-collapse__body { padding: 0 14px 14px; }
