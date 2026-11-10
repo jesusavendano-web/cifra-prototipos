@@ -132,6 +132,27 @@
     const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
     const out = []; for (let v = lo; v <= hi + step / 2; v += step) out.push(+v.toFixed(6)); return out;
   }
+  // Curva monótona (Fritsch–Carlson): suave y sin pasarse de los valores reales en picos y valles.
+  function smooth(p) {
+    const n = p.length;
+    if (n < 3) return 'M' + p.map((q) => q.join(',')).join(' L');
+    const dx = [], m = [], t = [];
+    for (let i = 0; i < n - 1; i++) { dx[i] = p[i + 1][0] - p[i][0]; m[i] = (p[i + 1][1] - p[i][1]) / dx[i]; }
+    t[0] = m[0]; t[n - 1] = m[n - 2];
+    for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+      const a = t[i] / m[i], b = t[i + 1] / m[i], s2 = a * a + b * b;
+      if (s2 > 9) { const k = 3 / Math.sqrt(s2); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+    }
+    const f = (v) => v.toFixed(1);
+    let d = `M${f(p[0][0])},${f(p[0][1])}`;
+    for (let i = 0; i < n - 1; i++) {
+      const h3 = dx[i] / 3;
+      d += ` C${f(p[i][0] + h3)},${f(p[i][1] + t[i] * h3)} ${f(p[i + 1][0] - h3)},${f(p[i + 1][1] - t[i + 1] * h3)} ${f(p[i + 1][0])},${f(p[i + 1][1])}`;
+    }
+    return d;
+  }
   function chart(rule, width) {
     const { s, hits } = evaluate(rule);
     const c = CONDITIONS[rule.condition];
@@ -151,10 +172,12 @@
       g += `<text x="${sx(i)}" y="${H - 8}" text-anchor="${k === 0 ? 'start' : k === 2 ? 'end' : 'middle'}">${pointLabel(rule.window, i, s.length)}</text>`;
     });
     const bw = (W - L - R) / (s.length - 1);
-    hits.forEach((i) => { g += `<rect x="${sx(i) - bw / 2}" y="${T}" width="${bw}" height="${H - T - B}" fill="rgba(197,31,31,.07)"/>`; });
-    const pts = s.map((v, i) => `${sx(i).toFixed(1)},${sy(v).toFixed(1)}`);
-    g += `<path d="M${pts.join(' L')} L${sx(s.length - 1)},${sy(min)} L${sx(0)},${sy(min)} Z" fill="var(--c-chart-area)"/>`;
-    g += `<polyline points="${pts.join(' ')}" fill="none" stroke="var(--c-chart-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    hits.forEach((i) => { g += `<rect x="${sx(i) - bw / 2}" y="${T}" width="${bw}" height="${H - T - B}" rx="6" fill="rgba(197,31,31,.05)"/>`; });
+    const gid = 'ag' + Math.random().toString(36).slice(2, 8);
+    g += `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--c-chart-1)" stop-opacity=".18"/><stop offset="100%" stop-color="var(--c-chart-1)" stop-opacity="0"/></linearGradient></defs>`;
+    const line = smooth(s.map((v, i) => [sx(i), sy(v)]));
+    g += `<path d="${line} L${sx(s.length - 1)},${sy(min)} L${sx(0)},${sy(min)} Z" fill="url(#${gid})"/>`;
+    g += `<path d="${line}" fill="none" stroke="var(--c-chart-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
     if (!c.pct) g += `<line x1="${L}" x2="${W - R}" y1="${sy(thr)}" y2="${sy(thr)}" stroke="var(--c-negative)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
     hits.forEach((i) => { g += `<circle cx="${sx(i)}" cy="${sy(s[i])}" r="4.5" fill="var(--c-negative)" stroke="#fff" stroke-width="2"><title>${pointLabel(rule.window, i, s.length, true)} · ${fmt(rule.metric, s[i])}</title></circle>`; });
     return `<svg class="c-chart" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${METRICS[rule.metric].label}: ${hits.length} alerts in the last ${s.length - 1} ${WINDOWS[rule.window].unit}">${g}</svg>`;
