@@ -22,7 +22,6 @@
   const WINDOWS = {
     day:   { label: 'Daily',   noun: 'a day',   prev: 'the day before',   points: 30, unit: 'days',   per: 'day' },
     week:  { label: 'Weekly',  noun: 'a week',  prev: 'the week before',  points: 12, unit: 'weeks',  per: 'week' },
-    month: { label: 'Monthly', noun: 'a month', prev: 'the month before', points: 12, unit: 'months', per: 'month' },
   };
 
   // ---------------------------------------------------------------- store
@@ -31,9 +30,9 @@
     { id: 's2', type: 'schedule', name: 'demo', status: 'active', lastSent: 'N/A', next: 'November 10, 2026 12:00 PM', author: 'Julio Flores' },
     { id: 'a1', type: 'alert', name: 'Weekly total orders drop 20%', status: 'active', lastSent: 'Not yet', author: null, createdVia: 'chat',
       rule: { metric: 'total_orders', condition: 'drops_pct', value: 20, window: 'week' },
-      channel: 'email', recipients: ['jesus.avendano@getcifra.com'], slackChannel: '#alerts', hour: 8, ampm: 'am', once: true },
+      channel: 'email', recipients: ['jesus.avendano@getcifra.com'], slackChannel: '#alerts' },
   ];
-  const KEY = 'cifra-alerts-v1';
+  const KEY = 'cifra-alerts-v2';
   function load() {
     try { const s = sessionStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
     return JSON.parse(JSON.stringify(SEED));
@@ -79,7 +78,7 @@
   // ---------------------------------------------------------------- serie de ejemplo + evaluación
   function rng(seed) { let s = seed; return () => (s = (s * 9301 + 49297) % 233280) / 233280; }
   const isRate = (k) => ['aov', 'roas', 'conversion_rate'].includes(k);
-  function scaleFor(metric, window) { return isRate(metric) ? 1 : { day: 1, week: 7, month: 30 }[window]; }
+  function scaleFor(metric, window) { return isRate(metric) ? 1 : { day: 1, week: 7 }[window]; }
   function series(metric, window) {
     const m = METRICS[metric], n = WINDOWS[window].points + 1;
     const base = m.base * scaleFor(metric, window);
@@ -114,12 +113,10 @@
     const back = n - 1 - i;
     if (window === 'day') d.setDate(d.getDate() - back);
     if (window === 'week') d.setDate(d.getDate() - back * 7);
-    if (window === 'month') d.setMonth(d.getMonth() - back);
     return d;
   }
   function pointLabel(window, i, n, long) {
     const d = pointDate(window, i, n);
-    if (window === 'month') return d.toLocaleDateString('en-US', { month: long ? 'long' : 'short', year: 'numeric' });
     const s = d.toLocaleDateString('en-US', { month: long ? 'long' : 'short', day: 'numeric', year: long ? 'numeric' : undefined });
     return (window === 'week' ? 'Week of ' : '') + s;
   }
@@ -212,7 +209,6 @@
     else if (down) rule.condition = 'drops_pct';
     else if (up) rule.condition = 'rises_pct';
     if (/week|semana/.test(t)) rule.window = 'week';
-    else if (/month|mes\b|mensual/.test(t)) rule.window = 'month';
     else if (/day|daily|d[ií]a|diari/.test(t)) rule.window = 'day';
     if (/slack/.test(t)) out.channel = 'slack';
     else if (/email|e-mail|correo|mail/.test(t)) out.channel = 'email';

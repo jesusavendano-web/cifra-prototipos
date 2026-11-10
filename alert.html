@@ -6,9 +6,9 @@
 <title>Alert · Create</title>
 <meta name="shopify-api-key" content="prototype">
 <script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
-<link rel="stylesheet" href="shared/cifra.css">
+<link rel="stylesheet" href="shared/cifra.css?v=7">
 <script src="shared/cifra.js" defer></script>
-<script src="shared/alerts.js"></script>
+<script src="shared/alerts.js?v=4"></script>
 </head>
 <body>
 
@@ -17,10 +17,9 @@
   Antes: las alertas solo se creaban desde el chat y no se podían editar.
   Ahora: página propia con la misma estructura que Schedule › Create.
     1. "Create with AI" (acción de página) abre el chat lateral, igual que en dashboards; Cifra llena el formulario (IA simulada)
-    2. Rule → periodo (segmented, igual que "When to send"), métrica, condición y valor
+    2. Rule → métrica, condición, valor y periodo (día o semana, como MetricAlert en ENG-2449)
     3. Preview → cuántas veces habría saltado y cuándo (gráfica + tabla, como "Preview scheduled calendar")
     4. Recipients → Email | Slack + Send test (igual que en schedules)
-    5. When to check → hora, AM/PM y "notify once per period"
   Edición: alert.html?id=a1 (heading con el nombre, Pause/Delete como acciones de página).
   Nativo → s-page, s-section, s-text-field, s-select, s-number-field, s-email-field, s-clickable-chip,
            s-checkbox, s-banner, s-table, s-modal, s-badge. Custom → segmented, prompt de Cifra, gráfica, toast.
@@ -76,17 +75,19 @@
           <s-heading>When to alert</s-heading>
           <s-text color="subdued">Choose the metric to watch and the change you want to hear about.</s-text>
         </s-stack>
-        <div class="c-segmented" id="f-window" data-custom="SegmentedControl">
-          <button type="button" aria-pressed="false" data-value="day">Daily</button>
-          <button type="button" aria-pressed="false" data-value="week">Weekly</button>
-          <button type="button" aria-pressed="false" data-value="month">Monthly</button>
-        </div>
         <s-select label="Metric" id="f-metric"></s-select>
-        <s-grid gridTemplateColumns="1fr 1fr" gap="small">
+        <s-grid gridTemplateColumns="1fr 1fr 1fr" gap="small">
           <s-select label="Condition" id="f-condition"></s-select>
           <s-number-field label="Value" id="f-value" min="0"></s-number-field>
+          <s-select label="Period" id="f-window">
+            <s-option value="day">Day</s-option>
+            <s-option value="week">Week</s-option>
+          </s-select>
         </s-grid>
-        <s-text color="subdued" id="rule-sentence"></s-text>
+        <s-stack gap="small-200">
+          <s-text color="subdued" id="rule-sentence"></s-text>
+          <s-text color="subdued" id="check-help"></s-text>
+        </s-stack>
 
         <details class="c-collapse" open data-custom="Collapsible">
           <summary>
@@ -113,26 +114,6 @@
             </s-stack>
           </div>
         </details>
-      </s-stack>
-    </s-section>
-
-    <!-- When to check (igual que "When to send") -->
-    <s-section>
-      <s-stack gap="base">
-        <s-stack gap="small-100">
-          <s-heading>When to check</s-heading>
-          <s-text color="subdued" id="check-help"></s-text>
-        </s-stack>
-        <s-grid gridTemplateColumns="120px 120px" gap="small">
-          <s-select label="Hour" id="f-hour">
-            <s-option value="6">6</s-option><s-option value="7">7</s-option><s-option value="8">8</s-option><s-option value="9">9</s-option><s-option value="10">10</s-option><s-option value="11">11</s-option><s-option value="12">12</s-option>
-          </s-select>
-          <s-select label="AM/PM" id="f-ampm">
-            <s-option value="am">AM</s-option><s-option value="pm">PM</s-option>
-          </s-select>
-        </s-grid>
-        <s-checkbox id="f-once" label="Notify only once per period" details="If the rule keeps holding, you get one alert per period instead of one on every check."></s-checkbox>
-        <s-text color="subdued">This alert will be checked at the local time set in your app (UTC-05:00)</s-text>
       </s-stack>
     </s-section>
 
@@ -203,7 +184,7 @@
   const d = existing ? JSON.parse(JSON.stringify(existing)) : {
     id: null, type: 'alert', name: '', status: 'active', lastSent: 'Not yet', author: 'Jesus Avendaño', createdVia: 'form',
     rule: { metric: 'net_sales', condition: 'drops_pct', value: 20, window: 'day' },
-    channel: 'email', recipients: ['jesus.avendano@getcifra.com'], slackChannel: '#alerts', hour: 8, ampm: 'am', once: true,
+    channel: 'email', recipients: ['jesus.avendano@getcifra.com'], slackChannel: '#alerts',
   };
   let nameTouched = !isNew;
 
@@ -226,15 +207,12 @@
     $(groupId).querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.value === value)));
   }
   function fill() {
-    setSeg('f-window', d.rule.window);
+    $('f-window').value = d.rule.window;
     setSeg('f-channel', d.channel);
     $('f-metric').value = d.rule.metric;
     $('f-condition').value = d.rule.condition;
     $('f-value').value = String(d.rule.value);
     $('f-slack').value = d.slackChannel;
-    $('f-hour').value = String(d.hour);
-    $('f-ampm').value = d.ampm;
-    $('f-once').checked = d.once;
     $('f-name').value = d.name || A.autoName(d.rule);
     if ($('toggle')) $('toggle').textContent = d.status === 'active' ? 'Pause' : 'Resume';
   }
@@ -271,17 +249,13 @@
     $('chips').innerHTML = d.recipients.map((e, i) => `<s-clickable-chip removable data-i="${i}">${esc(e)}</s-clickable-chip>`).join('');
     $('chips').querySelectorAll('s-clickable-chip').forEach((ch) => ch.addEventListener('remove', () => { d.recipients.splice(+ch.dataset.i, 1); refresh(); }));
 
-    $('check-help').textContent = {
-      day: 'Cifra checks yesterday’s numbers every day at this time.',
-      week: 'Cifra checks last week’s numbers every Monday at this time.',
-      month: 'Cifra checks last month’s numbers on the 1st at this time.',
-    }[r.window];
+    $('check-help').textContent = `Cifra checks each finished ${w.per} and alerts you once if the rule holds.`;
 
     if (!nameTouched) $('f-name').value = A.autoName(r);
   }
 
   // ---------------------------------------------------------------- eventos del formulario
-  $('f-window').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; d.rule.window = b.dataset.value; refresh(); });
+  $('f-window').addEventListener('change', (e) => { d.rule.window = e.currentTarget.value; refresh(); });
   $('f-channel').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; d.channel = b.dataset.value; refresh(); });
   $('f-metric').addEventListener('change', (e) => {
     d.rule.metric = e.currentTarget.value;
@@ -304,9 +278,6 @@
   $('f-value').addEventListener('input', (e) => { d.rule.value = parseFloat(e.currentTarget.value) || 0; refresh(); });
   $('f-name').addEventListener('input', (e) => { nameTouched = true; d.name = e.currentTarget.value; });
   $('f-slack').addEventListener('change', (e) => { d.slackChannel = e.currentTarget.value; });
-  $('f-hour').addEventListener('change', (e) => { d.hour = +e.currentTarget.value; });
-  $('f-ampm').addEventListener('change', (e) => { d.ampm = e.currentTarget.value; });
-  $('f-once').addEventListener('change', (e) => { d.once = e.currentTarget.checked; });
   $('f-email').addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -369,9 +340,8 @@
       fill(); refresh();
       const r = d.rule, { s, hits } = A.evaluate(r), w = A.WINDOWS[r.window];
       const to = d.channel === 'email' ? `email <b>${esc(d.recipients.join(', ') || 'you')}</b>` : `post to <b>Slack ${esc(d.slackChannel)}</b>`;
-      const when = { day: 'every day', week: 'every Monday', month: 'on the 1st of each month' }[r.window];
       answer(`<p>Done. I filled in the alert for you to review:</p>
-        <p>I’ll ${to} when <b>${esc(A.lc(A.ruleText(r)))}</b>, checked ${when} at ${d.hour}:00 ${d.ampm.toUpperCase()}.</p>
+        <p>I’ll ${to} when <b>${esc(A.lc(A.ruleText(r)))}</b>. Cifra checks each finished ${w.per} and alerts you once.</p>
         <p>With your recent data it would have alerted you <b>${hits.length} time${hits.length === 1 ? '' : 's'}</b> in the last ${s.length - 1} ${w.unit}.${hits.length === 0 ? ' You may want a smaller change.' : ''} Check the form and click <b>Save</b> when it looks right.</p>`, 2);
       const sec = $('rule');
       sec.classList.remove('c-flash'); void sec.offsetWidth; sec.classList.add('c-flash');
