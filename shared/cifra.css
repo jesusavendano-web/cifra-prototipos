@@ -1259,3 +1259,25 @@ body.c-has-aipanel { padding-right: 400px; }
 .c-aip__composer input { flex: 1; border: 0; outline: 0; background: transparent; font: 400 var(--c-fs-base)/20px var(--c-font); color: var(--c-text); }
 .c-aip__composer input::placeholder { color: #8a8a8a; }
 .c-aip__composer .c-ask__send:not([disabled]) s-icon { color: #fff; }
+
+/* Schedules: buscador y tabla como en la app (campo gris con borde, botón de orden redondo, encabezado 14px) */
+.c-indextable--alerts .c-indextable__search { padding: 10px 10px 8px; border-bottom: 0; gap: 10px; }
+.c-indextable--alerts .c-indextable__searchbox {
+  height: 40px; padding: 0 12px; gap: 8px;
+  background: #f7f7f7; border: 1px solid #cfcfcf; border-radius: 12px; color: #303030;
+}
+.c-indextable--alerts .c-indextable__searchbox:focus-within { background: #fff; border-color: #8a8a8a; }
+.c-indextable--alerts .c-indextable__searchbox input { font: 15px/20px var(--c-font); }
+.c-indextable--alerts .c-indextable__searchbox input::placeholder { color: #616161; }
+.c-indextable--alerts .c-sortbtn {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 32px; height: 32px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; background: #ebebeb; color: #303030;
+}
+.c-indextable--alerts .c-sortbtn:hover { background: #e0e0e0; }
+.c-indextable--alerts table { font-size: 14px; }
+.c-indextable--alerts th { font-size: 14px; color: #616161; background: #f7f7f7; height: 40px; padding: 0 16px; }
+.c-indextable--alerts th button { font-size: 14px; color: inherit; }
+.c-indextable--alerts th .c-th-active { color: #303030; }
+.c-indextable--alerts td { padding: 10px 16px; color: #303030; }
+.c-indextable--alerts .c-alert-sub { font-size: 14px; line-height: 22px; color: #4a4a4a; }
+.c-indextable--alerts.c-hide-type th:nth-child(2), .c-indextable--alerts.c-hide-type td:nth-child(2) { display: none; }
