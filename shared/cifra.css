@@ -1289,3 +1289,5 @@ body.c-has-aipanel { padding-right: 400px; }
 .c-author__ai { width: 20px; height: 20px; border-radius: 6px; background: #fff; box-shadow: inset 0 0 0 1px #e3e3e3; display: inline-grid; place-items: center; flex: none; }
 .c-author__ai img { width: 14px; height: 14px; display: block; }
 .c-indextable--alerts td { padding-top: 6px; padding-bottom: 6px; }
+.c-author__ai { background: none; box-shadow: none; border-radius: 6px; overflow: hidden; }
+.c-author__ai img { width: 20px; height: 20px; object-fit: cover; }
