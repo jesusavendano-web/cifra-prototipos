@@ -10,59 +10,6 @@
   resaltarlo con el botón "Resaltar custom" de la barra de prototipos.
 */
 
-:root {
-  /* Superficies y texto (Admin Next) */
-  --c-bg: #f1f1f1;
-  --c-surface: #ffffff;
-  --c-surface-hover: #f7f7f7;
-  --c-surface-subdued: #f3f3f3;
-  --c-fill-secondary: #ebebeb;
-  --c-fill-secondary-hover: #e3e3e3;
-  --c-text: #101010;
-  --c-text-secondary: #616161;
-  --c-text-tertiary: #8a8a8a;
-  --c-border: #e3e3e3;
-  --c-border-strong: #cccccc;
-
-  /* Tono de variaciones */
-  --c-positive: #29845a;
-  --c-negative: #c51f1f;
-
-  /* Gráficas (paleta Cifra actual) */
-  --c-chart-1: #3aa9f0;
-  --c-chart-2: #5b3fd6;
-  --c-chart-3: #4a6ff0;
-  --c-chart-4: #e0448f;
-  --c-chart-5: #36c2b4;
-  --c-chart-grid: #ececec;
-  --c-chart-area: rgba(58, 169, 240, 0.10);
-
-  /* Forma */
-  --c-radius-card: 20px;
-  --c-radius-control: 9999px;
-  --c-radius-inner: 12px;
-  --c-radius-small: 8px;
-  --c-shadow-card: rgba(0,0,0,.24) 0 0 2px 0, rgba(0,0,0,.02) 0 2px 12px 0, rgba(0,0,0,.02) 0 4px 16px 0, rgba(0,0,0,.02) 0 4px 48px 0;
-  --c-shadow-popover: rgba(0,0,0,.2) 0 0 1px 0, rgba(0,0,0,.08) 0 8px 24px -4px, rgba(0,0,0,.08) 0 16px 40px -8px;
-
-  /* Tipografía */
-  --c-font: ShopifyInter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --c-fs-small: 12px;
-  --c-fs-base: 13px;
-  --c-fs-kpi: 20px;
-  --c-fs-kpi-large: 28px;
-}
-
-* { box-sizing: border-box; }
-html, body { margin: 0; }
-body {
-  background: var(--c-bg);
-  color: var(--c-text);
-  font-family: var(--c-font);
-  font-size: var(--c-fs-base);
-  line-height: 20px;
-  -webkit-font-smoothing: antialiased;
-}
 
 /* ------------------------------------------------------------------ */
 /* Barra de prototipos (NO es parte de la app)                         */
