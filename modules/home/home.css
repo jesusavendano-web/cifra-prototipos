@@ -1,0 +1,113 @@
+/*
+  Módulo home: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Home                                                                 */
+/* ------------------------------------------------------------------ */
+.c-hero { text-align: center; padding: 28px 0 8px; }
+.c-hero h2 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 600; color: var(--c-text-tertiary); }
+.c-hero p { margin: 0; font-size: 26px; line-height: 32px; font-weight: 600; }
+/* ------------------------------------------------------------------ */
+/* Home (app actual): strip de métricas con gráfica al hover, hero,     */
+/* cards con ilustración. El popover replica el del Home de Shopify:    */
+/* card de 640px, radio 20px, valor 24px, título 12px/500, línea 2px.   */
+/* ------------------------------------------------------------------ */
+.c-home { max-width: 1108px; margin: 0 auto; }
+.c-home[hidden] { display: none; }
+.c-metricstrip { position: relative; display: flex; align-items: flex-start; gap: 24px; padding: 24px 0 0; }
+.c-metricstrip__range { display: grid; font-size: 13px; line-height: 18px; min-width: 150px; }
+.c-metricstrip__range span { color: var(--c-text-secondary); }
+.c-metricstrip__items { position: relative; display: flex; justify-content: center; gap: 0; flex: 1; }
+.c-mstat { padding: 0 24px; display: grid; justify-items: center; gap: 2px; outline: 0; cursor: default; }
+.c-mstat__label { color: var(--c-text-secondary); font-size: 13px; line-height: 18px; }
+.c-mstat:hover .c-mstat__label, .c-mstat:focus-within .c-mstat__label { color: var(--c-text); }
+.c-mstat__row { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.c-mstat__row b { font-weight: 600; }
+.c-mstat__delta { font-style: normal; font-weight: 500; }
+.c-mstat__delta--down { color: #8e0b21; }
+.c-mstat__delta--up { color: #0c5132; }
+.c-mstat .c-spark { width: 30px; height: 12px; }
+.c-mstat .c-spark path { stroke: #a8a8a8 !important; }
+.c-mstat__pop {
+  position: absolute; top: 100%; left: 50%; z-index: 60; width: 640px; max-width: calc(100vw - 32px);
+  padding: 24px 24px 20px; background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-popover);
+  opacity: 0; visibility: hidden; transform: translate(-50%, 4px); transition: opacity .15s ease, transform .15s ease, visibility .15s;
+}
+.c-mstat:hover .c-mstat__pop, .c-mstat:focus-within .c-mstat__pop { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.c-mstat__head { display: flex; justify-content: space-between; align-items: flex-start; }
+.c-mstat__value { font-size: 24px; line-height: 32px; font-weight: 450; font-variant-numeric: tabular-nums; }
+.c-mstat__title { margin: 2px 0 0; font-size: 12px; line-height: 18px; font-weight: 500; }
+.c-mstat__desc { margin: 0; color: var(--c-text-secondary); font-size: 13px; line-height: 20px; }
+.c-mstat__info { position: absolute; right: 24px; top: 124px; color: var(--c-text-secondary); }
+.c-mstat__pop .c-chartwrap { margin-top: 12px; }
+
+.c-hero h2 { color: #4a4a4a; font-weight: 500; font-size: 28px; line-height: 34px; }
+.c-hero p { font-weight: 600; font-size: 28px; line-height: 34px; }
+.c-home__section { margin-top: 8px; }
+.c-home__grid { display: grid; gap: 16px; }
+.c-home__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.c-home__grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 900px) { .c-home__grid--3, .c-home__grid--2 { grid-template-columns: 1fr; } .c-metricstrip { flex-direction: column; } }
+.c-homecard {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 8px; min-height: 320px;
+  padding: 20px; background: var(--c-surface); border-radius: 28px; box-shadow: var(--c-shadow-card);
+}
+.c-homecard--insight { min-height: 320px; }
+.c-homecard--short { min-height: 200px; }
+.c-homecard__title { margin: 0; font-size: 18px; line-height: 24px; font-weight: 600; color: #303030; }
+.c-homecard s-paragraph { color: var(--c-text-secondary); max-width: 560px; }
+.c-homecard .c-homecard__actions { margin-top: auto; position: relative; z-index: 1; }
+.c-homecard .c-homecard__img { position: absolute; height: auto; pointer-events: none; }
+.c-homecard--insight s-paragraph { max-width: 720px; }
+
+/* ---- Home: ajustes de espaciado, botón de card y estado hover del strip (referencia: app actual) ---- */
+.c-metricstrip { padding-top: 44px; }
+.c-mstat { padding: 0 45px; transition: opacity .15s ease; }
+.c-metricstrip__items:hover .c-mstat:not(:hover):not(:focus-within) { opacity: .4; }
+.c-mstat__pop { top: calc(100% + 10px); }
+.c-mstat__pop::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+.c-hero { padding-top: 86px; padding-bottom: 0; }
+.c-hero h2, .c-hero p { font-size: 26px; line-height: 45px; font-weight: 500; }
+.c-hero p { color: var(--c-text); }
+.c-home .c-prompt { padding: 10px 10px 10px 16px; margin: 4px auto 0; }
+.c-home .c-section-label { margin: 32px 0 22px; }
+.c-home .c-hero + .c-home__section .c-section-label { margin-top: 12px; }
+.c-homecard { gap: 14px; padding: 20px 26px; }
+.c-homebtn {
+  display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 16px;
+  background: #fff; color: #101010; font: 500 13px/20px var(--c-font); text-decoration: none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.1);
+}
+.c-homebtn:hover { background: #fafafa; }
+.c-homebtn:focus-visible { outline: 2px solid #005bd3; outline-offset: 2px; }
+
+.c-hero h2, .c-hero p { line-height: 33px; }
+/* La gráfica del strip se alinea al centro de la columna (igual que Shopify: mismo ancho y x que la caja de Ask),
+   no al centro del grupo de métricas */
+.c-metricstrip__items { position: static; }
+.c-mstat { padding: 0 30px; }
+/* Rango de fechas del strip: una sola línea, gris y regular, como "Yesterday · All channels" del Home de Shopify */
+.c-metricstrip__range {
+  all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-width: 0; white-space: nowrap;
+  height: 28px; padding: 0 8px; margin: -4px 0 0 -8px; border-radius: 8px;
+  font: 400 13px/18px var(--c-font); color: var(--c-text-secondary);
+}
+.c-metricstrip__range:hover { background: #ebebeb; color: var(--c-text); }
+.c-metricstrip__range:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+/* Rango y comparación: dos botones independientes separados por un punto (como "Yesterday · All channels") */
+.c-metricstrip__range { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 0; margin: -4px 0 0 -8px; color: var(--c-text-secondary); white-space: nowrap; }
+.c-metricstrip__range:hover { background: none; }
+.c-metricstrip__btn {
+  all: unset; box-sizing: border-box; cursor: pointer; height: 28px; padding: 0 8px; border-radius: 8px;
+  display: inline-flex; align-items: center; font: 400 13px/18px var(--c-font); color: var(--c-text-secondary);
+}
+.c-metricstrip__btn:hover { background: #ebebeb; color: var(--c-text); }
+.c-metricstrip__btn:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-metricstrip__range > span { padding: 0 1px; }
+
+/* Home · Sync: margen del s-banner de sincronización arriba del strip de métricas */
+.c-syncbanner { margin-top: 20px; }
+.c-syncbanner[hidden] { display: none; }
+/* s-banner pone título y descripción en la misma línea si caben: así siempre van en dos líneas (como el de error) */
+.c-syncbanner s-banner > s-paragraph { display: block; min-inline-size: min(600px, 50vw); }

@@ -1,0 +1,75 @@
+/*
+  Módulo metric-tree: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Metric tree: canvas, nodos, conectores con operador, zoom            */
+/* ------------------------------------------------------------------ */
+.c-canvas {
+  position: relative; overflow: auto;
+  height: 600px; border-radius: var(--c-radius-card);
+  background-color: #f1f1f1;
+  background-image: radial-gradient(#d4d4d4 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+.c-canvas__stage { padding: 48px; width: max-content; transform-origin: 0 0; transition: transform .15s ease; }
+.c-canvas__zoom {
+  position: absolute; left: 16px; bottom: 16px; z-index: 2;
+  display: flex; align-items: center; gap: 2px; padding: 2px;
+  background: var(--c-surface); border-radius: var(--c-radius-small); box-shadow: var(--c-shadow-card);
+}
+.c-canvas__zoom button { all: unset; cursor: pointer; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; color: var(--c-text-secondary); }
+.c-canvas__zoom button:hover { background: var(--c-surface-hover); color: var(--c-text); }
+.c-canvas__zoom span { min-width: 44px; text-align: center; font-size: var(--c-fs-small); }
+.c-canvas__panel { position: absolute; top: 16px; right: 16px; z-index: 2; width: 240px; max-height: calc(100% - 32px); overflow: auto; }
+.c-canvas__panel[hidden] { display: none; }
+
+.c-tree, .c-tree ul { list-style: none; margin: 0; }
+.c-tree { padding: 0; }
+.c-tree li { position: relative; display: flex; align-items: center; padding: 6px 0; }
+.c-tree ul { position: relative; padding: 0 0 0 56px; display: flex; flex-direction: column; }
+/* línea del padre hacia los hijos */
+.c-tree ul::before { content: ""; position: absolute; left: 0; top: 50%; width: 28px; border-top: 1px solid var(--c-border-strong); }
+/* rama horizontal de cada hijo */
+.c-tree ul > li::before { content: ""; position: absolute; left: -28px; top: 50%; width: 28px; border-top: 1px solid var(--c-border-strong); }
+/* tronco vertical */
+.c-tree ul > li::after { content: ""; position: absolute; left: -28px; top: 0; bottom: 0; border-left: 1px solid var(--c-border-strong); }
+.c-tree ul > li:first-child::after { top: 50%; }
+.c-tree ul > li:last-child::after { bottom: 50%; }
+.c-tree ul > li:only-child::after { display: none; }
+
+.c-tree__op {
+  position: absolute; left: -28px; top: 50%; z-index: 1;
+  transform: translate(-50%, -50%);
+  width: 22px; height: 22px; border-radius: 6px;
+  display: grid; place-items: center;
+  background: var(--c-surface); border: 1px solid var(--c-border-strong); box-shadow: rgba(0,0,0,.08) 0 1px 2px;
+  font: 600 11px/1 var(--c-font); color: var(--c-text-secondary);
+}
+.c-tree__node {
+  min-width: 200px; padding: 10px 12px;
+  background: var(--c-surface); border-radius: var(--c-radius-inner);
+  box-shadow: var(--c-shadow-card);
+  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2px 12px;
+  margin-right: 0;
+}
+.c-tree__node--root { min-width: 220px; }
+.c-tree__node--wide { min-width: 300px; }
+.c-tree__label { grid-column: 1 / -1; color: var(--c-text-secondary); font-size: var(--c-fs-small); }
+.c-tree__value { font-size: 18px; line-height: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.c-tree__node .c-source { width: 18px; height: 18px; font-size: 9px; border-radius: 4px; }
+.c-tree__node .c-delta { grid-column: 1 / -1; }
+
+.c-metriclist__group { color: var(--c-text-secondary); font-size: var(--c-fs-small); padding: 8px 8px 2px; }
+.c-metriclist button {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  width: 100%; padding: 6px 8px; border-radius: var(--c-radius-small);
+}
+.c-metriclist button:hover { background: var(--c-surface-hover); }
+.c-metriclist button[aria-pressed="true"] { background: var(--c-surface-subdued); font-weight: 600; }
+
+.c-tree__node .c-source { width: 22px !important; height: 22px !important; border-radius: 6px !important; }
+.c-tree__node .c-source img { width: 13px; height: 13px; }
+/* Estado inicial del Metric tree: ilustración gris (círculo + hoja con árbol) y texto, centrado en el canvas junto al panel */
+.c-canvas__empty { position: absolute; inset: 0 272px 0 0; display: grid; place-content: center; justify-items: center; gap: 4px; color: var(--c-text-secondary); text-align: center; pointer-events: none; }
+.c-canvas__empty[hidden], #mt-stage[hidden], .c-canvas__zoom[hidden] { display: none; }

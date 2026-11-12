@@ -1,0 +1,78 @@
+/*
+  Componente custom: IndexTable. IndexTable custom: toolbar, búsqueda, filtros, orden, celdas y pie.
+  Raíz con data-custom="IndexTable" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* IndexTable custom (tablas de costos): tabs + toolbar + selección +   */
+/* orden + footer con conteo y paginación                               */
+/* ------------------------------------------------------------------ */
+.c-indextable { background: var(--c-surface); border-radius: var(--c-radius-card); box-shadow: var(--c-shadow-card); overflow: hidden; }
+.c-indextable__bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px; min-height: 48px; }
+.c-indextable__tools { display: flex; gap: 6px; margin-left: auto; }
+.c-indextable__scroll { overflow-x: auto; }
+.c-indextable table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+/* Medido en admin.shopify.com/.../customers: encabezado 31px (#f7f7f7, 12px/500, #4a4a4a), filas de 32px, celdas con 6px de padding */
+.c-indextable th {
+  text-align: left; font-weight: 500; color: #4a4a4a; background: #f7f7f7;
+  height: 31px; padding: 6px 12px; white-space: nowrap; border: 0;
+}
+.c-indextable th:first-child { border-radius: 8px 0 0 8px; }
+.c-indextable th:last-child { border-radius: 0 8px 8px 0; }
+.c-indextable th button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+.c-indextable th button:hover { color: var(--c-text); }
+.c-indextable th s-icon { color: #8a8a8a; }
+.c-indextable td { padding: 6px 12px; height: 32px; border-bottom: 1px solid #f2f2f2; white-space: nowrap; }
+.c-indextable tr:last-child td { border-bottom: 0; }
+.c-indextable tbody tr:hover td { background: #f7f7f7; }
+.c-indextable .c-col-check { width: 36px; padding-right: 0; }
+.c-indextable .c-col-actions { width: 48px; text-align: right; }
+.c-indextable .c-num { text-align: right; }
+.c-indextable .c-strong { font-weight: 500; }
+.c-indextable tr[data-readonly] td { color: var(--c-text-tertiary); }
+.c-indextable tr[data-readonly] .c-strong { color: var(--c-text-secondary); }
+.c-indextable__scroll { padding: 0 4px; }
+.c-indextable__bar--stack { flex-direction: column; align-items: stretch; gap: 8px; }
+.c-indextable__search { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+.c-indextable__filters { display: flex; gap: 8px; }
+.c-indextable__filters:empty { display: none; }
+.c-rowlink { color: inherit; text-decoration: none; }
+.c-rowlink:hover { text-decoration: underline; }
+.c-author { display: inline-flex; align-items: center; gap: 8px; }
+/* Variante "list" (Reports) — medida en admin.shopify.com/.../analytics/reports:
+   búsqueda sin borde, pills con borde punteado, encabezado gris a ancho completo */
+.c-indextable--list .c-indextable__bar { padding: 0; gap: 0; }
+.c-indextable--list .c-indextable__search { padding: 6px 12px 6px 8px; border-bottom: 1px solid #f2f2f2; }
+.c-indextable--list .c-indextable__searchbox { display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 4px; color: var(--c-text-secondary); cursor: text; }
+.c-indextable--list .c-indextable__searchbox input { all: unset; flex: 1; min-width: 0; font: 13px/20px var(--c-font); color: var(--c-text); }
+.c-indextable--list .c-indextable__searchbox input::placeholder { color: var(--c-text-secondary); }
+.c-indextable--list .c-indextable__filters { padding: 8px 12px; gap: 6px; }
+.c-fpill {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 2px; height: 24px; padding: 0 4px 0 10px;
+  background: var(--c-surface); border: 1px dashed #ddd; border-radius: 9999px;
+  font: 13px/20px var(--c-font); color: var(--c-text);
+}
+.c-fpill:hover { background: var(--c-surface-hover); }
+.c-fpill:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-fpill s-icon { color: var(--c-text-secondary); }
+.c-indextable--list .c-indextable__scroll { padding: 0; }
+.c-indextable--list th { background: #f7f7f7; height: 36px; padding: 8px 6px 8px 12px; border-top: 1px solid #ebebeb; border-bottom: 1px solid #ebebeb; border-radius: 0; }
+.c-indextable--list th:first-child { padding-left: 16px; border-radius: 0; }
+.c-indextable--list th:last-child { border-radius: 0; }
+.c-indextable--list td:first-child { padding-left: 16px; }
+.c-indextable__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; color: var(--c-text-secondary); font-size: 12px;
+}
+.c-cellinput {
+  width: 72px; height: 32px; padding: 0 10px;
+  border: 1px solid var(--c-border-strong); border-radius: var(--c-radius-small);
+  font: inherit; color: var(--c-text); background: var(--c-surface);
+}
+.c-cellinput:focus { outline: 2px solid #005bd3; outline-offset: 0; }
+
+.c-indextable td { vertical-align: middle; line-height: 20px; }
+.c-indextable td s-badge { display: inline-flex; vertical-align: middle; }
+.c-indextable td s-badge { display: flex; width: max-content; }
+.c-indextable td .c-author { display: flex; }

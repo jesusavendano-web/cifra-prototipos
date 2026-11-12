@@ -1,0 +1,10 @@
+/*
+  Componente custom: IconMask. Iconos internos de Shopify que no existen en <s-icon> (SVG + máscara).
+  Raíz con data-custom="IconMask" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* Icono interno de Shopify que no existe en <s-icon> público (chart-vertical-filled): SVG extraído + máscara para heredar color */
+.c-icon-mask { display: inline-block; width: 20px; height: 20px; flex: none; background: currentColor;
+  -webkit-mask: var(--icon) center / 100% no-repeat; mask: var(--icon) center / 100% no-repeat; }
+.c-icon-mask--menu-horizontal { --icon: url(../../../assets/icons/menu-horizontal.svg); }
+.c-icon-mask--chart-vertical-filled { --icon: url(../../../assets/icons/chart-vertical-filled.svg); }

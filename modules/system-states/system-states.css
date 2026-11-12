@@ -1,0 +1,7 @@
+/*
+  Módulo system-states: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* System states: s-empty-state no deja espacio entre el gráfico y el título ni centra el subheading */
+.c-empty-graphic { padding-block-end: 24px; }
+.c-empty-text { text-align: center; }

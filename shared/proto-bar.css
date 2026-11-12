@@ -1,0 +1,41 @@
+/*
+  Barra de prototipos y modo "Resaltar custom". NO es parte de la app.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Barra de prototipos (NO es parte de la app)                         */
+/* ------------------------------------------------------------------ */
+.proto-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 8px 16px;
+  background: #1a1a1a; color: #fff;
+  font-size: 12px;
+}
+.proto-bar strong { margin-right: 12px; font-weight: 600; }
+.proto-bar a {
+  color: #cfcfcf; text-decoration: none;
+  padding: 4px 10px; border-radius: 9999px;
+}
+.proto-bar a:hover { background: #2e2e2e; color: #fff; }
+.proto-bar a[aria-current="page"] { background: #fff; color: #101010; }
+.proto-bar .spacer { flex: 1; }
+.proto-bar button {
+  font: inherit; color: #fff; background: #2e2e2e; border: 0;
+  padding: 4px 10px; border-radius: 9999px; cursor: pointer;
+}
+.proto-bar button[aria-pressed="true"] { background: #e5484d; }
+
+body.show-custom [data-custom] {
+  outline: 2px dashed #e5484d;
+  outline-offset: 2px;
+  position: relative;
+}
+body.show-custom [data-custom]::before {
+  content: "custom · " attr(data-custom);
+  position: absolute; top: -10px; left: 10px; z-index: 5;
+  background: #e5484d; color: #fff;
+  font: 600 10px/16px var(--c-font);
+  padding: 0 6px; border-radius: 4px; white-space: nowrap;
+  pointer-events: none;
+}

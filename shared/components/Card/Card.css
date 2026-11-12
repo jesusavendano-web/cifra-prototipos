@@ -1,0 +1,41 @@
+/*
+  Componente custom: Card. Card custom (cuando <s-section> no alcanza: header/footer propio), grip y pie de fuentes.
+  Raíz con data-custom="Card" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Card custom (para cuando s-section no alcanza: header/footer propio) */
+/* ------------------------------------------------------------------ */
+.c-card {
+  background: var(--c-surface);
+  border-radius: var(--c-radius-card);
+  box-shadow: var(--c-shadow-card);
+  overflow: hidden;
+  min-width: 0;
+}
+.c-card { display: flex; flex-direction: column; }
+.c-card__body { padding: 16px; flex: 1; }
+.c-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--c-border);
+  color: var(--c-text-secondary);
+}
+.c-card__title {
+  margin: 0; font-size: var(--c-fs-base); font-weight: 600;
+  text-decoration: underline dotted var(--c-border-strong);
+  text-underline-offset: 4px;
+}
+
+.c-grip { cursor: grab; color: var(--c-text-secondary); display: inline-grid; place-items: center; width: 16px; height: 16px; flex: none; }
+.c-card__title { cursor: default; }
+
+/* ---- Pie "From N sources" más sutil (prueba): texto pequeño y tenue + chip de fuente compacto, con el logo recortado ---- */
+.c-card__footer--source { border-top: 1px solid rgba(0,0,0,.06); padding: 8px 14px 10px 16px; }
+.c-card__sources { font-size: 12px; line-height: 16px; color: #8a8a8a; letter-spacing: 0; }
+.c-card__footer--source .c-source {
+  width: 22px !important; height: 22px !important; border-radius: 7px !important; border: 0 !important;
+  background: #fff !important; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 1px rgba(0,0,0,.04);
+}
+.c-card__footer--source .c-source img { width: 13px; height: 15px; object-fit: contain; }
+.c-card__footer--source:hover .c-card__sources { color: var(--c-text-secondary); }

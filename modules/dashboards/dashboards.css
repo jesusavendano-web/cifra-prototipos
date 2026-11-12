@@ -1,0 +1,57 @@
+/*
+  Módulo dashboards: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Dashboard · Customize (editor a pantalla completa)                   */
+/* En la app: App Bridge max modal. Aquí se simula con un overlay.      */
+/* ------------------------------------------------------------------ */
+.c-editor { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,.45); padding: 12px; }
+.c-editor__frame { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--c-bg); border-radius: 16px; overflow: hidden; box-shadow: var(--c-shadow-popover); }
+.c-editor__bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--c-surface); border-bottom: 1px solid var(--c-border); }
+.c-editor__title { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-right: auto; }
+.c-editor__appicon { width: 20px; height: 20px; border-radius: 5px; background: #2f6cf6; color: #fff; display: grid; place-items: center; font: 700 11px var(--c-font); }
+.c-editor__body { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 16px; padding: 16px; min-height: 0; }
+
+.c-library { display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--c-surface); border-radius: var(--c-radius-card); box-shadow: var(--c-shadow-card); min-height: 0; }
+.c-library__head { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 12px; }
+.c-library__list { overflow: auto; padding: 0 8px 12px; }
+.c-library__group { color: var(--c-text-secondary); padding: 10px 8px 4px; }
+.c-library__item {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 8px; border-radius: var(--c-radius-small); cursor: grab; position: relative;
+  white-space: nowrap;
+}
+.c-library__item span { overflow: hidden; text-overflow: ellipsis; }
+.c-library__item:hover { background: var(--c-surface-hover); }
+.c-library__item .c-grip { opacity: 0; }
+.c-library__item:hover .c-grip { opacity: 1; }
+.c-preview { z-index: 9100 !important;
+  position: fixed; z-index: 70; width: 300px; padding: 14px 16px; pointer-events: none;
+  background: var(--c-surface); border-radius: var(--c-radius-inner); box-shadow: var(--c-shadow-popover);
+}
+.c-preview[hidden] { display: none; }
+.c-preview .c-chart { height: 70px; }
+
+.c-canvasgrid {
+  overflow: auto; min-height: 0; padding: 4px; margin: -4px;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: min-content; gap: 16px; align-content: start;
+}
+.c-widget { position: relative; grid-column: span var(--span, 3); background: var(--c-surface); border-radius: var(--c-radius-inner); box-shadow: var(--c-shadow-card); display: flex; flex-direction: column; min-width: 0; }
+.c-widget[aria-selected="true"] { outline: 2px solid #005bd3; outline-offset: 0; }
+.c-widget.is-dragging { opacity: .4; }
+.c-widget.is-over { outline: 2px dashed #005bd3; }
+.c-widget__head { display: flex; align-items: center; gap: 6px; padding: 10px 10px 0 12px; }
+.c-widget__head .c-card__title { margin-right: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.c-widget__body { padding: 8px 12px 12px; flex: 1; }
+.c-widget .c-card__footer { padding: 8px 12px; }
+.c-widget__resize {
+  position: absolute; right: 2px; bottom: 2px; width: 14px; height: 14px; cursor: ew-resize; display: none;
+  background: linear-gradient(135deg, transparent 50%, #005bd3 50%); border-bottom-right-radius: 10px;
+}
+.c-widget[aria-selected="true"] .c-widget__resize { display: block; }
+.c-slot { grid-column: span 1; height: 34px; border: 1.5px dashed var(--c-border-strong); border-radius: 10px; }
+.c-canvasgrid.is-dropping .c-slot { border-color: #005bd3; background: rgba(0,91,211,.05); }
+
+.c-editor__appicon { background: none !important; }
+.c-editor__appicon img { width: 100%; height: 100%; display: block; border-radius: 6px; }

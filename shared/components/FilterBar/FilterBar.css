@@ -1,0 +1,89 @@
+/*
+  Componente custom: FilterBar. Barra de filtros: pill, popover, date range y selector de fechas (.c-dp).
+  Raíz con data-custom="FilterBar" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Botón-píldora custom (trigger de pickers con contenido propio)       */
+/* ------------------------------------------------------------------ */
+.c-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 4px 12px 4px 8px;
+  border: 0; border-radius: var(--c-radius-control);
+  background: var(--c-fill-secondary); color: var(--c-text);
+  font: 500 var(--c-fs-small)/16px var(--c-font);
+  cursor: pointer; white-space: nowrap;
+}
+.c-pill:hover { background: var(--c-fill-secondary-hover); }
+.c-pill svg { width: 16px; height: 16px; flex: none; }
+
+/* ------------------------------------------------------------------ */
+/* Barra de filtros (fecha / comparación / moneda)                      */
+/* ------------------------------------------------------------------ */
+.c-filterbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.c-filterbar__meta { margin-left: auto; color: var(--c-text-secondary); font-size: var(--c-fs-small); }
+
+/* ------------------------------------------------------------------ */
+/* Popover custom (date range picker)                                   */
+/* ------------------------------------------------------------------ */
+.c-popover-anchor { position: relative; display: inline-block; }
+.c-popover {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 40;
+  background: var(--c-surface);
+  border-radius: 16px;
+  box-shadow: var(--c-shadow-popover);
+  display: none;
+}
+.c-popover[data-open="true"] { display: block; }
+
+.c-daterange { display: grid; grid-template-columns: 180px auto; }
+.c-daterange__presets {
+  border-right: 1px solid var(--c-border);
+  padding: 6px; max-height: 340px; overflow: auto;
+}
+.c-daterange__presets button {
+  display: flex; justify-content: space-between; align-items: center;
+  width: 100%; height: 32px; padding: 0 10px;
+  border: 0; border-radius: var(--c-radius-small); background: transparent;
+  font: 400 var(--c-fs-base)/20px var(--c-font); color: var(--c-text);
+  text-align: left; cursor: pointer;
+}
+.c-daterange__presets button:hover { background: var(--c-surface-hover); }
+.c-daterange__presets button[aria-pressed="true"] { background: var(--c-surface-subdued); font-weight: 600; }
+.c-daterange__presets hr { border: 0; border-top: 1px solid var(--c-border); margin: 6px 4px; }
+.c-daterange__main { padding: 12px 16px; min-width: 300px; }
+.c-daterange__footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 10px 16px; border-top: 1px solid var(--c-border);
+  grid-column: 1 / -1;
+}
+
+.c-pill[aria-pressed="true"] { background: #d4d4d4; }
+.c-pill[disabled] { opacity: .5; cursor: default; }
+.c-pill s-icon { flex: none; }
+.c-pill[hidden] { display: none; }
+/* ---- Selector de fechas (réplica de s-shopifyql-date-picker): presets + calendario de 2 meses + pie con Cancel/Apply ---- */
+.c-dp { display: none; width: 700px; max-width: calc(100vw - 32px); grid-template-columns: 170px minmax(0, 1fr); grid-template-rows: 1fr auto; padding: 0; overflow: hidden; border-radius: 20px; top: calc(100% + 4px); }
+.c-dp[data-open="true"] { display: grid; }
+.c-dp__nav { grid-row: 1 / 3; display: flex; flex-direction: column; gap: 2px; padding: 8px; background: #fafafa; border-right: 1px solid #f0f0f0; }
+.c-dp__nav hr { border: 0; border-top: 1px solid #ebebeb; margin: 8px 4px; }
+.c-dp__item, .c-dp__back {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  min-height: 30px; padding: 4px 10px; border-radius: 8px; font: 450 13px/20px var(--c-font); color: #303030;
+}
+.c-dp__item:hover, .c-dp__back:hover { background: #f0f0f0; }
+.c-dp__item[aria-current="true"] { background: #ebebeb; font-weight: 550; }
+.c-dp__back { justify-content: flex-start; font-size: 12px; font-weight: 550; color: #616161; margin-bottom: 4px; }
+.c-dp__item:focus-visible, .c-dp__back:focus-visible { outline: 2px solid #005bd3; outline-offset: -2px; }
+.c-dp__main { padding: 16px 16px 8px; min-width: 0; }
+.c-dp__last { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 13px; }
+.c-dp__last s-number-field { width: 120px; }
+.c-dp__last s-select { width: 130px; }
+.c-dp__last s-date-field { width: 160px; }
+.c-dp__footer { grid-column: 2; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid #ebebeb; font-size: 13px; color: #303030; }
+.c-dp__last { flex-wrap: nowrap; }
+.c-dp__last s-number-field { width: 110px; flex: none; }
+.c-dp__last s-select { width: 120px; flex: none; }
+.c-dp__last s-checkbox { flex: none; white-space: nowrap; }

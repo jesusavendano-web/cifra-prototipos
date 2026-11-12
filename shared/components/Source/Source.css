@@ -1,0 +1,28 @@
+/*
+  Componente custom: Source. Chips de fuente de datos y logos de marca (.c-source, .c-sourcestack, .c-brandbox).
+  Raíz con data-custom="Source" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+.c-source { width: 24px; height: 24px; border-radius: 6px; background: #95bf47; display: grid; place-items: center; color: #fff; font: 700 11px var(--c-font); }
+
+.c-brandbox.c-brandbox--sm { width: 24px; height: 24px; border-radius: 8px; border: 0; background: none; }
+.c-brandbox.c-brandbox--sm img { width: 24px; height: 24px; }
+.c-source { width: 28px !important; height: 28px !important; border-radius: 8px !important; background: var(--c-surface) !important; border: 1px solid var(--c-border); display: inline-grid !important; place-items: center; flex: none; }
+.c-source img { width: 16px; height: 16px; display: block; }
+/* Logo de marca en filas de lista (Settings › Reporting): caja de 50px con borde y logo de 26px, como en la app */
+.c-brandbox { width: 50px; height: 50px; flex: none; display: grid; place-items: center; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 12px; }
+.c-brandbox img { width: 26px; height: 26px; display: block; }
+.c-brandbox.c-brandbox--sm, .c-brandbox.c-brandbox--sm img { width: 20px; height: 20px; }
+/* ---- Varias fuentes: chips apilados con anillo blanco (el último queda arriba) + etiqueta tenue ---- */
+.c-sourcestack { display: inline-flex; align-items: center; gap: 8px; border-radius: 8px; outline: 0; cursor: default; }
+.c-sourcestack:focus-visible { outline: 2px solid #005bd3; outline-offset: 2px; }
+.c-sourcestack__chips { display: inline-flex; align-items: center; }
+.c-sourcestack__chips .c-source {
+  width: 24px !important; height: 24px !important; border-radius: 8px !important; border: 0 !important; background: #fff !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0,0,0,.08); position: relative; transition: margin .15s ease;
+}
+.c-sourcestack__chips .c-source + .c-source { margin-left: -6px; }
+.c-sourcestack__chips .c-source img { width: 14px; height: 14px; object-fit: contain; }
+.c-sourcestack:hover .c-sourcestack__chips .c-source + .c-source,
+.c-sourcestack:focus-visible .c-sourcestack__chips .c-source + .c-source { margin-left: 4px; }
+.c-sourcestack:hover .c-card__sources { color: var(--c-text-secondary); }
