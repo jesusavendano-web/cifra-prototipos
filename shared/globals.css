@@ -60,6 +60,80 @@
   --c-shadow-popover: rgba(0, 0, 0, 0.2) 0 0 1px 0, rgba(0, 0, 0, 0.08) 0 8px 24px -4px, rgba(0, 0, 0, 0.08) 0 16px 40px -8px;
   --c-shadow-tooltip: 0 8px 24px rgba(0, 0, 0, 0.24);
 
+  /* Texto y superficies adicionales (medidos en Admin Next) */
+  --c-text-emphasis: #303030;
+  --c-text-label: #4a4a4a;
+  --c-text-on-dark-tertiary: #d4d4d4;
+  --c-surface-muted: #fafafa;
+  --c-border-subtle: #f2f2f2;
+  --c-divider-strong: #dcdcdc;
+  --c-border-selected: #d0d0d0;
+  --c-fill-tertiary: #dddddd;
+  --c-fill-pressed: #d4d4d4;
+  --c-fill-selected: #e8e8e8;
+  --c-fill-quiet: #f0f0f0;
+  --c-icon-muted: #9a9a9a;
+  --c-surface-transparent: rgba(255, 255, 255, 0);
+  --c-bg-transparent: rgba(241, 241, 241, 0);
+
+  /* Interacción y marca */
+  --c-focus: #005bd3;
+  --c-focus-wash: rgba(0, 91, 211, 0.05);
+  --c-brand: #2f6cf6;
+  --c-brand-shopify: #95bf47;
+  --c-ai-glow: rgba(184, 140, 255, 0.16);
+  --c-flash-ring: rgba(47, 108, 246, 0.45);
+  --c-flash-ring-end: rgba(47, 108, 246, 0);
+  --c-info-bg: #cfe8ff;
+  --c-illus-bg: #e3e7ff;
+  --c-live-dot: #0c7a5a;
+  --c-avatar-bg: #35f0a1;
+  --c-avatar-text: #0c3d2b;
+
+  /* Escala de opacidad negra (anillos y sombras compuestas) */
+  --c-alpha-03: rgba(0, 0, 0, 0.03);
+  --c-alpha-04: rgba(0, 0, 0, 0.04);
+  --c-alpha-05: rgba(0, 0, 0, 0.05);
+  --c-alpha-06: rgba(0, 0, 0, 0.06);
+  --c-alpha-07: rgba(0, 0, 0, 0.07);
+  --c-alpha-08: rgba(0, 0, 0, 0.08);
+  --c-alpha-10: rgba(0, 0, 0, 0.10);
+  --c-alpha-12: rgba(0, 0, 0, 0.12);
+  --c-alpha-14: rgba(0, 0, 0, 0.14);
+  --c-overlay: rgba(0, 0, 0, 0.45);
+
+  /* Skeleton */
+  --c-skeleton-base: #ececec;
+  --c-skeleton-shine: #f6f6f6;
+
+  /* Cohortes (Shopify Analytics): ejes, heatmap y serie de colores de la leyenda */
+  --c-chart-axis: #70707b;
+  --c-heat-text: #0b2062;
+  --c-heat-0: #f9fafe;
+  --c-heat-1: #eef1fd;
+  --c-heat-2: #dfe6fb;
+  --c-heat-3: #c9d5f8;
+  --c-heat-4: #aebff3;
+  --c-cohort-1: #13acf0;
+  --c-cohort-2: #6a42e9;
+  --c-cohort-3: #597eed;
+  --c-cohort-4: #d147ac;
+  --c-cohort-5: #23baba;
+  --c-cohort-6: #9b3cdd;
+  --c-cohort-7: #9e84f2;
+  --c-cohort-8: #128ac0;
+  --c-cohort-9: #d75eb7;
+  --c-cohort-10: #305ee8;
+
+  /* Bloque de código en tooltips de métricas */
+  --c-code-result: #8fc7ff;
+  --c-code-arg: #4ade80;
+
+  /* Barra de prototipos (no es parte de la app) */
+  --c-proto-surface: #2e2e2e;
+  --c-proto-text: #cfcfcf;
+  --c-proto-accent: #e5484d;
+
   /* Animations */
   --cifra-entrance-ms: 600ms;
 }

@@ -25,10 +25,10 @@
 .c-mstat__row { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; line-height: 18px; font-variant-numeric: tabular-nums; }
 .c-mstat__row b { font-weight: 600; }
 .c-mstat__delta { font-style: normal; font-weight: 500; }
-.c-mstat__delta--down { color: #8e0b21; }
-.c-mstat__delta--up { color: #0c5132; }
+.c-mstat__delta--down { color: var(--c-delta-down); }
+.c-mstat__delta--up { color: var(--c-delta-up); }
 .c-mstat .c-spark { width: 30px; height: 12px; }
-.c-mstat .c-spark path { stroke: #a8a8a8 !important; }
+.c-mstat .c-spark path { stroke: var(--c-spark-stroke) !important; }
 .c-mstat__pop {
   position: absolute; top: 100%; left: 50%; z-index: 60; width: 640px; max-width: calc(100vw - 32px);
   padding: 24px 24px 20px; background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-popover);
@@ -42,7 +42,7 @@
 .c-mstat__info { position: absolute; right: 24px; top: 124px; color: var(--c-text-secondary); }
 .c-mstat__pop .c-chartwrap { margin-top: 12px; }
 
-.c-hero h2 { color: #4a4a4a; font-weight: 500; font-size: 28px; line-height: 34px; }
+.c-hero h2 { color: var(--c-text-label); font-weight: 500; font-size: 28px; line-height: 34px; }
 .c-hero p { font-weight: 600; font-size: 28px; line-height: 34px; }
 .c-home__section { margin-top: 8px; }
 .c-home__grid { display: grid; gap: 16px; }
@@ -55,7 +55,7 @@
 }
 .c-homecard--insight { min-height: 320px; }
 .c-homecard--short { min-height: 200px; }
-.c-homecard__title { margin: 0; font-size: 18px; line-height: 24px; font-weight: 600; color: #303030; }
+.c-homecard__title { margin: 0; font-size: 18px; line-height: 24px; font-weight: 600; color: var(--c-text-emphasis); }
 .c-homecard s-paragraph { color: var(--c-text-secondary); max-width: 560px; }
 .c-homecard .c-homecard__actions { margin-top: auto; position: relative; z-index: 1; }
 .c-homecard .c-homecard__img { position: absolute; height: auto; pointer-events: none; }
@@ -76,11 +76,11 @@
 .c-homecard { gap: 14px; padding: 20px 26px; }
 .c-homebtn {
   display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 16px;
-  background: #fff; color: #101010; font: 500 13px/20px var(--c-font); text-decoration: none;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.1);
+  background: var(--c-surface); color: var(--c-text); font: 500 13px/20px var(--c-font); text-decoration: none;
+  box-shadow: 0 0 0 1px var(--c-alpha-08), 0 1px 3px var(--c-alpha-10);
 }
-.c-homebtn:hover { background: #fafafa; }
-.c-homebtn:focus-visible { outline: 2px solid #005bd3; outline-offset: 2px; }
+.c-homebtn:hover { background: var(--c-surface-muted); }
+.c-homebtn:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
 
 .c-hero h2, .c-hero p { line-height: 33px; }
 /* La gráfica del strip se alinea al centro de la columna (igual que Shopify: mismo ancho y x que la caja de Ask),
@@ -93,8 +93,8 @@
   height: 28px; padding: 0 8px; margin: -4px 0 0 -8px; border-radius: 8px;
   font: 400 13px/18px var(--c-font); color: var(--c-text-secondary);
 }
-.c-metricstrip__range:hover { background: #ebebeb; color: var(--c-text); }
-.c-metricstrip__range:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-metricstrip__range:hover { background: var(--c-fill-secondary); color: var(--c-text); }
+.c-metricstrip__range:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 1px; }
 /* Rango y comparación: dos botones independientes separados por un punto (como "Yesterday · All channels") */
 .c-metricstrip__range { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 0; margin: -4px 0 0 -8px; color: var(--c-text-secondary); white-space: nowrap; }
 .c-metricstrip__range:hover { background: none; }
@@ -102,8 +102,8 @@
   all: unset; box-sizing: border-box; cursor: pointer; height: 28px; padding: 0 8px; border-radius: 8px;
   display: inline-flex; align-items: center; font: 400 13px/18px var(--c-font); color: var(--c-text-secondary);
 }
-.c-metricstrip__btn:hover { background: #ebebeb; color: var(--c-text); }
-.c-metricstrip__btn:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-metricstrip__btn:hover { background: var(--c-fill-secondary); color: var(--c-text); }
+.c-metricstrip__btn:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 1px; }
 .c-metricstrip__range > span { padding: 0 1px; }
 
 /* Home · Sync: margen del s-banner de sincronización arriba del strip de métricas */

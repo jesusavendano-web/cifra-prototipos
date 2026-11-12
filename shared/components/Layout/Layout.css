@@ -1,6 +1,7 @@
 /*
-  Componente custom: Layout. Utilidades de layout heredadas (.c-grid-*, .c-row, .c-stack...). Preferir <s-stack>/<s-grid> en pantallas nuevas.
-  Raíz con data-custom="Layout" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+  Utilidades de layout heredadas (.c-grid-*, .c-row, .c-stack, .c-muted, .c-section-label).
+  No crear nuevas: en pantallas nuevas usar <s-stack>, <s-grid> y <s-box>.
+  Los contenedores .c-stack llevan data-custom="Stack". Solo tokens --c-* de shared/globals.css.
 */
 
 /* ------------------------------------------------------------------ */

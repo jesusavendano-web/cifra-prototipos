@@ -12,7 +12,7 @@
 .c-chat__scroll[hidden] { display: none; }
 .c-chat__scroll--center { display: grid; place-items: center; text-align: center; }
 .c-chat__col { max-width: 1080px; margin: 0 auto; display: grid; gap: 16px; align-content: start; }
-.c-bubble { justify-self: end; max-width: 70%; padding: 8px 14px; background: #f3f3f3; border-radius: 14px; font-size: 13px; line-height: 20px; }
+.c-bubble { justify-self: end; max-width: 70%; padding: 8px 14px; background: var(--c-surface-subdued); border-radius: 14px; font-size: 13px; line-height: 20px; }
 .c-msg { display: grid; gap: 12px; font-size: 13px; line-height: 20px; }
 .c-chat__skel { display: grid; gap: 10px; }
 .c-chat__skel .c-skeleton { height: 14px; }
@@ -20,7 +20,7 @@
 .c-chat-table table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13px; }
 .c-chat-table th, .c-chat-table td { padding: 8px 12px 8px 0; text-align: right; white-space: nowrap; }
 .c-chat-table thead th { font-weight: 400; color: var(--c-text-secondary); border-bottom: 1px solid var(--c-border); padding-bottom: 10px; }
-.c-chat-table tbody tr + tr th, .c-chat-table tbody tr + tr td { border-top: 1px solid #f2f2f2; }
+.c-chat-table tbody tr + tr th, .c-chat-table tbody tr + tr td { border-top: 1px solid var(--c-border-subtle); }
 .c-chat-table th:first-child { text-align: left; }
 .c-chat-table tbody th { font-weight: 600; }
 .c-feedback { display: flex; gap: 2px; margin-left: -6px; }

@@ -504,7 +504,7 @@
   }
   function metricTips() {
     const tip = document.createElement('div');
-    tip.className = 'c-metrictip';
+    tip.className = 'c-metrictip'; tip.dataset.custom = 'MetricTooltip';
     tip.setAttribute('role', 'tooltip');
     tip.hidden = true;
     document.body.appendChild(tip);

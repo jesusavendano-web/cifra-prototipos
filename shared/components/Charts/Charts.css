@@ -29,17 +29,17 @@
 /* Superficie oscura (fondo, color, radio, sombra, fuente): shared/globals.css */
 .c-charttip { position: absolute; z-index: 5; padding: 10px 12px; min-width: 150px; pointer-events: none; }
 .c-charttip strong { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-.c-charttip__row { display: flex; align-items: center; gap: 6px; color: #d4d4d4; margin-top: 4px; }
+.c-charttip__row { display: flex; align-items: center; gap: 6px; color: var(--c-text-on-dark-tertiary); margin-top: 4px; }
 .c-charttip__row i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .c-charttip__row i.is-dashed { background: none !important; border-radius: 0; height: 0; width: 10px; border-top: 2px dashed; }
-.c-charttip__value { display: inline-block; margin-top: 4px; padding: 1px 6px; border-radius: 6px; background: #303030; font-weight: 500; color: #fff; font-variant-numeric: tabular-nums; }
+.c-charttip__value { display: inline-block; margin-top: 4px; padding: 1px 6px; border-radius: 6px; background: var(--c-text-emphasis); font-weight: 500; color: var(--c-text-on-dark); font-variant-numeric: tabular-nums; }
 .c-metrictip { position: fixed; z-index: 9500; max-width: 300px; padding: 10px 12px; pointer-events: none; }
 .c-metrictip strong { display: block; font-weight: 600; font-size: 13px; line-height: 18px; }
-.c-metrictip p { margin: 2px 0 0; color: #e3e3e3; font-weight: 500; }
+.c-metrictip p { margin: 2px 0 0; color: var(--c-text-on-dark-secondary); font-weight: 500; }
 .c-metrictip code { display: block; margin-top: 8px; font: 12px/17px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-.c-metrictip .res { color: #8fc7ff; }
-.c-metrictip .arg { color: #4ade80; }
-.c-metrictip .op { color: #fff; }
+.c-metrictip .res { color: var(--c-code-result); }
+.c-metrictip .arg { color: var(--c-code-arg); }
+.c-metrictip .op { color: var(--c-text-on-dark); }
 
 /* Empty state de widget/gráfica (Shopify Analytics + texto de Cifra): solo texto centrado, sin icono */
 .c-chart-empty { display: grid; place-items: center; flex: 1; min-height: 220px; text-align: center; color: var(--c-text-secondary); font-size: var(--c-fs-base); }

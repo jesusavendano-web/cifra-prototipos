@@ -41,7 +41,7 @@
     <s-button icon="delete" tone="critical">Delete</s-button>
   </s-menu>
 
-  <div class="c-stack">
+  <div class="c-stack" data-custom="Stack">
 
     <!-- Tabs: dashboard actual (con selector) / All Dashboards -->
     <div class="c-tabs" role="tablist" data-custom="Tabs">
@@ -51,7 +51,7 @@
       <button class="c-tabs__tab" role="tab" aria-selected="false" aria-controls="dash-all">All Dashboards</button>
     </div>
 
-    <div id="dash-view" data-tabpanel class="c-stack">
+    <div id="dash-view" data-tabpanel class="c-stack" data-custom="Stack">
     <!-- Barra de filtros -->
     <div class="c-filterbar">
       <button class="c-pill" type="button" data-custom="DateRangePicker"><s-icon type="calendar"></s-icon><span data-label>Last 30 days</span></button>
@@ -248,7 +248,7 @@
     </div>
 
     <!-- Lista "All Dashboards" (segunda tab): reemplaza la vista del dashboard, como en la app -->
-    <div id="dash-all" data-tabpanel hidden class="c-stack">
+    <div id="dash-all" data-tabpanel hidden class="c-stack" data-custom="Stack">
       <div class="c-indextable" data-custom="IndexTable">
         <div class="c-indextable__bar c-indextable__bar--stack">
           <div class="c-indextable__search">

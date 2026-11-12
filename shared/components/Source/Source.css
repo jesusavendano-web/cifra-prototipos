@@ -3,7 +3,7 @@
   Raíz con data-custom="Source" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
 */
 
-.c-source { width: 24px; height: 24px; border-radius: 6px; background: #95bf47; display: grid; place-items: center; color: #fff; font: 700 11px var(--c-font); }
+.c-source { width: 24px; height: 24px; border-radius: 6px; background: var(--c-brand-shopify); display: grid; place-items: center; color: var(--c-text-on-dark); font: 700 11px var(--c-font); }
 
 .c-brandbox.c-brandbox--sm { width: 24px; height: 24px; border-radius: 8px; border: 0; background: none; }
 .c-brandbox.c-brandbox--sm img { width: 24px; height: 24px; }
@@ -15,11 +15,11 @@
 .c-brandbox.c-brandbox--sm, .c-brandbox.c-brandbox--sm img { width: 20px; height: 20px; }
 /* ---- Varias fuentes: chips apilados con anillo blanco (el último queda arriba) + etiqueta tenue ---- */
 .c-sourcestack { display: inline-flex; align-items: center; gap: 8px; border-radius: 8px; outline: 0; cursor: default; }
-.c-sourcestack:focus-visible { outline: 2px solid #005bd3; outline-offset: 2px; }
+.c-sourcestack:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
 .c-sourcestack__chips { display: inline-flex; align-items: center; }
 .c-sourcestack__chips .c-source {
-  width: 24px !important; height: 24px !important; border-radius: 8px !important; border: 0 !important; background: #fff !important;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0,0,0,.08); position: relative; transition: margin .15s ease;
+  width: 24px !important; height: 24px !important; border-radius: 8px !important; border: 0 !important; background: var(--c-surface) !important;
+  box-shadow: 0 0 0 2px var(--c-surface), 0 0 0 3px var(--c-alpha-08); position: relative; transition: margin .15s ease;
 }
 .c-sourcestack__chips .c-source + .c-source { margin-left: -6px; }
 .c-sourcestack__chips .c-source img { width: 14px; height: 14px; object-fit: contain; }

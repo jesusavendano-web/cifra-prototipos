@@ -8,8 +8,8 @@
 .c-canvas {
   position: relative; overflow: auto;
   height: 600px; border-radius: var(--c-radius-card);
-  background-color: #f1f1f1;
-  background-image: radial-gradient(#d4d4d4 1px, transparent 1px);
+  background-color: var(--c-bg);
+  background-image: radial-gradient(var(--c-fill-pressed) 1px, transparent 1px);
   background-size: 16px 16px;
 }
 .c-canvas__stage { padding: 48px; width: max-content; transform-origin: 0 0; transition: transform .15s ease; }
@@ -43,7 +43,7 @@
   transform: translate(-50%, -50%);
   width: 22px; height: 22px; border-radius: 6px;
   display: grid; place-items: center;
-  background: var(--c-surface); border: 1px solid var(--c-border-strong); box-shadow: rgba(0,0,0,.08) 0 1px 2px;
+  background: var(--c-surface); border: 1px solid var(--c-border-strong); box-shadow: var(--c-alpha-08) 0 1px 2px;
   font: 600 11px/1 var(--c-font); color: var(--c-text-secondary);
 }
 .c-tree__node {

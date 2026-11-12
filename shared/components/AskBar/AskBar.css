@@ -13,7 +13,7 @@
   flex: 1; border: 0; outline: 0; background: transparent;
   font: 400 var(--c-fs-base)/20px var(--c-font); color: var(--c-text);
 }
-.c-prompt__logo { width: 22px; height: 22px; border-radius: 6px; background: #2f6cf6; display: grid; place-items: center; color: #fff; font: 700 12px var(--c-font); }
+.c-prompt__logo { width: 22px; height: 22px; border-radius: 6px; background: var(--c-brand); display: grid; place-items: center; color: var(--c-text-on-dark); font: 700 12px var(--c-font); }
 .c-composer {
   position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 2;
   display: flex; align-items: center; gap: 8px; width: min(576px, calc(100% - 48px)); padding: 6px 6px 6px 12px;
@@ -29,7 +29,7 @@
   width: 100%; min-height: 40px; resize: none; border: 0; outline: 0; background: transparent; padding: 0;
   font: 400 13px/20px var(--c-font); color: var(--c-text);
 }
-.c-ask__input::placeholder { color: #8a8a8a; }
+.c-ask__input::placeholder { color: var(--c-text-tertiary); }
 .c-ask__bar { display: flex; align-items: center; justify-content: space-between; }
 .c-ask__bar .c-prompt__logo { width: 24px; height: 24px; }
 .c-ask__tools { display: inline-flex; align-items: center; gap: 4px; }
@@ -37,20 +37,20 @@
   all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   height: 28px; padding: 0 6px; border-radius: 8px; font: 500 13px/20px var(--c-font); color: var(--c-text);
 }
-.c-ask__recents:hover, .c-ask__btn:hover { background: #f3f3f3; }
-.c-ask__sep { width: 1px; height: 18px; background: #dcdcdc; margin: 0 6px; }
-.c-ask__send { width: 28px; padding: 0; border-radius: 50%; background: var(--c-text); color: #fff; }
-.c-ask__send[disabled] { background: #e3e3e3; color: #8a8a8a; cursor: default; }
-.c-ask__recents:focus-visible, .c-ask__btn:focus-visible, .c-ask__send:focus-visible { outline: 2px solid #005bd3; outline-offset: 1px; }
+.c-ask__recents:hover, .c-ask__btn:hover { background: var(--c-surface-subdued); }
+.c-ask__sep { width: 1px; height: 18px; background: var(--c-divider-strong); margin: 0 6px; }
+.c-ask__send { width: 28px; padding: 0; border-radius: 50%; background: var(--c-text); color: var(--c-text-on-dark); }
+.c-ask__send[disabled] { background: var(--c-fill-secondary-hover); color: var(--c-text-tertiary); cursor: default; }
+.c-ask__recents:focus-visible, .c-ask__btn:focus-visible, .c-ask__send:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 1px; }
 /* Composer del chat: misma barra que "Work with Sidekick" del admin de Shopify (píldora blanca, glow lila arriba,
    logo a la izquierda, + y botón circular a la derecha), con el logo de Cifra */
 .c-composer {
   height: 46px; padding: 0 8px 0 14px; gap: 10px; width: min(640px, calc(100% - 48px));
-  background: #fff; border-radius: 9999px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.14), 0 -10px 30px rgba(184,140,255,.16);
+  background: var(--c-surface); border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--c-alpha-05), 0 1px 3px var(--c-alpha-14), 0 -10px 30px var(--c-ai-glow);
 }
 .c-composer .c-prompt__logo { width: 22px; height: 22px; flex: none; }
-.c-composer input::placeholder { color: #8a8a8a; }
+.c-composer input::placeholder { color: var(--c-text-tertiary); }
 .c-composer .c-ask__btn, .c-composer .c-ask__send { flex: none; }
 .c-prompt__logo { background: none !important; }
 .c-prompt__logo img { width: 100%; height: 100%; display: block; border-radius: 6px; }

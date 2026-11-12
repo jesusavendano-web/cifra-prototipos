@@ -8,7 +8,7 @@
 /* ------------------------------------------------------------------ */
 .c-skeleton {
   display: block; height: 12px; border-radius: 6px;
-  background: linear-gradient(90deg, #ececec 25%, #f6f6f6 37%, #ececec 63%);
+  background: linear-gradient(90deg, var(--c-skeleton-base) 25%, var(--c-skeleton-shine) 37%, var(--c-skeleton-base) 63%);
   background-size: 400% 100%;
   animation: c-shimmer 1.4s ease infinite;
 }

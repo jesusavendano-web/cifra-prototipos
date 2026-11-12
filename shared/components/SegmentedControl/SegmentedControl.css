@@ -19,5 +19,5 @@
 }
 .c-segmented button[aria-pressed="true"] {
   background: var(--c-surface); color: var(--c-text);
-  box-shadow: rgba(0,0,0,.12) 0 1px 2px, rgba(0,0,0,.06) 0 0 0 1px;
+  box-shadow: var(--c-alpha-12) 0 1px 2px, var(--c-alpha-06) 0 0 0 1px;
 }

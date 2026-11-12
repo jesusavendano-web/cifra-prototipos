@@ -30,14 +30,14 @@
   padding: 12px 14px; border: 1px solid var(--c-border); border-radius: var(--c-radius-inner);
   cursor: pointer; background: var(--c-surface);
 }
-.c-choicecard:has(input:checked) { border: 2px solid #005bd3; padding: 11px 13px; }
-.c-choicecard input { margin: 2px 0 0; width: 16px; height: 16px; accent-color: #101010; }
+.c-choicecard:has(input:checked) { border: 2px solid var(--c-focus); padding: 11px 13px; }
+.c-choicecard input { margin: 2px 0 0; width: 16px; height: 16px; accent-color: var(--c-text); }
 .c-choicecard strong { font-weight: 500; }
 .c-choicecard span { grid-column: 2; color: var(--c-text-secondary); }
 
 /* Callout informativo (Add Costs) */
 .c-callout { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--c-border); border-radius: var(--c-radius-inner); }
-.c-callout__icon { flex: none; width: 28px; height: 28px; border-radius: 8px; background: #cfe8ff; display: grid; place-items: center; }
+.c-callout__icon { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--c-info-bg); display: grid; place-items: center; }
 
 /* Pasos numerados (Shipping) */
 .c-step { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--c-border); display: grid; place-items: center; font-size: var(--c-fs-small); color: var(--c-text-secondary); }
