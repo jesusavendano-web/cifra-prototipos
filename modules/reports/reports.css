@@ -1,0 +1,138 @@
+/*
+  Módulo reports: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Tabla de reporte (sticky header + 1ra columna, totales, orden)       */
+/* ------------------------------------------------------------------ */
+.c-datatable {
+  overflow: auto; max-height: 520px;
+  border-radius: var(--c-radius-card);
+  background: var(--c-surface);
+  box-shadow: var(--c-shadow-card);
+}
+.c-datatable table { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; font-variant-numeric: tabular-nums; }
+.c-datatable th, .c-datatable td {
+  padding: 8px 16px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+.c-datatable th:first-child, .c-datatable td:first-child {
+  position: sticky; left: 0; z-index: 1; text-align: left;
+  border-right: 1px solid var(--c-border); min-width: 220px;
+}
+.c-datatable thead th {
+  position: sticky; top: 0; z-index: 2;
+  font-weight: 500; color: var(--c-text-secondary); background: var(--c-surface);
+  height: 40px;
+}
+.c-datatable thead th:first-child { z-index: 3; }
+.c-datatable thead button {
+  all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+}
+.c-datatable thead button:hover { color: var(--c-text); }
+.c-datatable thead button svg { width: 14px; height: 14px; opacity: .35; }
+.c-datatable thead th[aria-sort] button { color: var(--c-text); }
+.c-datatable thead th[aria-sort] button svg { opacity: 1; }
+.c-datatable tr.c-total td { background: var(--c-surface-subdued); font-weight: 600; vertical-align: top; }
+.c-datatable tr.c-total td:first-child { color: var(--c-text); }
+.c-datatable tbody tr:not(.c-total):hover td { background: var(--c-surface-hover); }
+.c-datatable .c-sub { display: block; color: var(--c-text-secondary); font-weight: 400; }
+.c-datatable td .c-delta { display: flex; justify-content: flex-end; }
+.c-datatable td:first-child .c-sub { font-weight: 400; }
+
+/* ------------------------------------------------------------------ */
+/* Explorador de reportes (panel Standard/Cohorts)                      */
+/* Medido en admin.shopify.com/.../analytics/reports/explore (Admin Next): */
+/* panel 280px, radio 20px, tabs 36px (#ddd, activa blanca con radio    */
+/* 12px 12px 0 0), bloques de 32px con radio 8px. Iconos = s-icon.      */
+/* ------------------------------------------------------------------ */
+.c-xlayout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 12px; align-items: start; }
+.c-xlayout.is-panel-hidden { grid-template-columns: minmax(0, 1fr); }
+.c-xlayout.is-panel-hidden .c-xpanel { display: none; }
+@media (max-width: 900px) { .c-xlayout { grid-template-columns: 1fr; } }
+
+.c-xpanel { background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-card); overflow: hidden; display: flex; flex-direction: column; max-height: 640px; }
+.c-xtabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--c-fill-tertiary); flex: none; }
+.c-xtab {
+  all: unset; box-sizing: border-box; height: 36px; padding: 8px 12px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  font: 500 12.3333px/20px var(--c-font); color: var(--c-text-secondary);
+}
+.c-xtab s-icon { flex: none; }
+.c-xtab[aria-selected="true"] { background: var(--c-surface); border-radius: 12px 12px 0 0; color: var(--c-text); font-weight: 500; }
+.c-xtab:not([aria-selected="true"]):hover { color: var(--c-text); }
+.c-xtab:focus-visible { outline: 2px solid var(--c-focus); outline-offset: -2px; }
+.c-xbody { padding: 20px 11px 12px; display: grid; gap: 16px; overflow: auto; align-content: start; }
+.c-xbody[hidden] { display: none; }
+
+/* bloque con contenido (Cifra: lista de métricas, dimensiones…) */
+.c-xgroup { border: 1px solid var(--c-border); border-radius: 12px; overflow: hidden; background: var(--c-surface); }
+.c-xgroup__head {
+  display: flex; align-items: center; justify-content: space-between; min-height: 32px; padding: 0 6px 0 8px;
+  background: var(--c-surface-subdued); font-weight: 500; color: var(--c-text);
+}
+.c-xgroup__head span { text-decoration: underline dotted var(--c-border-strong); text-underline-offset: 4px; }
+.c-xgroup__item { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; padding: 5px 8px; border-top: 1px solid var(--c-border); }
+.c-xgroup__item:hover { background: var(--c-surface-hover); }
+.c-xgroup__item--control { padding: 4px 8px; }
+.c-xgroup__item--control > * { flex: 1; min-width: 0; }
+.c-xgroup__sub { padding: 4px 8px 8px 20px; display: flex; align-items: center; justify-content: space-between; border-top: 0; color: var(--c-text); }
+
+/* bloque vacío (estado Create custom report): solo encabezado de 32px */
+.c-xblock {
+  display: flex; align-items: center; justify-content: space-between; height: 32px; padding: 0 6px 0 8px;
+  border-radius: 8px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-border); font-weight: 500; color: var(--c-text);
+}
+.c-xblock--disabled { background: var(--c-alpha-03); box-shadow: none; color: var(--c-text-secondary); }
+
+/* barra de acciones (Annotations / Controls) */
+.c-xbar { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+/* icono de orden en encabezados de tabla (s-icon sort) */
+.c-datatable thead button s-icon { opacity: .35; }
+.c-datatable thead th[aria-sort] button s-icon { opacity: 1; }
+
+/* empty state del explorador (sin card, ilustración + texto) */
+.c-xempty {
+  background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-card);
+  min-height: 420px; display: grid; place-items: center; align-content: center; gap: 12px; padding: 48px 24px; text-align: center;
+  color: var(--c-text-secondary);
+}
+.c-xempty img { width: 128px; height: 128px; }
+
+/* chart de cohortes + tabla heatmap — medidas de Shopify Analytics (reports › cohorts):
+   ejes 11px #70707b, grid #eeeeef, líneas 2px, leyenda 12px, tabla 12px con filas de 36px,
+   celdas con escala de azul claro (#f9fafe base, texto #0b2062). */
+.c-cohortcard { background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-card); overflow: hidden; min-width: 0; }
+.c-cohortcard__head { display: flex; align-items: flex-start; justify-content: space-between; padding: 16px 20px 0; }
+.c-cohortcard__value { font-size: 20px; font-weight: 650; line-height: 28px; margin-top: 4px; }
+.c-cohortchart { display: block; width: 100%; min-height: 290px; }
+.c-cohortchart text { font: 11px var(--c-font); fill: var(--c-chart-axis); }
+.c-cohortlegend { display: flex; flex-wrap: wrap; gap: 4px 20px; justify-content: center; padding: 8px 20px 16px; font-size: 12px; color: var(--c-text); }
+.c-cohortlegend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.c-cohortlegend__more { color: var(--c-text-secondary); }
+.c-cohorttable { overflow: auto; border-top: 1px solid var(--c-border-subtle); font-size: 12px; }
+.c-cohorttable table { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; font-variant-numeric: tabular-nums; }
+.c-cohorttable th, .c-cohorttable td { height: 36px; padding: 8px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--c-border-subtle); background: var(--c-surface); font-weight: 400; }
+.c-cohorttable thead th { color: var(--c-text); background: var(--c-surface); }
+.c-cohorttable th:first-child { position: sticky; left: 0; text-align: left; border-right: 1px solid var(--c-border-subtle); z-index: 1; min-width: 120px; }
+.c-cohorttable tr.c-total th, .c-cohorttable tr.c-total td { font-weight: 600; background: var(--c-surface-subdued); }
+.c-cohorttable td.h0 { background: var(--c-heat-0); color: var(--c-heat-text); }
+.c-cohorttable td.h1 { background: var(--c-heat-1); color: var(--c-heat-text); }
+.c-cohorttable td.h2 { background: var(--c-heat-2); color: var(--c-heat-text); }
+.c-cohorttable td.h3 { background: var(--c-heat-3); color: var(--c-heat-text); }
+.c-cohorttable td.h4 { background: var(--c-heat-4); color: var(--c-heat-text); font-weight: 600; }
+.c-cohorttable th s-icon { display: inline-flex; vertical-align: -3px; }
+.c-cohortfoot { padding: 10px; text-align: center; color: var(--c-text-secondary); font-size: 12px; }
+.c-xempty[hidden] { display: none; }
+
+/* Tab activa con "orejas" cóncavas (pseudo-elementos medidos en el explorador de Shopify):
+   cuadrados de 16px del color de la barra, con sombra blanca que rellena la esquina. */
+.c-xtab { position: relative; }
+.c-xtab[aria-selected="true"]::before,
+.c-xtab[aria-selected="true"]::after { content: ""; position: absolute; bottom: 0; width: 16px; height: 16px; background: var(--c-fill-tertiary); }
+.c-xtab[aria-selected="true"]::before { left: -16px; border-bottom-right-radius: 12px; box-shadow: 2px 2px 0 2px var(--c-surface); }
+.c-xtab[aria-selected="true"]::after { right: -16px; border-bottom-left-radius: 12px; box-shadow: -2px 2px 0 2px var(--c-surface); }
+
+.c-xtab .c-icon-mask { width: 20px; height: 20px; -webkit-mask-size: 16px; mask-size: 16px; }

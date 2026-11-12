@@ -2,36 +2,42 @@
 // En la app real esto vive en React; aquí es vanilla para que el HTML sea autocontenido.
 
 (function () {
+  // Rutas relativas a la raíz del repo (funciona en localhost:4321 y en GitHub Pages /cifra-prototipos/)
   const PAGES = [
     ['index.html', 'Inventario'],
-    ['home.html', 'Home'],
-    ['home-sync.html', 'Home · Sync'],
-    ['onboarding.html', 'Onboarding'],
-    ['chat.html', 'Chat IA'],
-    ['dashboard.html', 'Dashboard'],
-    ['reports.html', 'Reports'],
-    ['report.html', 'Reporte'],
-    ['metric-tree.html', 'Metric tree'],
-    ['insights.html', 'Insights'],
-    ['integrations.html', 'Integrations'],
-    ['schedules.html', 'Schedules'],
-    ['schedule.html', 'Schedule'],
-    ['alert.html', 'Alert'],
-    ['settings.html', 'Settings'],
-    ['system-states.html', 'System states'],
+    ['modules/home/index.html', 'Home'],
+    ['modules/home/sync.html', 'Home · Sync'],
+    ['modules/onboarding/index.html', 'Onboarding'],
+    ['modules/ask/index.html', 'Chat IA'],
+    ['modules/dashboards/index.html', 'Dashboard'],
+    ['modules/reports/index.html', 'Reports'],
+    ['modules/reports/detail.html', 'Reporte'],
+    ['modules/metric-tree/index.html', 'Metric tree'],
+    ['modules/insights/index.html', 'Insights'],
+    ['modules/integrations/index.html', 'Integrations'],
+    ['modules/schedules/index.html', 'Schedules'],
+    ['modules/schedules/new-schedule.html', 'Schedule'],
+    ['modules/schedules/alert.html', 'Alert'],
+    ['modules/settings/index.html', 'Settings'],
+    ['modules/system-states/index.html', 'System states'],
   ];
+
+  // Raíz del repo = carpeta padre de shared/cifra.js, sea cual sea la profundidad de la pantalla
+  const ROOT = new URL('../', document.currentScript ? document.currentScript.src : location.href).href;
+  const url = (p) => ROOT + p;
 
   const svgNS = 'http://www.w3.org/2000/svg';
   const fmt = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
 
   // ---------------------------------------------------------------- proto bar
   function protoBar() {
-    const here = location.pathname.split('/').pop() || 'index.html';
+    const norm = (href) => new URL(href, location.href).pathname.replace(/\/index\.html$/, '/');
+    const here = norm(location.href);
     const bar = document.createElement('nav');
     bar.className = 'proto-bar';
     bar.setAttribute('aria-label', 'Prototipos');
     bar.innerHTML = '<strong>Cifra · Web Components 2.0-rc</strong>' +
-      PAGES.map(([href, label]) => `<a href="${href}"${href === here ? ' aria-current="page"' : ''}>${label}</a>`).join('') +
+      PAGES.map(([p, label]) => `<a href="${url(p)}"${norm(url(p)) === here ? ' aria-current="page"' : ''}>${label}</a>`).join('') +
       '<span class="spacer"></span><button type="button" aria-pressed="false" data-toggle-custom>Resaltar custom</button>';
     document.body.prepend(bar);
     const btn = bar.querySelector('[data-toggle-custom]');
@@ -498,7 +504,7 @@
   }
   function metricTips() {
     const tip = document.createElement('div');
-    tip.className = 'c-metrictip';
+    tip.className = 'c-metrictip'; tip.dataset.custom = 'MetricTooltip';
     tip.setAttribute('role', 'tooltip');
     tip.hidden = true;
     document.body.appendChild(tip);
@@ -589,7 +595,7 @@
       const MARKS = { shopify: 'shopify-mark' }; // versión recortada al glifo: se ve nítida a 14-16px
       const key = el.dataset.source || 'shopify';
       const src = MARKS[key] || key;
-      el.innerHTML = '<img src="assets/logos/' + src + '.svg" alt="">';
+      el.innerHTML = '<img src="' + url('assets/logos/' + src + '.svg') + '" alt="">';
       el.setAttribute('data-hydrated', '');
     });
     root.querySelectorAll('.c-delta--up:not([data-hydrated]), .c-delta--down:not([data-hydrated])').forEach((el) => {
@@ -598,7 +604,7 @@
       el.setAttribute('data-hydrated', '');
     });
     root.querySelectorAll('.c-prompt__logo, .c-editor__appicon').forEach((el) => {
-      el.innerHTML = '<img src="assets/img/cifra-icon-blue.svg" alt="">';
+      el.innerHTML = '<img src="' + url('assets/img/cifra-icon-blue.svg') + '" alt="">';
     });
   }
   window.CifraAssets = { hydrate };

@@ -1,0 +1,13 @@
+<!--
+  Componente custom: KpiCard
+  KPI card; cifra.js dibuja la sparkline ([data-spark]) y el delta.
+  Estilos: shared/components/KpiCard/KpiCard.css (cargar después de shared/globals.css).
+  Ejemplo tomado de index.html. Rutas de assets relativas a la raíz del repo.
+-->
+<article class="c-card" style="max-width:320px" data-custom="KpiCard">
+  <div class="c-card__body">
+    <h3 class="c-card__title">Gross Sales</h3>
+    <div class="c-kpi__row"><span><span class="c-kpi__value">$9,505.93</span> <span class="c-delta c-delta--up">↗ 180.56%</span></span><span data-spark="rand:1" data-prev="rand:2:30:60:30"></span></div>
+  </div>
+  <footer class="c-card__footer">From 1 source <span class="c-source" aria-label="Shopify">S</span></footer>
+</article>

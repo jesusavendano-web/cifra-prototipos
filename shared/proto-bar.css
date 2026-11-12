@@ -1,0 +1,43 @@
+/*
+  Barra de prototipos y modo "Resaltar custom". NO es parte de la app.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Barra de prototipos (NO es parte de la app)                         */
+/* ------------------------------------------------------------------ */
+.proto-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 8px 16px;
+  background: var(--c-charttip-bg); color: var(--c-text-on-dark);
+  font-size: 12px;
+}
+.proto-bar strong { margin-right: 12px; font-weight: 600; }
+.proto-bar a {
+  color: var(--c-proto-text); text-decoration: none;
+  padding: 4px 10px; border-radius: 9999px;
+}
+.proto-bar a:hover { background: var(--c-proto-surface); color: var(--c-text-on-dark); }
+.proto-bar a[aria-current="page"] { background: var(--c-surface); color: var(--c-text); }
+.proto-bar .spacer { flex: 1; }
+.proto-bar button {
+  font: inherit; color: var(--c-text-on-dark); background: var(--c-proto-surface); border: 0;
+  padding: 4px 10px; border-radius: 9999px; cursor: pointer;
+}
+.proto-bar button[aria-pressed="true"] { background: var(--c-proto-accent); }
+
+body.show-custom [data-custom] {
+  outline: 2px dashed var(--c-proto-accent);
+  outline-offset: 2px;
+}
+/* Ancla la etiqueta sin pisar el position propio del componente (tooltips fixed, popovers absolute):
+   :where() deja la especificidad en 0, así cualquier regla .c-* gana. */
+:where(body.show-custom [data-custom]) { position: relative; }
+body.show-custom [data-custom]::before {
+  content: "custom · " attr(data-custom);
+  position: absolute; top: -10px; left: 10px; z-index: 5;
+  background: var(--c-proto-accent); color: var(--c-text-on-dark);
+  font: 600 10px/16px var(--c-font);
+  padding: 0 6px; border-radius: 4px; white-space: nowrap;
+  pointer-events: none;
+}

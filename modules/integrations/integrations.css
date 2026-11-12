@@ -1,0 +1,8 @@
+/*
+  Módulo integrations: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* Nombre de la integración: un peso mayor, como los títulos de card en el admin de Shopify */
+s-stack > s-heading { font-weight: 650; }
+.c-int-logo { width: 64px; height: 64px; border-radius: 12px; border: 1px solid var(--c-border); display: grid; place-items: center; flex: none; background: var(--c-surface); }
+.c-int-logo img { width: 32px; height: 32px; display: block; }

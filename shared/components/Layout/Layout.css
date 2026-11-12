@@ -1,0 +1,19 @@
+/*
+  Utilidades de layout heredadas (.c-grid-*, .c-row, .c-stack, .c-muted, .c-section-label).
+  No crear nuevas: en pantallas nuevas usar <s-stack>, <s-grid> y <s-box>.
+  Los contenedores .c-stack llevan data-custom="Stack". Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Utilidades                                                           */
+/* ------------------------------------------------------------------ */
+.c-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.c-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.c-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1000px) { .c-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .c-grid-3 { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .c-grid-4, .c-grid-2 { grid-template-columns: 1fr; } }
+.c-muted { color: var(--c-text-secondary); }
+.c-section-label { color: var(--c-text-secondary); font-weight: 500; margin: 20px 0 8px; }
+.c-stack { display: grid; gap: 16px; }
+.c-row { display: flex; align-items: center; gap: 8px; }
+.c-row--between { justify-content: space-between; }

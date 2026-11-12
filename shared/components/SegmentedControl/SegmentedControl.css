@@ -1,0 +1,23 @@
+/*
+  Componente custom: SegmentedControl. Segmented control (.c-segmented).
+  Raíz con data-custom="SegmentedControl" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Segmented control                                                    */
+/* ------------------------------------------------------------------ */
+.c-segmented {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 2px; gap: 2px;
+  background: var(--c-surface-subdued);
+  border-radius: var(--c-radius-control);
+}
+.c-segmented button {
+  height: 28px; border: 0; border-radius: var(--c-radius-control);
+  background: transparent; color: var(--c-text-secondary);
+  font: 500 var(--c-fs-small)/16px var(--c-font); cursor: pointer;
+}
+.c-segmented button[aria-pressed="true"] {
+  background: var(--c-surface); color: var(--c-text);
+  box-shadow: var(--c-alpha-12) 0 1px 2px, var(--c-alpha-06) 0 0 0 1px;
+}

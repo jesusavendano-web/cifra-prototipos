@@ -1,0 +1,21 @@
+<!--
+  Componente custom: Charts
+  Gráfica de línea; cifra.js genera el SVG desde [data-line] y el tooltip .c-charttip.
+  Estilos: shared/components/Charts/Charts.css (cargar después de shared/globals.css).
+  Ejemplo tomado de modules/dashboards/index.html. Rutas de assets relativas a la raíz del repo.
+-->
+<article class="c-card" data-custom="LineChart">
+  <div class="c-card__body">
+    <h3 class="c-card__title">Gross Profit Margin</h3>
+    <div class="c-row" style="margin:8px 0 4px">
+      <span class="c-kpi__value c-kpi__value--large">55.9%</span>
+      <span class="c-delta c-delta--up">↗ 39.40%</span>
+    </div>
+    <span data-line="rand:11:30:45:35" data-prev="rand:12:30:30:30" data-labels='["Sep 12","Sep 19","Sep 27","Oct 4","Oct 11"]' data-suffix="%" data-label="Gross profit margin over time"></span>
+    <div class="c-legend">
+      <span><span class="c-legend__swatch" style="background:var(--c-chart-1)"></span>Sep 12–Oct 11, 2026</span>
+      <span><span class="c-legend__dash"></span>Aug 13–Sep 11, 2026</span>
+    </div>
+  </div>
+  <footer class="c-card__footer c-card__footer--source"><span class="c-card__sources">From 1 source</span><span class="c-source" data-source="shopify" role="img" aria-label="Shopify" title="Shopify"></span></footer>
+</article>

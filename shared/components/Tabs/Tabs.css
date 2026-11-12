@@ -1,0 +1,20 @@
+/*
+  Componente custom: Tabs. Tabs custom (.c-tabs).
+  Raíz con data-custom="Tabs" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Tabs                                                                 */
+/* ------------------------------------------------------------------ */
+.c-tabs { display: flex; gap: 2px; flex-wrap: wrap; }
+.c-tabs__tab {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 28px; padding: 4px 12px;
+  border: 0; border-radius: var(--c-radius-control);
+  background: transparent; color: var(--c-text-secondary);
+  font: 500 var(--c-fs-small)/16px var(--c-font);
+  cursor: pointer;
+}
+.c-tabs__tab:hover { background: var(--c-fill-secondary); color: var(--c-text); }
+.c-tabs__tab[aria-selected="true"] { background: var(--c-fill-secondary); color: var(--c-text); }
+.c-tabs__tab svg { width: 14px; height: 14px; }

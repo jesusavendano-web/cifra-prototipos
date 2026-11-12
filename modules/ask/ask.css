@@ -1,0 +1,28 @@
+/*
+  Módulo ask: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Chat IA (conversación): hilo con scroll, burbuja, tabla markdown,    */
+/* feedback y composer fijo. Nativo: s-paragraph, s-heading, listas.    */
+/* ------------------------------------------------------------------ */
+.c-chat { position: relative; display: flex; flex-direction: column; height: calc(100vh - 150px); min-height: 460px; background: var(--c-surface); border-radius: 20px; box-shadow: var(--c-shadow-card); overflow: hidden; }
+.c-chat__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px 6px; flex: none; }
+.c-chat__scroll { flex: 1; overflow: auto; padding: 8px 24px 96px; }
+.c-chat__scroll[hidden] { display: none; }
+.c-chat__scroll--center { display: grid; place-items: center; text-align: center; }
+.c-chat__col { max-width: 1080px; margin: 0 auto; display: grid; gap: 16px; align-content: start; }
+.c-bubble { justify-self: end; max-width: 70%; padding: 8px 14px; background: var(--c-surface-subdued); border-radius: 14px; font-size: 13px; line-height: 20px; }
+.c-msg { display: grid; gap: 12px; font-size: 13px; line-height: 20px; }
+.c-chat__skel { display: grid; gap: 10px; }
+.c-chat__skel .c-skeleton { height: 14px; }
+.c-chat-table { border: 1px solid var(--c-border); border-radius: 16px; padding: 8px 16px 4px; overflow: auto; }
+.c-chat-table table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13px; }
+.c-chat-table th, .c-chat-table td { padding: 8px 12px 8px 0; text-align: right; white-space: nowrap; }
+.c-chat-table thead th { font-weight: 400; color: var(--c-text-secondary); border-bottom: 1px solid var(--c-border); padding-bottom: 10px; }
+.c-chat-table tbody tr + tr th, .c-chat-table tbody tr + tr td { border-top: 1px solid var(--c-border-subtle); }
+.c-chat-table th:first-child { text-align: left; }
+.c-chat-table tbody th { font-weight: 600; }
+.c-feedback { display: flex; gap: 2px; margin-left: -6px; }
+.c-msg s-text[type="strong"], .c-msg s-heading { font-weight: 650; }
+.c-chat__head > s-clickable { display: inline-block; width: fit-content; flex: none; }

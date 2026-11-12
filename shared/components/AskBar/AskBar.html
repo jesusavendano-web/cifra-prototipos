@@ -1,0 +1,18 @@
+<!--
+  Componente custom: AskBar
+  Caja de IA (Home/Chat/Alerts).
+  Estilos: shared/components/AskBar/AskBar.css (cargar después de shared/globals.css).
+  Ejemplo tomado de modules/home/index.html. Rutas de assets relativas a la raíz del repo.
+-->
+<form class="c-ask" onsubmit="return false" data-custom="AskBar">
+  <textarea class="c-ask__input" rows="1" placeholder="How much profit did I make last month?" aria-label="Ask Cifra"></textarea>
+  <div class="c-ask__bar">
+    <span class="c-prompt__logo" aria-hidden="true">C</span>
+    <span class="c-ask__tools">
+      <button type="button" class="c-ask__recents"><s-icon type="clock"></s-icon>Recents</button>
+      <span class="c-ask__sep" aria-hidden="true"></span>
+      <button type="button" class="c-ask__btn" aria-label="Attach"><s-icon type="plus"></s-icon></button>
+      <button type="submit" class="c-ask__send" aria-label="Send" disabled><s-icon type="arrow-up"></s-icon></button>
+    </span>
+  </div>
+</form>

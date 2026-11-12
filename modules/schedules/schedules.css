@@ -1,0 +1,127 @@
+/*
+  Módulo schedules: layouts y estilos propios de estas pantallas. Se carga después de los componentes.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Alerts (ENG-2595)                                                    */
+/* ------------------------------------------------------------------ */
+.c-segmented--inline { display: inline-grid; grid-auto-columns: auto; justify-self: start; width: max-content; }
+.c-indextable--alerts table { font-size: 13px; }
+.c-indextable tr.c-row-tall td { padding-top: 8px; padding-bottom: 8px; }
+.c-alert-sub { color: var(--c-text-secondary); font-size: 12px; line-height: 18px; white-space: normal; }
+.c-th-active { }
+.c-alerts-empty { padding: 24px 16px 32px; }
+.c-alert-legend { display: inline-flex; gap: 14px; flex-wrap: wrap; font-size: var(--c-fs-small); color: var(--c-text-secondary); }
+.c-alert-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+#pv-chart .c-chart { height: 220px; width: 100%; }
+.c-flash { animation: c-flash 1.4s ease-out; border-radius: var(--c-radius-card); }
+@keyframes c-flash { 0% { box-shadow: 0 0 0 3px var(--c-flash-ring); } 100% { box-shadow: 0 0 0 0 var(--c-flash-ring-end); } }
+.c-toast {
+  position: fixed; left: 50%; bottom: 24px; z-index: 100;
+  transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  background: var(--c-charttip-bg); color: var(--c-text-on-dark); border-radius: 12px; padding: 10px 16px;
+  font: 500 var(--c-fs-base)/20px var(--c-font); box-shadow: var(--c-shadow-popover);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.c-toast[data-show="true"] { opacity: 1; transform: translate(-50%, 0); }
+
+/* Alerts · formulario en cards (mismo patrón que /schedules/new) */
+.c-cardhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; }
+.c-collapse { border: 1px solid var(--c-border); border-radius: var(--c-radius-inner); background: var(--c-surface); }
+.c-collapse summary {
+  list-style: none; display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 12px 14px; font-weight: 500; color: var(--c-text);
+}
+.c-collapse summary::-webkit-details-marker { display: none; }
+.c-collapse__meta { color: var(--c-text-secondary); font-weight: 400; }
+.c-collapse__chev { margin-left: auto; transition: transform .15s ease; }
+.c-collapse:not([open]) .c-collapse__chev { transform: rotate(180deg); }
+.c-collapse__body { padding: 0 14px 14px; }
+
+/* Alerts · tabla del preview (cabecera gris sin radio abajo) */
+.c-pvtable { border: 1px solid var(--c-border); border-radius: var(--c-radius-inner); overflow: hidden; }
+.c-pvtable table { width: 100%; border-collapse: collapse; font-size: var(--c-fs-base); font-variant-numeric: tabular-nums; }
+.c-pvtable th { text-align: left; font-weight: 500; color: var(--c-text-secondary); background: var(--c-surface-subdued); padding: 8px 14px; border-radius: 0; }
+.c-pvtable td { padding: 8px 14px; border-top: 1px solid var(--c-border-subtle); }
+
+/* Alerts · panel lateral de IA (mismo patrón que el chat del dashboard) */
+.c-aip {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 60; width: 400px; max-width: 100vw;
+  display: flex; flex-direction: column; background: var(--c-surface); border-left: 1px solid var(--c-border);
+}
+.c-aip[hidden] { display: none; }
+body.c-has-aipanel { padding-right: 400px; }
+@media (max-width: 900px) { body.c-has-aipanel { padding-right: 0; } }
+.c-aip__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px 8px 24px; }
+.c-aip__scroll { flex: 1; overflow: auto; padding: 16px 24px; }
+.c-aip__empty { display: grid; gap: 8px; justify-items: start; }
+.c-aip__empty[hidden] { display: none; }
+.c-aip__sugg {
+  border: 0; border-radius: 9999px; background: var(--c-fill-secondary); color: var(--c-text);
+  font: 500 var(--c-fs-base)/20px var(--c-font); padding: 4px 12px; cursor: pointer; text-align: left;
+}
+.c-aip__sugg:hover { background: var(--c-fill-secondary-hover); }
+.c-aip__thread { display: grid; gap: 16px; align-content: start; }
+.c-aip__user { justify-self: end; max-width: 85%; background: var(--c-surface-subdued); border-radius: 16px; padding: 8px 14px; }
+.c-aip__answer p { margin: 0 0 8px; line-height: 22px; }
+.c-aip__answer b { font-weight: 600; }
+.c-aip__feedback { display: flex; align-items: center; gap: 2px; color: var(--c-text-secondary); margin-top: 4px; }
+.c-aip__feedback span { margin-left: 6px; }
+.c-aip__thinking { display: flex; align-items: center; gap: 8px; color: var(--c-text-secondary); }
+.c-aip__foot { padding: 8px 16px 16px; display: grid; gap: 8px; }
+.c-aip__context {
+  justify-self: start; display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  background: var(--c-surface-subdued); border-radius: 8px; color: var(--c-text-secondary); font-size: var(--c-fs-small);
+}
+.c-aip__composer {
+  display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 8px 0 14px;
+  background: var(--c-surface); border-radius: 9999px; border: 1px solid var(--c-border);
+  box-shadow: 0 1px 3px var(--c-alpha-08);
+}
+.c-aip__composer:focus-within { border-color: var(--c-border-strong); }
+.c-aip__composer input { flex: 1; border: 0; outline: 0; background: transparent; font: 400 var(--c-fs-base)/20px var(--c-font); color: var(--c-text); }
+.c-aip__composer input::placeholder { color: var(--c-text-tertiary); }
+.c-aip__composer .c-ask__send:not([disabled]) s-icon { color: var(--c-text-on-dark); }
+
+/* Schedules — medido en admin.shopify.com/.../app/schedules (Chrome, nov 2026) */
+.c-segmented--inline {
+  padding: 1px; gap: 0; border-radius: 999px; height: 28px; box-sizing: border-box;
+  background: var(--c-bg); border: 1px solid var(--c-border); box-shadow: none;
+}
+.c-segmented--inline button {
+  height: 24px; padding: 0 12px; border-radius: 999px;
+  background: transparent; color: var(--c-text-emphasis); font: 450 13px/20px var(--c-font);
+}
+.c-segmented--inline button[aria-pressed="true"] {
+  background: var(--c-surface); color: var(--c-text-emphasis); font-weight: 450;
+  box-shadow: 0 0 0 1px var(--c-border), 0 1px 1px var(--c-alpha-05);
+}
+.c-indextable--alerts .c-indextable__search { padding: 8px 8px 6px; border-bottom: 0; gap: 8px; }
+.c-indextable--alerts .c-indextable__searchbox {
+  height: 30px; padding: 0 10px; gap: 6px; box-sizing: border-box;
+  background: var(--c-surface); border: 1px solid var(--c-border-strong); border-radius: 8px; color: var(--c-text-emphasis);
+}
+.c-indextable--alerts .c-indextable__searchbox:focus-within { border-color: var(--c-text-tertiary); }
+.c-indextable--alerts .c-indextable__searchbox input { font: 13px/20px var(--c-font); color: var(--c-text-emphasis); }
+.c-indextable--alerts .c-indextable__searchbox input::placeholder { color: var(--c-text-label); }
+.c-indextable--alerts .c-sortbtn {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 28px; height: 28px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; background: var(--c-fill-secondary); color: var(--c-text-emphasis);
+}
+.c-indextable--alerts .c-sortbtn:hover { background: var(--c-fill-secondary-hover); }
+.c-indextable--alerts table { font-size: 13px; }
+.c-indextable--alerts th { font-size: 13px; color: var(--c-text-secondary); background: var(--c-surface-hover); height: 29px; padding: 0 12px; }
+.c-indextable--alerts th button { font-size: 13px; color: inherit; }
+.c-indextable--alerts td { padding: 8px 12px; color: var(--c-text-emphasis); }
+.c-indextable--alerts .c-alert-sub { font-size: 13px; line-height: 20px; color: var(--c-text-label); }
+.c-indextable--alerts.c-hide-type th:nth-child(2), .c-indextable--alerts.c-hide-type td:nth-child(2) { display: none; }
+/* Encabezado de la tabla de Schedules: 32px como en la app, iconos Shopify a tamaño base */
+.c-indextable--alerts th { height: 32px; }
+.c-indextable--alerts th button { display: inline-flex; align-items: center; gap: 2px; }
+.c-indextable--alerts td { height: 40px; box-sizing: border-box; }
+.c-author__ai { width: 20px; height: 20px; border-radius: 6px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-border); display: inline-grid; place-items: center; flex: none; }
+.c-author__ai img { width: 14px; height: 14px; display: block; }
+.c-indextable--alerts td { padding-top: 6px; padding-bottom: 6px; }
+.c-author__ai { background: none; box-shadow: none; border-radius: 6px; overflow: hidden; }
+.c-author__ai img { width: 20px; height: 20px; object-fit: cover; }
+.c-indextable--alerts th .c-th-active { font-weight: inherit; color: inherit; }

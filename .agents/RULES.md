@@ -45,6 +45,7 @@ These rules are mandatory for all autonomous agents, product designers, and engi
 
 ## 5. Architectural Directory Structure
 - **Rule 5.1:** Never add flat `.html` files in the root folder. All UI screens belong inside their corresponding domain under `modules/<domain>/`.
+  - Exceptions: `index.html` (component inventory) and the legacy redirect stubs (`home.html`, `report.html`, …) that forward old URLs to `modules/`. Stubs contain no UI and must not be edited.
 - **Rule 5.2:** Follow standardized domain names strictly:
   - `modules/home/`
   - `modules/dashboards/`
@@ -54,15 +55,20 @@ These rules are mandatory for all autonomous agents, product designers, and engi
   - `modules/settings/`
   - `modules/onboarding/`
   - `modules/metric-tree/`
+  - `modules/insights/`
   - `modules/integrations/`
-- **Rule 5.3:** Use relative path references that support standalone local serving via `node serve.js` on port `4321`.
+  - `modules/system-states/`
+- **Rule 5.3:** Use relative path references that support standalone local serving via `node serve.js` on port `4321` and GitHub Pages under a sub-path. Never use root-absolute paths (`/shared/...`).
+  - From a screen in `modules/<domain>/`: `../../shared/...`, `../../assets/...`, `<domain>.css`.
+  - Inside `cifra.js`, build URLs with the `url()` helper (resolves from the script's own location).
+- **Rule 5.4:** Link only the component stylesheets a screen actually uses, in the canonical order documented in `AGENTS.md` §3, after `globals.css` and `proto-bar.css` and before the module stylesheet.
 
 ## 6. UI Modifications, Additions & Removals
 - **Rule 6.1 (Adding UI):**
   1. Determine the appropriate domain in `modules/`.
   2. Implement markup using `<s-*>` for all standard components.
   3. Co-locate any custom `.c-*` CSS rules in the module's CSS file or in a shared component.
-  4. Register the new screen in `shared/cifra.js` (`PAGES` list) and `index.html`.
+  4. Register the new screen in `shared/cifra.js` (`PAGES` list, path relative to the repo root, e.g. `modules/reports/new.html`) and `index.html`.
 - **Rule 6.2 (Updating UI):**
   1. Maintain standard class names across components.
   2. Test responsive behavior using `<s-query-container>` when container queries are required.

@@ -2,71 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reports</title>
-<meta name="shopify-api-key" content="prototype">
-<script src="https://cdn.shopify.com/shopifycloud/polaris-2.0-rc.js"></script>
-<link rel="stylesheet" href="shared/cifra.css">
-<script src="shared/cifra.js" defer></script>
+<title>Redirigiendo…</title>
+<!-- Redirección heredada: esta pantalla ahora vive en modules/reports/index.html. No editar aquí. -->
+<meta http-equiv="refresh" content="0; url=modules/reports/index.html">
+<link rel="canonical" href="modules/reports/index.html">
+<script>location.replace("modules/reports/index.html" + location.search + location.hash);</script>
 </head>
-<body>
-
-<!--
-  Pantalla: Reports  (/app/reports)
-  Lista de reportes, página aparte (no es una tab del reporte, a diferencia de Dashboards).
-  Nativo → s-page, s-table, s-search-field, s-badge, s-avatar. Custom → orden y filtros de la tabla.
--->
-<s-page heading="Reports" inlineSize="large">
-  <s-button slot="primary-action" variant="primary" href="report-new.html">Create custom report</s-button>
-
-  <div class="c-indextable c-indextable--list" data-custom="IndexTable">
-      <div class="c-indextable__bar c-indextable__bar--stack">
-          <div class="c-indextable__search">
-            <label class="c-indextable__searchbox">
-              <s-icon type="search" size="small"></s-icon>
-              <input type="search" placeholder="Search reports" aria-label="Search reports">
-            </label>
-            <s-button icon="sort" accessibilityLabel="Sort" commandFor="rep-sort"></s-button>
-          </div>
-          <div class="c-indextable__filters">
-            <button type="button" class="c-fpill" commandfor="rep-author" command="--auto">Created by <s-icon type="chevron-down" size="small"></s-icon></button>
-            <s-popover id="rep-author"><s-box padding="small-200"><s-choice-list label="Created by" labelAccessibilityVisibility="exclusive" multiple name="author"><s-choice value="cifra analytics">Cifra Analytics</s-choice><s-choice value="jesus avendaño">Jesus Avendaño</s-choice></s-choice-list></s-box></s-popover>
-            <button type="button" class="c-fpill" commandfor="rep-category" command="--auto">Category <s-icon type="chevron-down" size="small"></s-icon></button>
-            <s-popover id="rep-category"><s-box padding="small-200"><s-choice-list label="Category" labelAccessibilityVisibility="exclusive" multiple name="category"><s-choice value="customer">Customer</s-choice><s-choice value="cohort">Cohort</s-choice><s-choice value="sales">Sales</s-choice><s-choice value="profit">Profit</s-choice><s-choice value="marketing">Marketing</s-choice></s-choice-list></s-box></s-popover>
-          </div>
-        </div>
-      <div class="c-indextable__scroll">
-        <table>
-          <thead><tr>
-            <th><button type="button">Name</button></th>
-            <th><button type="button">Category</button></th>
-            <th><button type="button">Last viewed <s-icon type="sort" size="small"></s-icon></button></th>
-            <th><button type="button">Created by</button></th>
-          </tr></thead>
-          <tbody>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Customer Growth</a></td><td><s-badge>Customer</s-badge></td><td>Jun 8, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Customer LTV Cohorts</a></td><td><s-badge>Cohort</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Customer Retention Cohorts</a></td><td><s-badge>Cohort</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Discount Code Performance</a></td><td><s-badge>Sales</s-badge></td><td>Jun 8, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Discounts by Code</a></td><td><s-badge>Sales</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Expenses by Category</a></td><td><s-badge>Profit</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Gross Profit by Discount Code</a></td><td><s-badge>Profit</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Gross Profit by Product</a></td><td><s-badge>Profit</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Gross Profit over Time</a></td><td><s-badge>Profit</s-badge></td><td>Jun 8, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Loss-Making Products</a></td><td><s-badge>Profit</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Marketing Efficiency</a></td><td><s-badge>Marketing</s-badge></td><td>Jun 8, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Net Sales - New Customers</a></td><td><s-badge>Customer</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Net Sales - Returning Customers</a></td><td><s-badge>Customer</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-            <tr><td class="c-strong"><a class="c-rowlink" href="report.html">Net Sales by Discount Code</a></td><td><s-badge>Sales</s-badge></td><td>Sep 28, 2026</td><td><span class="c-author"><span class="c-brandbox c-brandbox--sm"><img src="assets/logos/cifra.svg" alt="Cifra"></span>Cifra Analytics</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="c-indextable__foot">
-        <span>Showing 14 of 14 results</span>
-        <span class="c-row" style="gap:4px"><s-button icon="chevron-left" accessibilityLabel="Previous page" disabled></s-button><s-button icon="chevron-right" accessibilityLabel="Next page" disabled></s-button></span>
-      </div>
-    </div>
-</s-page>
-
-</body>
+<body><a href="modules/reports/index.html">modules/reports/index.html</a></body>
 </html>

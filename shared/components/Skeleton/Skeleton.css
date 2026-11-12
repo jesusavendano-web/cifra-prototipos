@@ -1,0 +1,16 @@
+/*
+  Componente custom: Skeleton. Skeleton de carga.
+  Raíz con data-custom="Skeleton" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Skeleton                                                             */
+/* ------------------------------------------------------------------ */
+.c-skeleton {
+  display: block; height: 12px; border-radius: 6px;
+  background: linear-gradient(90deg, var(--c-skeleton-base) 25%, var(--c-skeleton-shine) 37%, var(--c-skeleton-base) 63%);
+  background-size: 400% 100%;
+  animation: c-shimmer 1.4s ease infinite;
+}
+@keyframes c-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+@media (prefers-reduced-motion: reduce) { .c-skeleton { animation: none; } }

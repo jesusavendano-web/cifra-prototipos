@@ -35,12 +35,27 @@ The repository enforces a modular domain structure:
 | **Dashboards** | `modules/dashboards/index.html`, `customize.html` | P&L dashboards, customizable widget layouts |
 | **Reports** | `modules/reports/index.html`, `detail.html`, `new.html` | High-density tables, metric breakdowns, cohort heatmaps |
 | **Chat / AI Assistant**| `modules/ask/index.html` | AI assistant thread, suggestions, markdown responses |
-| **Schedules & Alerts** | `modules/schedules/index.html`, `alert.html` | Automated alerts, cadence triggers, preview timelines |
+| **Schedules & Alerts** | `modules/schedules/index.html`, `new-schedule.html`, `alert.html`, `alerts.js` | Automated alerts, cadence triggers, preview timelines |
 | **Settings & Costs** | `modules/settings/index.html`, `costs-*.html` | Store preferences, multi-tier cost allocations |
 | **Onboarding** | `modules/onboarding/index.html` | First-time setup wizard and welcome screens |
 | **Metric Tree** | `modules/metric-tree/index.html` | Interactive financial metric decomposition tree |
-| **Integrations** | `modules/integrations/index.html` | Third-party data sources and connection status |
+| **Insights** | `modules/insights/index.html` | Active / dismissed insights list |
+| **Integrations** | `modules/integrations/index.html`, `klaviyo.html`, `meta.html` | Third-party data sources and connection status |
+| **System States** | `modules/system-states/index.html` | Maintenance, error 500 and not-found states |
 | **Shared Primitives** | `shared/components/<Name>/` | Reusable non-native custom components |
+
+Shared files at the root of `shared/`:
+
+| File | Purpose |
+| :--- | :--- |
+| `shared/globals.css` | Token dictionary, resets, FOUC defenses, universal utilities, dark tooltip surfaces |
+| `shared/proto-bar.css` | Prototype navigation bar and "Resaltar custom" diagnostics (not part of the app) |
+| `shared/inventory.css` | Styles for the root `index.html` component inventory only |
+| `shared/cifra.js` | Behaviour of custom components + prototype bar. Resolves the repo root from its own `src`, so it works at any folder depth |
+
+**Stylesheet order in every screen:** `globals.css` → `proto-bar.css` → the `shared/components/*/*.css` the screen uses (in the canonical order Card, FilterBar, Tabs, SegmentedControl, KpiCard, Charts, AskBar, Skeleton, Layout, Source, IndexTable, IconMask) → `modules/<domain>/<domain>.css`. Paths are always relative (`../../shared/...`) so the site works both on `node serve.js` and on GitHub Pages.
+
+**Legacy redirects:** the old flat URLs (`home.html`, `report.html`, …) remain at the root only as redirect stubs to the new `modules/` paths (query and hash preserved), so links already shared keep working. Never edit or add UI there.
 
 ---
 
@@ -62,6 +77,10 @@ The repository enforces a modular domain structure:
   - Radii: `--c-radius-card` (`20px`), `--c-radius-inner` (`12px`), `--c-radius-control` (`9999px`)
   - Shadows: `--c-shadow-card`, `--c-shadow-popover`
   - Charts: `--c-chart-1` through `--c-chart-5`, `--c-chart-grid`, `--c-charttip-bg`
+  - Interaction & brand: `--c-focus`, `--c-brand`, `--c-ai-glow`
+  - Alpha scale for composite shadows/rings: `--c-alpha-03` … `--c-alpha-14`, `--c-overlay`
+  - Cohorts: `--c-chart-axis`, `--c-heat-0` … `--c-heat-4`, `--c-heat-text`, `--c-cohort-1` … `--c-cohort-10`
+- Component and module CSS contain zero raw hex/rgb values; when a new measured value is needed, add a token to `globals.css` first.
 
 ### Directive 3: Scoped Custom Elements & Deconstructed Styles
 - The monolithic `shared/cifra.css` is deconstructed and eliminated.

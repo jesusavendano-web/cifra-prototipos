@@ -1,0 +1,19 @@
+/*
+  Componente custom: KpiCard. KPI card: valor, delta y sparkline.
+  Raíz con data-custom="KpiCard" (u otro nombre descriptivo). Solo tokens --c-* de shared/globals.css.
+*/
+
+/* ------------------------------------------------------------------ */
+/* KPI card (dashboard / home)                                          */
+/* ------------------------------------------------------------------ */
+.c-kpi__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+.c-kpi__value { font-size: var(--c-fs-kpi); line-height: 28px; font-weight: 600; letter-spacing: -0.2px; font-variant-numeric: tabular-nums; }
+.c-kpi__value--large { font-size: var(--c-fs-kpi-large); line-height: 36px; }
+.c-delta { display: inline-flex; align-items: center; gap: 2px; font-size: var(--c-fs-small); font-weight: 600; font-variant-numeric: tabular-nums; }
+.c-delta--up { color: var(--c-positive); }
+.c-delta--down { color: var(--c-negative); }
+.c-delta--flat { color: var(--c-text-secondary); }
+.c-delta svg { width: 12px; height: 12px; }
+.c-spark { width: 96px; height: 28px; flex: none; }
+
+.c-delta svg { width: 12px; height: 12px; flex: none; }
